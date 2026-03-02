@@ -1,4 +1,18 @@
+import type { Metadata } from "next";
 import { ArrowRight, CheckCircle } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "AI Automation Audit ($49) | Flowbotics",
+  description:
+    "Get a personalized automation audit in 24–48 hours. Fixed $49 pricing, clear deliverables, and a practical roadmap for your business.",
+  openGraph: {
+    title: "AI Automation Audit ($49) | Flowbotics",
+    description:
+      "Fixed-price automation audit with 24–48h delivery. Stop guessing what to automate and get a clear action plan.",
+    type: "website",
+    url: "https://www.flowbotics.xyz/audit",
+  },
+};
 
 const tallyUrl = "https://tally.so/r/zxK06R";
 
