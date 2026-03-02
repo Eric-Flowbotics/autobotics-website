@@ -146,10 +146,10 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/ai-audit"
+                href="/audit"
                 className="inline-flex items-center justify-center px-8 py-4 bg-sky-500 hover:bg-sky-400 text-white font-semibold rounded-xl transition-all shadow-lg shadow-sky-500/25 text-base"
               >
-                Book Your Free AI Audit
+                Get Your $49 Automation Audit
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Link>
               <Link
@@ -329,10 +329,10 @@ export default function HomePage() {
                   </div>
                 </div>
                 <Link
-                  href="/ai-audit"
+                  href="/audit"
                   className="inline-flex items-center text-sky-500 font-semibold hover:text-sky-600 transition-colors"
                 >
-                  Want results like these?{" "}
+                  Get your personalized audit{" "}
                   <ArrowRight className="ml-1 w-4 h-4" />
                 </Link>
               </div>
