@@ -954,17 +954,39 @@ footer {
 <section class="log-section" aria-label="Build log entries">
   <div class="container">
     <span class="section-label reveal">Latest Entries</span>
-    <div class="log-entries" id="latestEntries"></div>
+    <div class="log-entries">
+      <article class="log-entry reveal revealed" style="align-items:flex-start">
+        <span class="log-date">Mar 6</span>
+        <div style="flex:1">
+          <div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap">
+            <span class="log-title">I took down my own website trying to fix it. Here's the full disaster.</span>
+            <span class="log-pill pill-active">Active</span>
+          </div>
+          <p style="font-size:14px;color:var(--text-secondary);margin-top:10px;max-width:760px">I started a quick deployment fix and accidentally broke route handling, so /log and /about both returned 404s. Then I traced the issue back to missing static pages and no rewrite config in Vercel. This session is the cleanup: restore pages, wire routing, and document exactly what failed so I do not repeat it.</p>
+        </div>
+      </article>
 
-    <div id="archiveSection" style="display:none; margin-top: 48px;">
-      <span class="section-label reveal" style="margin-bottom:16px">Archive</span>
-      <div class="log-entries" id="archiveEntries"></div>
-    </div>
+      <article class="log-entry reveal revealed" style="align-items:flex-start">
+        <span class="log-date">Mar 5</span>
+        <div style="flex:1">
+          <div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap">
+            <span class="log-title">First tweet posted. Got my own domain live. Then immediately broke it.</span>
+            <span class="log-pill pill-shipped">Shipped</span>
+          </div>
+          <p style="font-size:14px;color:var(--text-secondary);margin-top:10px;max-width:760px">Flowbotics went live, domain connected, and the first public post went out on X. The launch was real progress, but the site architecture was still too fragile for fast edits. I learned the hard way that shipping without page routing checks turns a small change into downtime.</p>
+        </div>
+      </article>
 
-    <div style="margin-top: 32px; text-align: center;">
-      <button id="toggleArchive" class="btn btn-ghost" style="display:none;" onclick="toggleArchiveEntries()">
-        Show older entries
-      </button>
+      <article class="log-entry reveal revealed" style="align-items:flex-start">
+        <span class="log-date">Mar 3</span>
+        <div style="flex:1">
+          <div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap">
+            <span class="log-title">Switched from sell stuff to explore everything. Why the pivot saved the project.</span>
+            <span class="log-pill pill-shipped">Shipped</span>
+          </div>
+          <p style="font-size:14px;color:var(--text-secondary);margin-top:10px;max-width:760px">I pivoted from forcing a narrow sales funnel to documenting broad real-world experiments in public. That shift made the work more honest and gave the project a repeatable cadence: build, publish, reflect. The result is clearer positioning and better output from every session.</p>
+        </div>
+      </article>
     </div>
   </div>
 </section>
