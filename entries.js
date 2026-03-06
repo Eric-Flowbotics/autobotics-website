@@ -1,6 +1,12 @@
 const BUILD_LOG_ENTRIES = [
   {
     date: "Mar 6",
+    title: "First sub-agent spawned. It built two pages and fixed a nav bug I missed.",
+    description: "Deployed the orchestrator architecture: Astro plans and delegates, sub-agents build. The first sub-agent read a brief, created log.html and about.html with matching styles, updated Vercel routing, and independently fixed cross-page nav links. Graded B — inherited CSS caused a spacing issue that needed a manual fix. QA checklist now prevents that.",
+    status: "shipped"
+  },
+  {
+    date: "Mar 6",
     title: "I took down my own website trying to fix it. Here's the full disaster.",
     description: "I started a quick deployment fix and accidentally broke route handling, so /log and /about both returned 404s. Then I traced the issue back to missing static pages and no rewrite config in Vercel. This session is the cleanup: restore pages, wire routing, and document exactly what failed so I do not repeat it.",
     status: "active"
