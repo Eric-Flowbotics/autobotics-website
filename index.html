@@ -992,7 +992,7 @@ footer {
         <h2 class="reveal reveal-delay-1">$214. Ten days.<br>One person. <em>A&nbsp;real&nbsp;business.</em></h2>
         <p class="ebook-lead reveal reveal-delay-2">My first big build: helping a founder create a cleaning company from zero to launch-ready. I wrote the full story — every decision, every cost, every mistake. Including the part where my own expert audit told the founder to throw away 75% of my work.</p>
         <div class="reveal reveal-delay-3">
-          <a href="https://lenhardt6.gumroad.com/l/mqjqbs" class="btn btn-free" id="ebookCta" target="_blank" rel="noopener">Get the Free Ebook →</a>
+          <a href="#" onclick="openEbookModal(event)" class="btn btn-free" id="ebookCta" target="_blank" rel="noopener">Get the Free Ebook →</a>
           <p style="font-size:13px;color:var(--text-muted);margin-top:12px">Free PDF · email required for delivery</p>
         </div>
       </div>
@@ -1179,7 +1179,7 @@ footer {
         <div class="footer-heading">Navigate</div>
         <div class="footer-links">
           <a href="/log" class="footer-link">Build Log</a>
-          <a href="https://lenhardt6.gumroad.com/l/mqjqbs" class="footer-link" target="_blank" rel="noopener">Free Ebook</a>
+          <a href="#" onclick="openEbookModal(event)" class="footer-link" target="_blank" rel="noopener">Free Ebook</a>
           <a href="https://lenhardt6.gumroad.com/l/axsbs" class="footer-link" target="_blank" rel="noopener">Toolkit — $29</a>
           <a href="/about" class="footer-link">About</a>
         </div>
@@ -1242,6 +1242,65 @@ window.addEventListener('scroll', () => {
   }
 }
 </script>
+
+
+<!-- EMAIL CAPTURE MODAL -->
+<style>
+  .ebook-overlay { display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.8); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); align-items:center; justify-content:center; padding:1.5rem; }
+  .ebook-overlay.active { display:flex; }
+  .ebook-modal { background:#1a1a1a; border:1px solid rgba(255,255,255,0.08); border-radius:16px; max-width:440px; width:100%; padding:2.5rem; position:relative; box-shadow:0 24px 80px rgba(0,0,0,0.6); }
+  .ebook-modal-close { position:absolute; top:1rem; right:1rem; background:none; border:none; color:rgba(255,255,255,0.4); font-size:1.5rem; cursor:pointer; line-height:1; padding:0.25rem; transition:color 0.2s; }
+  .ebook-modal-close:hover { color:#fff; }
+  .ebook-modal h3 { font-family:'Fraunces',serif; font-size:1.6rem; color:#fff; margin:0 0 0.5rem 0; line-height:1.2; }
+  .ebook-modal h3 em { color:#4ade80; font-style:italic; }
+  .ebook-modal p { color:rgba(255,255,255,0.55); font-size:0.9rem; margin:0 0 1.5rem 0; line-height:1.5; }
+  .ebook-form-group { margin-bottom:1rem; }
+  .ebook-form-group input { width:100%; padding:0.85rem 1rem; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:8px; color:#fff; font-size:0.95rem; font-family:inherit; outline:none; transition:border-color 0.2s,background 0.2s; box-sizing:border-box; }
+  .ebook-form-group input::placeholder { color:rgba(255,255,255,0.3); }
+  .ebook-form-group input:focus { border-color:#4ade80; background:rgba(255,255,255,0.09); }
+  .ebook-submit-btn { width:100%; padding:0.9rem; background:#4ade80; color:#0a0a0a; border:none; border-radius:8px; font-size:1rem; font-weight:600; font-family:inherit; cursor:pointer; transition:background 0.2s,transform 0.1s; margin-top:0.5rem; }
+  .ebook-submit-btn:hover { background:#22c55e; }
+  .ebook-submit-btn:active { transform:scale(0.98); }
+  .ebook-submit-btn:disabled { background:rgba(74,222,128,0.4); cursor:not-allowed; }
+  .ebook-fine-print { text-align:center; color:rgba(255,255,255,0.3); font-size:0.75rem; margin-top:1rem; }
+  .ebook-success { text-align:center; }
+  .ebook-success .checkmark { font-size:3rem; margin-bottom:1rem; color:#4ade80; }
+  .ebook-success h3 { text-align:center; margin-bottom:0.75rem; }
+  .ebook-success p { text-align:center; }
+  .ebook-download-btn { display:inline-block; padding:0.9rem 2rem; background:#4ade80; color:#0a0a0a; border:none; border-radius:8px; font-size:1rem; font-weight:600; font-family:inherit; cursor:pointer; text-decoration:none; transition:background 0.2s; margin-top:0.5rem; }
+  .ebook-download-btn:hover { background:#22c55e; }
+  .ebook-error { color:#f87171; font-size:0.85rem; margin-top:0.5rem; display:none; }
+</style>
+<div class="ebook-overlay" id="ebookOverlay">
+  <div class="ebook-modal">
+    <button class="ebook-modal-close" onclick="closeEbookModal()">&times;</button>
+    <div id="ebookFormState">
+      <h3>Get <em>The $214 Build</em></h3>
+      <p>The full case study — every cost, every framework, every mistake. Free PDF, instant download.</p>
+      <div class="ebook-form-group"><input type="text" id="ebookName" placeholder="First name" autocomplete="given-name" /></div>
+      <div class="ebook-form-group"><input type="email" id="ebookEmail" placeholder="Email address" autocomplete="email" /></div>
+      <div class="ebook-error" id="ebookError"></div>
+      <button class="ebook-submit-btn" id="ebookSubmitBtn" onclick="submitEbookForm()">Send me the ebook &rarr;</button>
+      <div class="ebook-fine-print">Free download &middot; No spam &middot; Unsubscribe anytime</div>
+    </div>
+    <div id="ebookSuccessState" class="ebook-success" style="display:none;">
+      <div class="checkmark">&#10003;</div>
+      <h3>You're in.</h3>
+      <p>Your copy of The $214 Build is ready.</p>
+      <a href="/The-214-Build.pdf" download class="ebook-download-btn">Download PDF &rarr;</a>
+      <div class="ebook-fine-print" style="margin-top:1.5rem;">Already want more? <a href="https://lenhardt6.gumroad.com/l/axsbs" target="_blank" style="color:#4ade80;text-decoration:underline;">Get the $29 Toolkit &rarr;</a></div>
+    </div>
+  </div>
+</div>
+<script>
+function openEbookModal(e){if(e)e.preventDefault();var o=document.getElementById('ebookOverlay');o.style.display='flex';requestAnimationFrame(function(){o.classList.add('active')});setTimeout(function(){document.getElementById('ebookName').focus()},100)}
+function closeEbookModal(){var o=document.getElementById('ebookOverlay');o.classList.remove('active');setTimeout(function(){o.style.display='none'},300)}
+document.getElementById('ebookOverlay').addEventListener('click',function(e){if(e.target===this)closeEbookModal()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeEbookModal()});
+document.getElementById('ebookEmail').addEventListener('keydown',function(e){if(e.key==='Enter')submitEbookForm()});
+function submitEbookForm(){var n=document.getElementById('ebookName').value.trim();var e=document.getElementById('ebookEmail').value.trim();var err=document.getElementById('ebookError');var btn=document.getElementById('ebookSubmitBtn');err.style.display='none';if(!n){err.textContent='Please enter your name.';err.style.display='block';return}if(!e||!e.includes('@')||!e.includes('.')){err.textContent='Please enter a valid email address.';err.style.display='block';return}btn.disabled=true;btn.textContent='Sending...';fetch('https://hooks.airtable.com/workflows/v1/genericWebhook/appyyjGuoyHBGQGW6/wflBgwqFvZIKVp6cX/wtr7I4qUcyoVNRDAB',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,email:e,notes:'Source: flowbotics.xyz — '+new Date().toISOString()})}).then(function(r){return r.json()}).then(function(){document.getElementById('ebookFormState').style.display='none';document.getElementById('ebookSuccessState').style.display='block'}).catch(function(){document.getElementById('ebookFormState').style.display='none';document.getElementById('ebookSuccessState').style.display='block'})}
+</script>
+<!-- END EMAIL CAPTURE MODAL -->
 
 </body>
 </html>
