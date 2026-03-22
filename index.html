@@ -548,9 +548,9 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
     <div class="ebook-inner">
       <div class="ebook-text reveal">
         <p class="eyebrow">Free Case Study</p>
-        <h2>The <span class="highlight">$214 Build.</span></h2>
-        <p>The full story of building a business from zero — every cost, every framework, every mistake. A 20-minute read with 6 reusable frameworks you can use today.</p>
-        <p style="margin-top:8px;color:var(--medium);font-size:.9rem;">Already read it? <a href="#" style="color:var(--teal);text-decoration:underline;font-weight:600;">The $29 Toolkit</a> has all 14 prompts, 6 templates, and 11 rubrics ready to use.</p>
+        <h2>The <span class="highlight">Leaking Business.</span></h2>
+        <p>How home service businesses lose $20,000+ a year without knowing it — and the 8 automations that stop the bleeding. Free guide with real numbers, real tools, and real fixes.</p>
+        <p style="margin-top:8px;color:var(--medium);font-size:.9rem;">Based on the same 8-stage framework behind our $197 Automation Blueprint.</p>
       </div>
       <div class="ebook-form-card reveal rd2">
         <h3>Get the free case study</h3>
@@ -768,7 +768,7 @@ function handleEmailForm(formId, inputId){
     btn.textContent='Sending...';btn.disabled=true;
     try{
       const r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
-      if(r.ok){btn.textContent='✓ Check your email!';btn.style.background='#D97706';setTimeout(()=>{window.location.href='/The-214-Build.pdf'},1200)}
+      if(r.ok){btn.textContent='✓ Check your email!';btn.style.background='#D97706';setTimeout(()=>{window.location.href='/The-Leaking-Business.pdf'},1200)}
       else throw new Error()
     }catch{btn.textContent=orig;btn.disabled=false;alert('Something went wrong. Try again or email eric@theautobotics.com')}
   });
