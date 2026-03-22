@@ -768,7 +768,7 @@ function handleEmailForm(formId, inputId){
     btn.textContent='Sending...';btn.disabled=true;
     try{
       const r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
-      if(r.ok){btn.textContent='✓ Check your email!';btn.style.background='#D97706';setTimeout(()=>{window.location.href='/The-Leaking-Business.pdf'},1200)}
+      if(r.ok){btn.textContent='✓ Downloading your free guide...';btn.style.background='#D97706';setTimeout(()=>{window.location.href='/The-Leaking-Business.pdf'},1200)}
       else throw new Error()
     }catch{btn.textContent=orig;btn.disabled=false;alert('Something went wrong. Try again or email eric@theautobotics.com')}
   });
