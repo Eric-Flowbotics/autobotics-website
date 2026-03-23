@@ -1720,6 +1720,15 @@
       alertTriangle: <><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></>,
       checkCircle: <><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>,
       trendingUp: <><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></>,
+      sparkles: <><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></>,
+      leaf: <><path d="M11 20A7 7 0 0 1 9.8 6.9C15.5 4.9 17 3.5 19 2c1 2 2 4.5 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></>,
+      thermometer: <><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/></>,
+      droplets: <><path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/><path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/></>,
+      hammer: <><path d="m15 12-8.5 8.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0a2.12 2.12 0 0 1 0-3L12 9"/><path d="M17.64 15 22 10.64"/><path d="m20.91 11.7-1.25-1.25c-.6-.6-.93-1.4-.93-2.25V6.5a.5.5 0 0 0-.5-.5H16.5a3.18 3.18 0 0 1-2.25-.93l-1.25-1.25a.5.5 0 0 0-.68-.02L9.66 6.16a1 1 0 0 0-.27.97l.78 3.12a1 1 0 0 0 .27.46l6.86 6.86a1 1 0 0 0 .46.27l3.12.78a1 1 0 0 0 .97-.27l2.36-2.66a.5.5 0 0 0-.02-.68Z"/></>,
+      zap: <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>,
+      bug: <><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/><path d="M6.53 9C4.6 8.8 3 7.1 3 5"/><path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M22 13h-4"/><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/></>,
+      paintbrush: <><path d="M18.37 2.63 14 7l-1.59-1.59a2 2 0 0 0-2.82 0L8 7l9 9 1.59-1.59a2 2 0 0 0 0-2.82L17 10l4.37-4.37a2.12 2.12 0 1 0-3-3Z"/><path d="M9 8c-2 3-4 3.5-7 4l8 10c2-1 6-5 6-7"/><path d="M14.5 17.5 4.5 15"/></>,
+      home: <><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></>,
     };
 
     function Icon({ name, size = 24, color = 'currentColor', className = '', style = {} }) {
@@ -1756,6 +1765,7 @@
       }
     }
 
+    // ONE calculation function. Counter and results both use this.
     function calculateResults(answers, profile) {
       const businessType = BUSINESS_TYPES.find(bt => bt.id === profile.businessType);
       const category = businessType.category;
@@ -1766,25 +1776,35 @@
 
       STAGES.forEach(stage => {
         const qIds = stage.questionIds;
-        const stageAnswers = qIds.map(qId => answers[qId]).filter(a => a !== undefined);
         let totalStageScore = 0;
-        let leakMultiplierForStage = 1;
+        const leakMultipliers = [];
 
-        stageAnswers.forEach(answer => {
+        qIds.forEach(qId => {
+          const answer = answers[qId];
           if (answer) {
-            const question = AUDIT_QUESTIONS.find(q => q.id === answer.questionId);
+            const question = AUDIT_QUESTIONS.find(q => q.id === qId);
             const option = question.options.find(o => o.label === answer.label);
-            totalStageScore += option.score;
-            leakMultiplierForStage *= option.leakMultiplier;
+            if (option) {
+              totalStageScore += option.score;
+              leakMultipliers.push(option.leakMultiplier);
+            }
           }
         });
 
         stageScores[stage.id] = totalStageScore;
-        const baseLeak = annualRevenue * weights[stage.id];
-        stageLeaks[stage.id] = Math.round(baseLeak * leakMultiplierForStage);
+
+        // AVERAGE the multipliers for multi-question stages (per Data Engine V2 spec)
+        const avgMultiplier = leakMultipliers.length > 0
+          ? leakMultipliers.reduce((a, b) => a + b, 0) / leakMultipliers.length
+          : 0;
+
+        const rawLeak = annualRevenue * weights[stage.id] * avgMultiplier;
+        stageLeaks[stage.id] = roundLeak(rawLeak);
       });
 
-      const totalLeak = Object.values(stageLeaks).reduce((a, b) => a + b, 0);
+      // Total rounds to nearest $100
+      const rawTotal = Object.values(stageLeaks).reduce((a, b) => a + b, 0);
+      const totalLeak = Math.round(rawTotal / 100) * 100;
       const totalScore = Object.values(stageScores).reduce((a, b) => a + b, 0);
       const topLeaks = Object.entries(stageLeaks)
         .map(([stageId, leak]) => ({ stageId, leak }))
@@ -1792,6 +1812,13 @@
         .slice(0, 3);
 
       return { stageScores, stageLeaks, totalLeak, totalScore, topLeaks };
+    }
+
+    // Calculate running counter total from current answers (uses same logic as calculateResults)
+    function calculateRunningTotal(answers, profile) {
+      if (!profile.businessType || !profile.revenue) return 0;
+      const result = calculateResults(answers, profile);
+      return result.totalLeak;
     }
 
     // ===== PROMPT GENERATORS =====
@@ -1824,31 +1851,43 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
     }
 
     // ===== 90-DAY PLAN =====
-    function generate90DayPlan() {
+    function generate90DayPlan(results) {
+      const topLeaks = results ? results.topLeaks : [];
+      const getStageLabel = (idx) => {
+        if (topLeaks[idx]) return STAGES.find(s => s.id === topLeaks[idx].stageId)?.label || 'your biggest leak';
+        return 'your next priority';
+      };
+      const getKit = (idx) => {
+        if (topLeaks[idx]) return FIX_IT_KITS[topLeaks[idx].stageId];
+        return null;
+      };
+      const kit1 = getKit(0);
+      const kit2 = getKit(1);
+      const kit3 = getKit(2);
       return {
-        phase1: { title: "Week 1\u20132: Stabilize the Bleeding", timeframe: "(Days 1\u201314)", tasks: [
-          "Implement voicemail greeting and lead tracking sheet",
-          "Set up basic qualification questions",
-          "Send follow-ups on open quotes (use Day 1, 3, 7 script)",
-          "Identify and fix your biggest process gap"
+        phase1: { title: `Week 1–2: Fix ${getStageLabel(0)}`, timeframe: "(Days 1–14)", tasks: [
+          kit1 ? kit1.headline : "Implement your most impactful fix",
+          kit1 ? kit1.firstAction : "Set up basic qualification questions",
+          `Use the ${getStageLabel(0)} scripts from your Fix-It Kit daily`,
+          kit1 ? `Set up ${kit1.tool.name} (${kit1.tool.cost})` : "Pick one recommended tool and install it"
         ]},
-        phase2: { title: "Week 3\u20134: Build Systems", timeframe: "(Days 15\u201328)", tasks: [
-          "Choose 1\u20132 key tools from your Fix-It kit",
-          "Document your service delivery process (SOP)",
-          "Start asking for reviews after every job",
-          "Create a simple lead scoring checklist"
+        phase2: { title: `Week 3–4: Fix ${getStageLabel(1)}`, timeframe: "(Days 15–28)", tasks: [
+          kit2 ? kit2.headline : "Choose 1–2 key tools from your Fix-It kit",
+          kit2 ? kit2.firstAction : "Document your service delivery process (SOP)",
+          `Use the ${getStageLabel(1)} scripts from your Fix-It Kit daily`,
+          "Review: is your Phase 1 fix becoming a habit?"
         ]},
-        phase3: { title: "Month 2: Automate & Delegate", timeframe: "(Days 29\u201360)", tasks: [
-          "Set up calendar or scheduling tool",
-          "Launch automated quote follow-up system",
-          "Begin weekly retention outreach (5\u201310 past customers)",
-          "Review metrics from phase 1\u20132 improvements"
+        phase3: { title: `Month 2: Fix ${getStageLabel(2)} + Reinforce`, timeframe: "(Days 29–60)", tasks: [
+          kit3 ? kit3.headline : "Set up one automation for a previous fix",
+          kit3 ? kit3.firstAction : "Launch automated quote follow-up system",
+          `Reinforce ${getStageLabel(0)} and ${getStageLabel(1)} habits`,
+          "Measure: count your leads, close rate, and reviews vs. last month"
         ]},
-        phase4: { title: "Month 3: Measure & Optimize", timeframe: "(Days 61\u201390)", tasks: [
-          "Audit results: compare leads, quotes, closings to baseline",
-          "Scale what works; cut what doesn\u2019t",
-          "Train someone else on your new systems",
-          "Plan next 90 days with confidence"
+        phase4: { title: "Month 3: Measure & Decide", timeframe: "(Days 61–90)", tasks: [
+          "Pull your numbers: leads, close rate, invoices, payments, reviews, re-bookings",
+          "Compare to 90 days ago — calculate how much extra revenue you captured",
+          "Decide: keep going DIY or get the Automation Blueprint for the deep analysis?",
+          "Plan next 90 days"
         ]}
       };
     }
@@ -1918,11 +1957,16 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
         else { setScreen('audit'); setAuditQuestion(0); }
       };
 
-      const handleAnswerQuestion = (questionId, label, leakAmount) => {
+      const handleAnswerQuestion = (questionId, label) => {
+        const oldTotal = calculateRunningTotal(answers, profile);
         const newAnswers = { ...answers, [questionId]: { questionId, label } };
         setAnswers(newAnswers);
-        if (leakAmount > 2000) {
-          setShowFlash({ text: `+$${leakAmount.toLocaleString()} \u00b7 ${STAGES.find(s => s.id === AUDIT_QUESTIONS.find(q => q.id === questionId).stage).label}` });
+        const newTotal = calculateRunningTotal(newAnswers, profile);
+        const delta = newTotal - oldTotal;
+        if (Math.abs(delta) > 2000) {
+          const stageName = STAGES.find(s => s.id === AUDIT_QUESTIONS.find(q => q.id === questionId).stage).label;
+          const sign = delta >= 0 ? '+' : '-';
+          setShowFlash({ text: `${sign}$${Math.abs(delta).toLocaleString()} · ${stageName}` });
           setTimeout(() => setShowFlash(null), 2200);
         }
         setTimeout(() => {
@@ -2038,13 +2082,20 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
             <h2 className="setup-title">{cur.title}</h2>
             {setupStep === 1 ? (
               <div className="business-types-grid">
-                {cur.options.map((opt, i) => (
+                {cur.options.map((opt, i) => {
+                  const BTYPE_ICONS = {
+                    cleaning: 'sparkles', landscaping: 'leaf', hvac: 'thermometer',
+                    plumbing: 'droplets', handyman: 'hammer', electrical: 'zap',
+                    pest: 'bug', painting: 'paintbrush', other: 'home'
+                  };
+                  return (
                   <div key={opt.id} className="type-card card-interactive" onClick={() => handleSetupSelect(cur.key, opt.id)}
                     style={{ animation: `staggerIn 0.3s var(--ease-out) ${i * 0.04}s both` }}>
-                    <Icon name={['cleaning','landscaping','pest'].includes(opt.id) ? 'repeat' : ['hvac','plumbing'].includes(opt.id) ? 'alertTriangle' : 'wrench'} size={28} className="type-card-icon" />
+                    <Icon name={BTYPE_ICONS[opt.id] || 'home'} size={28} className="type-card-icon" />
                     <div className="type-card-label">{opt.label}</div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div>
@@ -2066,15 +2117,7 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
       if (screen === 'audit') {
         const question = AUDIT_QUESTIONS[auditQuestion];
         const stage = STAGES.find(s => s.id === question.stage);
-        let totalLeak = 0;
-        Object.entries(answers).forEach(([qId, ans]) => {
-          if (ans) {
-            const q = AUDIT_QUESTIONS.find(qq => qq.id === qId);
-            const opt = q.options.find(o => o.label === ans.label);
-            const w = STAGE_WEIGHTS[BUSINESS_TYPES.find(bt => bt.id === profile.businessType).category];
-            totalLeak += Math.round(profile.revenue * w[q.stage] * opt.leakMultiplier);
-          }
-        });
+        const totalLeak = calculateRunningTotal(answers, profile);
         const isCritical = totalLeak >= 20000;
         const progress = ((auditQuestion + 1) / AUDIT_QUESTIONS.length) * 100;
 
@@ -2085,7 +2128,7 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                 <div className={`counter ${isCritical ? 'critical' : ''}`}>
                   <div className="counter-left">
                     <div className="counter-label">Revenue leaking</div>
-                    <div className="counter-amount"><AnimatedNumber value={Math.round(totalLeak / 100) * 100} duration={600} /></div>
+                    <div className="counter-amount"><AnimatedNumber value={totalLeak} duration={600} /></div>
                   </div>
                   <Icon name="trendingUp" size={28} className="counter-icon" color="currentColor" />
                 </div>
@@ -2106,15 +2149,13 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                 <p className="question-subtext">{question.subtext}</p>
                 {question.options.map((opt, idx) => (
                   <button key={idx} className="answer-option card-interactive" onClick={() => {
-                    const w = STAGE_WEIGHTS[BUSINESS_TYPES.find(bt => bt.id === profile.businessType).category];
-                    const leak = Math.round(profile.revenue * w[question.stage] * opt.leakMultiplier);
-                    handleAnswerQuestion(question.id, opt.label, leak);
+                    handleAnswerQuestion(question.id, opt.label);
                   }} style={{ animation: `staggerIn 0.25s var(--ease-out) ${idx * 0.05}s both` }}>
                     {opt.label}
                   </button>
                 ))}
                 <div className="audit-nav">
-                  <button className="nav-button" disabled={auditQuestion === 0} onClick={() => { if (auditQuestion > 0) setAuditQuestion(auditQuestion - 1); }}>\u2190 Back</button>
+                  <button className="nav-button" disabled={auditQuestion === 0} onClick={() => { if (auditQuestion > 0) setAuditQuestion(auditQuestion - 1); }}>← Back</button>
                   <button className="nav-button" onClick={handleBack}>Exit</button>
                 </div>
               </div>
@@ -2154,19 +2195,20 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                     <p className="results-intro fade-in">Your business is leaving approximately</p>
                     <div className="big-number">${roundLeak(results.totalLeak).toLocaleString()}</div>
                     <p className="big-number-context fade-in-delay-1">/year in revenue opportunity</p>
-                    <div className="score-badge fade-in-delay-2" style={{ backgroundColor: badge.color }}>{badge.label} \u00b7 {results.totalScore}/60</div>
-                    <p className="methodology fade-in-delay-2">Based on your profile, industry benchmarks, and answers</p>
+                    <div className="score-badge fade-in-delay-2" style={{ backgroundColor: badge.color }}>{badge.label}</div>
+                    <div className="score-detail fade-in-delay-2" style={{ fontSize: 14, color: 'var(--medium)', marginTop: 8 }}>Score: {results.totalScore}/60</div>
+                    <p className="methodology fade-in-delay-2" style={{ fontSize: 12, color: 'var(--muted)', maxWidth: 480, margin: '12px auto 0', lineHeight: 1.6 }}>This estimate is based on industry benchmarks for {BUSINESS_TYPES.find(bt => bt.id === profile.businessType)?.label || 'your'} businesses at your revenue level. It includes missed leads, unconverted quotes, delayed payments, lost repeat business, and unrealized referrals. For a precise analysis with external research on your specific market, see the Automation Blueprint.</p>
                   </div>
 
                   {isAllGreen && (
                     <div className="all-green-card fade-in-delay-2">
-                      <div className="all-green-title">You're doing great.</div>
-                      <div className="all-green-text">Your systems are solid. Focus on optimization and scaling, not fixing leaks. The 90-Day Plan and AI prompts can help you level up from here.</div>
+                      <div className="all-green-title">Your business is running well.</div>
+                      <div className="all-green-text">Even healthy businesses have some opportunity — here's where you could tighten up. The 90-Day Plan and AI prompts can help you level up from here.</div>
                     </div>
                   )}
 
                   <div className="stage-bars-section fade-in-delay-2">
-                    <div className="stage-bars-title">Revenue by Stage</div>
+                    <div className="stage-bars-title">Revenue Leak by Stage</div>
                     {STAGES.map((stage, i) => {
                       const leak = results.stageLeaks[stage.id];
                       const score = results.stageScores[stage.id];
@@ -2176,11 +2218,10 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                         <div key={stage.id} className="stage-bar" style={{ animation: `staggerIn 0.3s var(--ease-out) ${0.3 + i * 0.06}s both` }}>
                           <div className="stage-bar-label">
                             <span className="stage-bar-name">{stage.label}</span>
-                            <span className="stage-bar-amount">${leak.toLocaleString()}</span>
+                            <span className="stage-bar-amount" style={{ color }}>${leak.toLocaleString()}</span>
                           </div>
                           <div className="stage-bar-track">
                             <div className="stage-bar-fill" style={{ width: Math.max(width, 3) + '%', background: color, animationDelay: `${0.4 + i * 0.08}s` }}>
-                              {width > 15 && <span>${Math.round(leak / 1000)}k</span>}
                             </div>
                           </div>
                         </div>
@@ -2205,7 +2246,7 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                   </div>
 
                   <button className="button button-primary" style={{ marginBottom: 32 }} onClick={() => setActiveTab('fixit')}>
-                    See Your Fix-It Kits \u2192
+                    See Your Fix-It Kits →
                   </button>
                 </div>
               )}
@@ -2215,15 +2256,25 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                 <div className="tab-content">
                   <div style={{ marginBottom: 20 }}>
                     <h2 style={{ marginBottom: 4 }}>Fix-It Kits</h2>
-                    <p className="caption">Scripts, tools, and actions for your top 3 leaks</p>
+                    <p className="caption">Scripts, tools, and actions for your weak stages</p>
                   </div>
-                  {results.topLeaks.map((leak, kitIdx) => {
+                  {(() => {
+                    // Show kits for ALL weak stages: 1-question ≤3/5, 2-question ≤6/10
+                    const weakStages = STAGES.filter(stage => {
+                      const score = results.stageScores[stage.id];
+                      const isTwoQ = stage.questionIds.length === 2;
+                      return isTwoQ ? score <= 6 : score <= 3;
+                    }).map(stage => ({
+                      stageId: stage.id,
+                      leak: results.stageLeaks[stage.id]
+                    })).sort((a, b) => b.leak - a.leak);
+                    return weakStages.map((leak, kitIdx) => {
                     const stage = STAGES.find(s => s.id === leak.stageId);
                     const kit = FIX_IT_KITS[stage.id];
-                    const isOpen = expandedKit === stage.id;
+                    const isOpen = expandedKit === stage.id || (expandedKit === null && kitIdx === 0);
                     return (
                       <div key={stage.id} className="kit-card" style={{ animation: `staggerIn 0.3s var(--ease-out) ${kitIdx * 0.08}s both` }}>
-                        <div className="kit-header card-interactive" onClick={() => setExpandedKit(isOpen ? null : stage.id)}>
+                        <div className="kit-header card-interactive" onClick={() => setExpandedKit(isOpen ? '__none__' : stage.id)}>
                           <div className="kit-header-left">
                             <div className="kit-icon-wrap">
                               <Icon name={stage.icon} size={20} className="kit-header-icon" />
@@ -2231,6 +2282,7 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                             <div className="kit-header-title">
                               <div className="kit-header-stage">{stage.label}</div>
                               <div className="kit-leak-amount">-${leak.leak.toLocaleString()}/yr</div>
+                              {!isOpen && <div style={{ fontSize: 12, color: 'var(--medium)', marginTop: 2 }}>{kit.headline} · {kit.tool.name}</div>}
                             </div>
                           </div>
                           <div className="kit-toggle" style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0)' }}>
@@ -2263,7 +2315,8 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                         </div>
                       </div>
                     );
-                  })}
+                  });
+                  })()}
                 </div>
               )}
 
@@ -2351,7 +2404,7 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                     <p className="caption">A phased roadmap to plug your revenue leaks</p>
                   </div>
                   {(() => {
-                    const plan = generate90DayPlan();
+                    const plan = generate90DayPlan(results);
                     return [plan.phase1, plan.phase2, plan.phase3, plan.phase4].map((phase, idx) => (
                       <div key={idx} className="phase-card" style={{ animation: `staggerIn 0.3s var(--ease-out) ${idx * 0.08}s both` }}>
                         <div className="phase-header">
@@ -2379,10 +2432,15 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                   <div className="blueprint-cta">
                     <div className="blueprint-headline">Ready for the deep analysis?</div>
                     <div className="blueprint-subtext">
-                      The Toolkit shows you where to look. The Automation Blueprint does the heavy lifting for you — custom research, AI-powered analysis, and a step-by-step implementation spec.
+                      The Toolkit shows you where the money is leaking. The Automation Blueprint uses AI to analyze your specific business, research your market, and build a custom implementation plan with real ROI numbers.
+                    </div>
+                    <div style={{ display: 'flex', gap: 16, justifyContent: 'center', margin: '16px 0', flexWrap: 'wrap' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--muted)' }}><Icon name="checkCircle" size={16} color="var(--green)" /> Done for you</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--muted)' }}><Icon name="checkCircle" size={16} color="var(--green)" /> 48-hour delivery</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--muted)' }}><Icon name="checkCircle" size={16} color="var(--green)" /> Money-back guarantee</div>
                     </div>
                     <button className="blueprint-button" onClick={() => window.open('https://theautobotics.com/blueprint', '_blank')}>
-                      Learn About the Blueprint \u2192
+                      Get Your Automation Blueprint — $197
                     </button>
                   </div>
                 </div>
@@ -2390,7 +2448,7 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
 
               <div className="results-footer">
                 <a className="start-over-link" onClick={handleStartOver} role="button">Start Over</a>
-                <span style={{ margin: '0 8px' }}>\u00b7</span>
+                <span style={{ margin: '0 8px' }}>·</span>
                 <span>Autobotics Operator's Toolkit</span>
               </div>
             </div>
