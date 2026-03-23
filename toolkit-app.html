@@ -1699,6 +1699,28 @@
       }
     };
 
+    const TOOL_STAGE_MAP = {
+      'OpenPhone': ['lead_capture'],
+      'Google Voice': ['lead_capture'],
+      'Google Forms': ['qualification'],
+      'Jobber Core': ['quoting', 'scheduling', 'invoicing'],
+      'Calendly or Square': ['scheduling'],
+      'Wave': ['invoicing'],
+      'Square Invoices': ['invoicing'],
+      'NiceJob': ['reviews'],
+      'SimpleTexting': ['retention'],
+      'Google Sheets': ['lead_capture'],
+      'Google Calendar': ['scheduling'],
+      'Google Docs': ['delivery'],
+      'Manual texting': ['retention']
+    };
+
+    const INDUSTRY_TIPS = {
+      recurring: "For recurring service businesses, the biggest ROI usually comes from retention and rebooking tools. SimpleTexting pays for itself if it rebooks even 2 past customers per month.",
+      emergency: "For emergency service businesses, the #1 tool investment is always phone answering. Miss an emergency call and that customer calls the next number. OpenPhone pays for itself on the first captured call.",
+      project: "For project-based businesses, quoting tools and review collection drive the most revenue. Fast, professional quotes close more jobs, and reviews are how new customers find you."
+    };
+
     // ===== SVG ICONS =====
     const ICONS = {
       phone: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>,
@@ -2367,34 +2389,142 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
               )}
 
               {/* TOOLS TAB */}
-              {activeTab === 'tools' && (
+              {activeTab === 'tools' && (() => {
+                const topLeakStageIds = results.topLeaks.slice(0, 3).map(l => l.stageId);
+                const businessType = BUSINESS_TYPES.find(bt => bt.id === profile.businessType);
+                const category = businessType ? businessType.category : 'project';
+
+                // Find which tier contains the #1 leak's tool
+                const topLeakKit = results.topLeaks[0] ? FIX_IT_KITS[results.topLeaks[0].stageId] : null;
+                const topLeakToolName = topLeakKit ? topLeakKit.tool.name : null;
+                const recommendedTierKey = topLeakToolName ? Object.keys(TOOL_STACKS).find(key =>
+                  TOOL_STACKS[key].tools.some(t => t.name === topLeakToolName || (topLeakToolName && t.name.includes(topLeakToolName.split(' ')[0])))
+                ) : null;
+
+                return (
                 <div className="tab-content">
-                  <div style={{ marginBottom: 20 }}>
+
+                  {/* SECTION 1 — Tools That Fix Your Leaks */}
+                  <div style={{ marginBottom: 28 }}>
+                    <h2 style={{ marginBottom: 4 }}>Tools That Fix Your Leaks</h2>
+                    <p className="caption">Based on your top revenue leaks</p>
+                  </div>
+                  {results.topLeaks.slice(0, 3).map((leak, idx) => {
+                    const stage = STAGES.find(s => s.id === leak.stageId);
+                    const kit = FIX_IT_KITS[leak.stageId];
+                    if (!kit || !stage) return null;
+                    return (
+                      <div key={leak.stageId} style={{
+                        background: 'var(--white)',
+                        border: '1px solid var(--border)',
+                        borderLeft: idx === 0 ? '3px solid var(--teal)' : '1px solid var(--border)',
+                        borderRadius: 'var(--radius)',
+                        padding: 20,
+                        marginBottom: 14,
+                        boxShadow: 'var(--shadow-sm)',
+                        animation: `staggerIn 0.3s var(--ease-out) ${idx * 0.08}s both`
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+                          <span style={{
+                            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                            width: 26, height: 26, borderRadius: 'var(--radius-full)',
+                            background: idx === 0 ? 'var(--teal)' : 'var(--charcoal)',
+                            color: 'var(--white)', fontSize: 12, fontWeight: 800, fontFamily: 'var(--font-mono)', flexShrink: 0
+                          }}>#{idx + 1}</span>
+                          <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--charcoal)' }}>
+                            {stage.label} — <span style={{ color: 'var(--red)', fontFamily: 'var(--font-mono)' }}>leaking ${roundLeak(leak.leak).toLocaleString()}/year</span>
+                          </span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                          <Icon name="checkCircle" size={18} color="var(--teal)" />
+                          <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--charcoal)' }}>{kit.tool.name}</span>
+                          <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>{kit.tool.cost}</span>
+                        </div>
+                        <div style={{ fontSize: 13, color: 'var(--medium)', lineHeight: 1.45, marginLeft: 26, marginBottom: 6 }}>{kit.tool.why}</div>
+                        <div style={{ fontSize: 12, color: 'var(--muted)', marginLeft: 26 }}>Free alternative: {kit.tool.freeAlt}</div>
+                      </div>
+                    );
+                  })}
+
+                  {/* SECTION 2 — Budget Tiers */}
+                  <div style={{ marginBottom: 20, marginTop: 32 }}>
                     <h2 style={{ marginBottom: 4 }}>Tool Stacks</h2>
                     <p className="caption">Recommended tools by budget level</p>
                   </div>
-                  {Object.entries(TOOL_STACKS).map(([key, tier], idx) => (
-                    <div key={key} className="tool-tier-card" style={{ animation: `staggerIn 0.3s var(--ease-out) ${idx * 0.08}s both` }}>
+                  {Object.entries(TOOL_STACKS).map(([key, tier], idx) => {
+                    const isRecommended = key === recommendedTierKey;
+                    // Sort tools: those matching a top leak stage come first
+                    const sortedTools = [...tier.tools].sort((a, b) => {
+                      const aMatch = TOOL_STAGE_MAP[a.name] ? TOOL_STAGE_MAP[a.name].some(s => topLeakStageIds.includes(s)) : false;
+                      const bMatch = TOOL_STAGE_MAP[b.name] ? TOOL_STAGE_MAP[b.name].some(s => topLeakStageIds.includes(s)) : false;
+                      if (aMatch && !bMatch) return -1;
+                      if (!aMatch && bMatch) return 1;
+                      return 0;
+                    });
+
+                    return (
+                    <div key={key} className="tool-tier-card" style={{ animation: `staggerIn 0.3s var(--ease-out) ${(idx + 3) * 0.08}s both` }}>
                       <div className="tool-tier-header">
-                        <div className="tool-tier-label">{tier.label}</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                          <div className="tool-tier-label">{tier.label}</div>
+                          {isRecommended && (
+                            <span style={{
+                              display: 'inline-flex', alignItems: 'center', padding: '3px 10px',
+                              borderRadius: 'var(--radius-full)', background: 'var(--amber-light)',
+                              color: 'var(--amber)', fontSize: 11, fontWeight: 700, letterSpacing: '0.2px'
+                            }}>Recommended for you</span>
+                          )}
+                        </div>
                         <div className="tool-tier-subtitle">{tier.subtitle}</div>
                       </div>
                       <div className="tool-list">
-                        {tier.tools.map((tool, tIdx) => (
+                        {sortedTools.map((tool, tIdx) => {
+                          const matchedStages = TOOL_STAGE_MAP[tool.name]
+                            ? TOOL_STAGE_MAP[tool.name].filter(s => topLeakStageIds.includes(s))
+                            : [];
+                          return (
                           <div key={tIdx} className="tool-item">
                             <Icon name="checkCircle" size={20} className="tool-item-check" />
                             <div className="tool-item-content">
-                              <div className="tool-item-name">{tool.name}</div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                                <div className="tool-item-name" style={{ marginBottom: 0 }}>{tool.name}</div>
+                                {matchedStages.map(stageId => {
+                                  const stg = STAGES.find(s => s.id === stageId);
+                                  return stg ? (
+                                    <span key={stageId} style={{
+                                      display: 'inline-flex', alignItems: 'center', padding: '2px 8px',
+                                      borderRadius: 'var(--radius-full)', background: 'var(--teal)',
+                                      color: 'var(--white)', fontSize: 10, fontWeight: 700, letterSpacing: '0.2px'
+                                    }}>Fixes {stg.label}</span>
+                                  ) : null;
+                                })}
+                              </div>
                               <div className="tool-item-purpose">{tool.purpose}</div>
                               <div className="tool-item-cost">{tool.cost}</div>
                             </div>
                           </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
+
+                  {/* SECTION 3 — Industry Tip */}
+                  {INDUSTRY_TIPS[category] && (
+                    <div style={{
+                      background: 'var(--cream)', border: '1px solid var(--border)',
+                      borderRadius: 'var(--radius)', padding: '16px 20px',
+                      marginTop: 8, marginBottom: 8,
+                      display: 'flex', gap: 12, alignItems: 'flex-start'
+                    }}>
+                      <span style={{ fontSize: 18, flexShrink: 0, marginTop: 1 }}>💡</span>
+                      <div style={{ fontSize: 13, color: 'var(--medium)', lineHeight: 1.55 }}>{INDUSTRY_TIPS[category]}</div>
+                    </div>
+                  )}
                 </div>
-              )}
+                );
+              })()}
 
               {/* 90 DAYS TAB */}
               {activeTab === 'ninetyDays' && (
