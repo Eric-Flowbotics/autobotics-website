@@ -2091,6 +2091,7 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
       const [copiedText, setCopiedText] = useState(null);
       const [checkedTasks, setCheckedTasks] = useState({});
       const [showFlash, setShowFlash] = useState(null);
+      const [browseOpen, setBrowseOpen] = useState(false);
 
       useEffect(() => {
         const saved = localStorage.getItem('autobotics_toolkit_v2');
@@ -2378,14 +2379,14 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                     ) : null}
                     <div className="score-badge fade-in-delay-2" style={{ backgroundColor: badge.color }}>{badge.label}</div>
                     <div className="score-detail fade-in-delay-2" style={{ fontSize: 14, color: 'var(--medium)', marginTop: 8 }}>Score: {results.totalScore}/60</div>
-                    <p className="methodology fade-in-delay-2" style={{ fontSize: 12, color: 'var(--muted)', maxWidth: 480, margin: '12px auto 0', lineHeight: 1.6 }}>These estimates are directional \u2014 based on industry benchmarks from ServiceTitan, Housecall Pro, and home services industry research, applied to your specific answers. They show where your biggest opportunities are, not exact dollar predictions. Each number above traces directly to what you told us. For precise analysis with external market research, see the Automation Blueprint.</p>
+                    <p className="methodology fade-in-delay-2" style={{ fontSize: 12, color: 'var(--muted)', maxWidth: 480, margin: '12px auto 0', lineHeight: 1.6 }}>These estimates are directional — based on industry benchmarks from ServiceTitan, Housecall Pro, and home services industry research, applied to your specific answers. They show where your biggest opportunities are, not exact dollar predictions. Each number above traces directly to what you told us. For precise analysis with external market research, see the Automation Blueprint.</p>
                   </div>
 
                   {isAllGreen && (
                     <>
                     <div className="all-green-card fade-in-delay-2">
                       <div className="all-green-title">Your business is running tight.</div>
-                      <div className="all-green-text">Every stage of your operation scored at the top level. That\u2019s rare \u2014 most operators have 2\u20133 stages that need work. The scripts and tools in this toolkit are still here if you ever need them. For deeper optimization opportunities that this self-assessment doesn\u2019t cover, the Automation Blueprint can help.</div>
+                      <div className="all-green-text">Every stage of your operation scored at the top level. That's rare — most operators have 2–3 stages that need work. The scripts and tools in this toolkit are still here if you ever need them. For deeper optimization opportunities that this self-assessment doesn't cover, the Automation Blueprint can help.</div>
                     </div>
                     <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 24, marginTop: 16 }}>
                       <div style={{ textAlign: 'center', marginBottom: 16 }}>
@@ -2500,7 +2501,7 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                               <div className="kit-header-title">
                                 <div className="kit-header-stage">{stage.label}</div>
                                 <div className="kit-leak-amount">-${leak.leak.toLocaleString()}/yr</div>
-                                {!isOpen && <div style={{ fontSize: 12, color: 'var(--medium)', marginTop: 2 }}>{kit.headline} \u00B7 {kit.tool.name}</div>}
+                                {!isOpen && <div style={{ fontSize: 12, color: 'var(--medium)', marginTop: 2 }}>{kit.headline} · {kit.tool.name}</div>}
                               </div>
                             </div>
                             <div className="kit-toggle" style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0)' }}>
@@ -2540,10 +2541,10 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                       return (
                         <>
                           <div style={{ background: 'var(--green-light)', border: '1px solid rgba(22, 163, 74, 0.15)', borderRadius: 'var(--radius)', padding: '20px 24px', marginBottom: 24 }}>
-                            <p style={{ fontSize: 14, color: 'var(--medium)', lineHeight: 1.65 }}>Your business is running well across all 8 stages. The scripts and tools below are still here if you ever need them \u2014 but right now, you don\u2019t have urgent leaks to fix.</p>
+                            <p style={{ fontSize: 14, color: 'var(--medium)', lineHeight: 1.65 }}>Your business is running well across all 8 stages. The scripts and tools below are still here if you ever need them — but right now, you don't have urgent leaks to fix.</p>
                           </div>
                           <div className="kit-card">
-                            <div className="kit-header card-interactive" onClick={() => setExpandedKit(expandedKit === '__browse__' ? '__none__' : '__browse__')}>
+                            <div className="kit-header card-interactive" onClick={() => setBrowseOpen(!browseOpen)}>
                               <div className="kit-header-left">
                                 <div className="kit-icon-wrap">
                                   <Icon name="wrench" size={20} className="kit-header-icon" />
@@ -2552,11 +2553,11 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                                   <div className="kit-header-stage">Browse all Fix-It Kits</div>
                                 </div>
                               </div>
-                              <div className="kit-toggle" style={{ transform: expandedKit === '__browse__' ? 'rotate(180deg)' : 'rotate(0)' }}>
+                              <div className="kit-toggle" style={{ transform: browseOpen ? 'rotate(180deg)' : 'rotate(0)' }}>
                                 <Icon name="chevronDown" size={20} />
                               </div>
                             </div>
-                            <div className={`kit-body ${expandedKit === '__browse__' ? 'open' : ''}`}>
+                            <div className={`kit-body ${browseOpen ? 'open' : ''}`}>
                               <div style={{ padding: 16 }}>
                                 {allKits.map((leak, kitIdx) => renderKit(leak, kitIdx, true))}
                               </div>
@@ -2665,7 +2666,7 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                                 color: 'var(--white)', fontSize: 12, fontWeight: 800, fontFamily: 'var(--font-mono)', flexShrink: 0
                               }}>#{idx + 1}</span>
                               <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--charcoal)' }}>
-                                {stage.label} \u2014 <span style={{ color: 'var(--red)', fontFamily: 'var(--font-mono)' }}>leaking ${roundLeak(leak.leak).toLocaleString()}/year</span>
+                                {stage.label} — <span style={{ color: 'var(--red)', fontFamily: 'var(--font-mono)' }}>leaking ${roundLeak(leak.leak).toLocaleString()}/year</span>
                               </span>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
@@ -2683,7 +2684,7 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                     <>
                       <div style={{ marginBottom: 28 }}>
                         <h2 style={{ marginBottom: 4 }}>Your Current Toolkit Is Working</h2>
-                        <p className="caption">Based on your results, you\u2019re already using the right tools and processes. The stacks below are useful reference if you ever want to compare options.</p>
+                        <p className="caption">Based on your results, you're already using the right tools and processes. The stacks below are useful reference if you ever want to compare options.</p>
                       </div>
                     </>
                   )}
@@ -2780,9 +2781,9 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                     if (plan.leakCount === 0) {
                       return (
                         <div style={{ background: 'var(--green-light)', border: '1px solid rgba(22, 163, 74, 0.15)', borderRadius: 'var(--radius)', padding: '24px', marginBottom: 24, textAlign: 'center' }}>
-                          <p style={{ fontSize: 15, color: 'var(--medium)', lineHeight: 1.65, marginBottom: 20 }}>You don\u2019t need a 90-day fix plan \u2014 your business is already running well across all 8 stages. The next step is finding deeper optimization opportunities that this self-assessment doesn\u2019t cover.</p>
+                          <p style={{ fontSize: 15, color: 'var(--medium)', lineHeight: 1.65, marginBottom: 20 }}>You don't need a 90-day fix plan — your business is already running well across all 8 stages. The next step is finding deeper optimization opportunities that this self-assessment doesn't cover.</p>
                           <button className="blueprint-button" onClick={() => window.open('https://theautobotics.com/blueprint', '_blank')}>
-                            Get Your Automation Blueprint \u2014 $197 \u2192
+                            Get Your Automation Blueprint — $197 →
                           </button>
                         </div>
                       );
@@ -2822,7 +2823,7 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--muted)' }}><Icon name="checkCircle" size={16} color="var(--green)" /> Money-back guarantee</div>
                     </div>
                     <button className="blueprint-button" onClick={() => window.open('https://theautobotics.com/blueprint', '_blank')}>
-                      Get Your Automation Blueprint \u2014 $197
+                      Get Your Automation Blueprint — $197
                     </button>
                   </div>
                 </div>
