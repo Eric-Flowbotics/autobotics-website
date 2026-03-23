@@ -1,0 +1,2408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autobotics Operator's Toolkit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    :root {
+      --teal: #0D9488;
+      --teal-hover: #0B7C72;
+      --teal-light: rgba(13, 148, 136, 0.08);
+      --teal-border: rgba(13, 148, 136, 0.25);
+      --teal-glow: rgba(13, 148, 136, 0.15);
+      --amber: #D97706;
+      --amber-light: #FFFBEB;
+      --charcoal: #1C2024;
+      --cream: #FAF7F2;
+      --white: #FFFFFF;
+      --medium: #5C6370;
+      --muted: #9CA3AF;
+      --border: #E8E2D9;
+      --border-strong: #D4CFC6;
+      --red: #DC2626;
+      --red-light: #FEF2F2;
+      --red-glow: rgba(220, 38, 38, 0.12);
+      --green: #16A34A;
+      --green-light: #F0FDF4;
+      --font-primary: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+      --shadow-xs: 0 1px 2px rgba(28, 32, 36, 0.04);
+      --shadow-sm: 0 1px 3px rgba(28, 32, 36, 0.06), 0 1px 2px rgba(28, 32, 36, 0.04);
+      --shadow-md: 0 4px 6px -1px rgba(28, 32, 36, 0.07), 0 2px 4px -2px rgba(28, 32, 36, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(28, 32, 36, 0.08), 0 4px 6px -4px rgba(28, 32, 36, 0.04);
+      --shadow-xl: 0 20px 25px -5px rgba(28, 32, 36, 0.08), 0 8px 10px -6px rgba(28, 32, 36, 0.04);
+      --shadow-inner: inset 0 2px 4px rgba(28, 32, 36, 0.04);
+      --shadow-card: 0 1px 3px rgba(28, 32, 36, 0.06), 0 1px 2px rgba(28, 32, 36, 0.04), 0 0 0 1px rgba(232, 226, 217, 0.7);
+      --shadow-card-hover: 0 8px 16px -4px rgba(28, 32, 36, 0.08), 0 2px 6px rgba(28, 32, 36, 0.04), 0 0 0 1px rgba(13, 148, 136, 0.2);
+
+      --radius: 16px;
+      --radius-sm: 10px;
+      --radius-xs: 6px;
+      --radius-full: 9999px;
+
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      background: var(--cream);
+      color: var(--charcoal);
+      font-family: var(--font-primary);
+      font-size: 15px;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1 { font-size: 32px; font-weight: 800; letter-spacing: -0.6px; line-height: 1.12; }
+    h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; line-height: 1.25; }
+    h3 { font-size: 17px; font-weight: 700; line-height: 1.35; letter-spacing: -0.2px; }
+    small, .caption { font-size: 13px; color: var(--muted); }
+    .mono { font-family: var(--font-mono); }
+
+    #root { min-height: 100vh; background: var(--cream); }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    @media (min-width: 768px) {
+      .container { padding: 32px 40px; }
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      padding: 20px;
+      transition: box-shadow 0.3s var(--ease-out), transform 0.2s var(--ease-out);
+      position: relative;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card-hover);
+      opacity: 0;
+      transition: opacity 0.3s var(--ease-out);
+      pointer-events: none;
+    }
+
+    .card:hover::before { opacity: 1; }
+
+    .card-interactive { cursor: pointer; user-select: none; }
+
+    .card-interactive:active {
+      transform: scale(0.98);
+      transition-duration: 0.1s;
+    }
+
+    /* ===== BUTTONS ===== */
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 24px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-primary);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s var(--ease-out);
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .button-primary {
+      background: var(--teal);
+      color: var(--white);
+      width: 100%;
+      height: 52px;
+      font-size: 16px;
+      border-radius: var(--radius-sm);
+      box-shadow: 0 2px 8px rgba(13, 148, 136, 0.25), 0 1px 2px rgba(13, 148, 136, 0.15);
+      letter-spacing: -0.2px;
+    }
+
+    .button-primary:hover {
+      background: var(--teal-hover);
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3), 0 2px 4px rgba(13, 148, 136, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .button-primary:active {
+      background: #097069;
+      transform: translateY(0) scale(0.98);
+      box-shadow: 0 1px 4px rgba(13, 148, 136, 0.2);
+    }
+
+    .button-secondary {
+      background: var(--white);
+      color: var(--teal);
+      border: 2px solid var(--teal);
+    }
+
+    .button-secondary:active {
+      background: var(--teal-light);
+      transform: scale(0.98);
+    }
+
+    .button-small {
+      padding: 8px 14px;
+      font-size: 13px;
+      height: auto;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    .fade-in { animation: fadeIn 0.4s var(--ease-out) both; }
+    .fade-in-delay-1 { animation: fadeIn 0.4s var(--ease-out) 0.1s both; }
+    .fade-in-delay-2 { animation: fadeIn 0.4s var(--ease-out) 0.2s both; }
+    .fade-in-delay-3 { animation: fadeIn 0.4s var(--ease-out) 0.3s both; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-in { animation: slideIn 0.35s var(--ease-out) both; }
+
+    @keyframes slideIn {
+      from { transform: translateX(24px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes scaleReveal {
+      0% { transform: scale(0.8); opacity: 0; }
+      60% { transform: scale(1.03); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes countUp {
+      from { opacity: 0; transform: translateY(16px) scale(0.9); filter: blur(4px); }
+      to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+
+    @keyframes barGrow {
+      from { width: 0; }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+      50% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0.1); }
+    }
+
+    @keyframes shimmer {
+      from { background-position: -200% 0; }
+      to { background-position: 200% 0; }
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes flashIn {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+      20% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+      30% { transform: translate(-50%, -50%) scale(0.97); }
+      40% { transform: translate(-50%, -50%) scale(1); }
+      80% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.1); }
+    }
+
+    @keyframes staggerIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== WELCOME SCREEN ===== */
+    .welcome-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .wordmark {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .wordmark-auto { color: var(--charcoal); }
+    .wordmark-botics { color: var(--teal); }
+
+    .welcome-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--charcoal);
+      color: var(--white);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .welcome-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--teal);
+      animation: breathe 2s ease-in-out infinite;
+    }
+
+    .welcome-headline {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      line-height: 1.1;
+      letter-spacing: -1px;
+    }
+
+    @media (max-width: 500px) {
+      .welcome-headline { font-size: 30px; letter-spacing: -0.6px; }
+    }
+
+    .welcome-subline {
+      font-size: 16px;
+      color: var(--medium);
+      margin-bottom: 40px;
+      line-height: 1.65;
+      max-width: 440px;
+    }
+
+    .features-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 40px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-align: left;
+      padding: 12px 16px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-xs);
+      transition: all 0.2s var(--ease-out);
+    }
+
+    .feature-item:hover {
+      box-shadow: var(--shadow-sm);
+      border-color: var(--teal-border);
+    }
+
+    .feature-icon-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-xs);
+      background: var(--teal-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .feature-icon {
+      width: 18px;
+      height: 18px;
+      color: var(--teal);
+    }
+
+    .feature-text {
+      font-size: 14px;
+      color: var(--charcoal);
+      font-weight: 600;
+    }
+
+    .welcome-meta {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 24px;
+      letter-spacing: 0.2px;
+    }
+
+    /* ===== SETUP SCREEN ===== */
+    .setup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-top: 8px;
+    }
+
+    .back-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-xs);
+      transition: background 0.15s;
+      color: var(--charcoal);
+    }
+
+    .back-button:active { background: var(--teal-light); }
+
+    .progress-steps {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .step-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: all 0.35s var(--ease-spring);
+    }
+
+    .step-dot.active {
+      background: var(--teal);
+      width: 28px;
+      border-radius: var(--radius-xs);
+      box-shadow: 0 0 0 3px var(--teal-glow);
+    }
+
+    .step-dot.completed {
+      background: var(--teal);
+    }
+
+    .setup-eyebrow {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .setup-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 28px;
+      letter-spacing: -0.5px;
+    }
+
+    .business-types-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    @media (min-width: 500px) {
+      .business-types-grid { grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    .type-card {
+      padding: 18px 14px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--white);
+      cursor: pointer;
+      transition: all 0.2s var(--ease-out);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      min-height: 100px;
+      justify-content: center;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .type-card:hover {
+      border-color: var(--teal-border);
+      box-shadow: var(--shadow-md);
+    }
+
+    .type-card:active {
+      border-color: var(--teal);
+      background: var(--teal-light);
+      transform: scale(0.97);
+    }
+
+    .type-card-icon {
+      width: 28px;
+      height: 28px;
+      color: var(--teal);
+    }
+
+    .type-card-label {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--charcoal);
+    }
+
+    .option-button {
+      width: 100%;
+      padding: 16px 20px;
+      text-align: left;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--white);
+      cursor: pointer;
+      transition: all 0.2s var(--ease-out);
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 56px;
+      margin-bottom: 12px;
+      font-family: var(--font-primary);
+      box-shadow: var(--shadow-xs);
+      color: var(--charcoal);
+    }
+
+    .option-button:hover {
+      border-color: var(--teal-border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .option-button:active {
+      border-color: var(--teal);
+      background: var(--teal-light);
+      transform: scale(0.985);
+    }
+
+    /* ===== AUDIT SCREEN ===== */
+    .audit-container { display: flex; flex-direction: column; }
+
+    .audit-header {
+      position: sticky;
+      top: 0;
+      background: linear-gradient(to bottom, var(--cream) 85%, transparent);
+      padding: 16px 0 24px;
+      z-index: 10;
+    }
+
+    .counter {
+      background: linear-gradient(135deg, #F59E0B, var(--amber));
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin-bottom: 14px;
+      color: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(217, 119, 6, 0.2);
+      transition: all 0.5s var(--ease-out);
+    }
+
+    .counter.critical {
+      background: linear-gradient(135deg, #EF4444, var(--red));
+      box-shadow: 0 2px 12px rgba(220, 38, 38, 0.25);
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+
+    .counter-left { display: flex; flex-direction: column; }
+
+    .counter-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      opacity: 0.85;
+    }
+
+    .counter-amount {
+      font-size: 28px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      letter-spacing: -0.5px;
+      transition: all 0.3s var(--ease-out);
+    }
+
+    .counter-icon {
+      width: 32px;
+      height: 32px;
+      opacity: 0.7;
+    }
+
+    .counter-flash {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--red);
+      color: var(--white);
+      padding: 14px 24px;
+      border-radius: var(--radius);
+      font-weight: 700;
+      font-size: 14px;
+      font-family: var(--font-mono);
+      z-index: 100;
+      pointer-events: none;
+      animation: flashIn 2.2s var(--ease-out) forwards;
+      box-shadow: 0 8px 24px rgba(220, 38, 38, 0.3);
+    }
+
+    .progress-bar-container { margin-bottom: 12px; }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .progress-label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 5px;
+      background: var(--border);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal), #14B8A6);
+      transition: width 0.4s var(--ease-out);
+      border-radius: var(--radius-full);
+    }
+
+    .stage-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding: 6px 12px;
+      background: var(--teal-light);
+      border-radius: var(--radius-full);
+      border: 1px solid var(--teal-border);
+    }
+
+    .stage-chip-icon {
+      width: 14px;
+      height: 14px;
+    }
+
+    .question-container { animation: slideIn 0.3s var(--ease-out); }
+
+    .question-title {
+      font-size: 21px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      line-height: 1.3;
+      letter-spacing: -0.4px;
+    }
+
+    .question-subtext {
+      font-size: 14px;
+      font-style: italic;
+      color: var(--medium);
+      margin-bottom: 28px;
+      line-height: 1.65;
+      padding-left: 14px;
+      border-left: 3px solid var(--amber);
+    }
+
+    .answer-option {
+      padding: 16px 18px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--white);
+      cursor: pointer;
+      transition: all 0.15s var(--ease-out);
+      font-size: 15px;
+      line-height: 1.5;
+      margin-bottom: 12px;
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      font-family: var(--font-primary);
+      color: var(--charcoal);
+      font-weight: 500;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .answer-option:hover {
+      border-color: var(--teal-border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .answer-option:active {
+      border-color: var(--teal);
+      background: var(--teal-light);
+      transform: scale(0.985);
+      transition-duration: 0.08s;
+    }
+
+    .audit-nav {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .nav-button {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      cursor: pointer;
+      font-family: var(--font-primary);
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--medium);
+      transition: all 0.2s;
+    }
+
+    .nav-button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .nav-button:active:not(:disabled) {
+      background: var(--teal-light);
+      border-color: var(--teal);
+    }
+
+    /* ===== RESULTS SCREEN ===== */
+    .results-container { display: flex; flex-direction: column; }
+
+    .results-header {
+      margin-bottom: 8px;
+      text-align: center;
+      padding: 40px 0 32px;
+    }
+
+    .results-intro {
+      font-size: 14px;
+      color: var(--medium);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .big-number {
+      font-size: 56px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--red);
+      margin-bottom: 4px;
+      letter-spacing: -2px;
+      animation: countUp 0.8s var(--ease-out) both;
+    }
+
+    @media (max-width: 400px) {
+      .big-number { font-size: 44px; letter-spacing: -1.5px; }
+    }
+
+    .big-number-context {
+      font-size: 16px;
+      color: var(--medium);
+      font-weight: 500;
+    }
+
+    .methodology {
+      font-size: 12px;
+      color: var(--muted);
+      font-style: italic;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    .score-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--white);
+      margin-top: 16px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ===== TAB BAR ===== */
+    .tabs {
+      display: flex;
+      background: var(--charcoal);
+      border-radius: var(--radius);
+      padding: 4px;
+      margin-bottom: 28px;
+      position: sticky;
+      top: 0;
+      z-index: 9;
+      box-shadow: 0 4px 12px rgba(28, 32, 36, 0.15);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab-button {
+      flex: 1;
+      padding: 10px 12px;
+      border: none;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.5);
+      font-family: var(--font-primary);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: all 0.25s var(--ease-out);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      white-space: nowrap;
+      min-width: 0;
+      position: relative;
+    }
+
+    .tab-button:hover { color: rgba(255, 255, 255, 0.75); }
+
+    .tab-button.active {
+      background: var(--teal);
+      color: var(--white);
+      box-shadow: 0 2px 8px rgba(13, 148, 136, 0.3);
+    }
+
+    .tab-content { animation: fadeIn 0.3s var(--ease-out); }
+
+    /* ===== STAGE BARS ===== */
+    .stage-bars-section { margin-bottom: 12px; }
+    .stage-bars-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .stage-bar {
+      margin-bottom: 20px;
+    }
+
+    .stage-bar-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .stage-bar-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--charcoal);
+    }
+
+    .stage-bar-amount {
+      font-size: 13px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: var(--medium);
+    }
+
+    .stage-bar-track {
+      height: 28px;
+      background: rgba(232, 226, 217, 0.5);
+      border-radius: var(--radius-xs);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .stage-bar-fill {
+      height: 100%;
+      border-radius: var(--radius-xs);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: var(--white);
+      animation: barGrow 0.6s var(--ease-out) both;
+      min-width: 0;
+    }
+
+    /* ===== TOP LEAKS ===== */
+    .top-leaks { margin-top: 32px; margin-bottom: 32px; }
+
+    .top-leaks-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .leak-card {
+      display: flex;
+      gap: 16px;
+      padding: 18px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s var(--ease-out);
+    }
+
+    .leak-card:hover { box-shadow: var(--shadow-md); }
+
+    .leak-rank {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--red-light);
+      color: var(--red);
+      font-weight: 800;
+      font-size: 16px;
+      flex-shrink: 0;
+      border: 2px solid rgba(220, 38, 38, 0.15);
+    }
+
+    .leak-content { flex: 1; }
+
+    .leak-stage {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 2px;
+    }
+
+    .leak-amount {
+      font-size: 22px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--red);
+      letter-spacing: -0.5px;
+    }
+
+    /* ===== FIX-IT KITS ===== */
+    .kit-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--white);
+      margin-bottom: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.2s;
+    }
+
+    .kit-card:hover { box-shadow: var(--shadow-md); }
+
+    .kit-header {
+      padding: 18px 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.15s;
+      user-select: none;
+    }
+
+    .kit-header:active { background: var(--teal-light); }
+
+    .kit-header-left {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .kit-icon-wrap {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-xs);
+      background: var(--teal-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid var(--teal-border);
+    }
+
+    .kit-header-icon { width: 20px; height: 20px; color: var(--teal); }
+
+    .kit-header-title { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
+    .kit-header-stage {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--charcoal);
+    }
+
+    .kit-leak-amount {
+      font-size: 13px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: var(--red);
+    }
+
+    .kit-toggle {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      flex-shrink: 0;
+      transition: transform 0.3s var(--ease-out);
+      margin-left: 12px;
+    }
+
+    .kit-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s var(--ease-out);
+    }
+
+    .kit-body.open { max-height: 3000px; }
+
+    .kit-headline {
+      background: linear-gradient(135deg, var(--teal), #14B8A6);
+      color: var(--white);
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .kit-content { padding: 20px; }
+
+    .first-action {
+      background: var(--teal-light);
+      border-left: 4px solid var(--teal);
+      padding: 16px;
+      margin-bottom: 24px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 14px;
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    .script-item { margin-bottom: 24px; }
+
+    .script-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .script-text {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      font-size: 13px;
+      font-family: var(--font-mono);
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-bottom: 10px;
+      max-height: 200px;
+      overflow-y: auto;
+      color: var(--charcoal);
+    }
+
+    .copy-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--charcoal);
+      color: var(--white);
+      border: none;
+      padding: 8px 14px;
+      border-radius: var(--radius-xs);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: var(--font-primary);
+    }
+
+    .copy-button:active { background: #2d3138; transform: scale(0.97); }
+
+    .copy-button.copied {
+      background: var(--green);
+    }
+
+    .copy-icon { width: 14px; height: 14px; }
+
+    .tool-rec-card {
+      background: var(--amber-light);
+      border: 2px solid rgba(217, 119, 6, 0.2);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-top: 20px;
+    }
+
+    .tool-rec-label {
+      font-size: 11px;
+      color: var(--amber);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .tool-rec-name { font-size: 16px; font-weight: 700; color: var(--charcoal); margin-bottom: 4px; }
+    .tool-rec-cost { font-size: 14px; font-weight: 700; color: var(--amber); font-family: var(--font-mono); margin-bottom: 8px; }
+    .tool-rec-why { font-size: 13px; color: var(--medium); line-height: 1.5; margin-bottom: 8px; }
+    .tool-rec-alt { font-size: 12px; color: var(--muted); }
+
+    /* ===== PROMPTS TAB ===== */
+    .prompt-card {
+      background: var(--white);
+      border: 2px solid var(--teal-border);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .prompt-card.highlight {
+      border-color: var(--charcoal);
+      background: var(--charcoal);
+      color: var(--white);
+    }
+
+    .prompt-card.highlight h3 { color: var(--white); }
+
+    .ai-onramp {
+      background: var(--charcoal);
+      color: var(--white);
+      border: none;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .ai-onramp h3 { color: var(--white); margin-bottom: 16px; }
+
+    .onramp-steps { display: flex; flex-direction: column; gap: 14px; }
+
+    .onramp-step { display: flex; gap: 14px; align-items: flex-start; }
+
+    .onramp-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      background: var(--teal);
+      border-radius: 50%;
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .onramp-text { font-size: 14px; line-height: 1.55; }
+
+    .prompt-text {
+      background: var(--cream);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-bottom: 14px;
+      max-height: 280px;
+      overflow-y: auto;
+      color: var(--charcoal);
+    }
+
+    .prompt-card.highlight .prompt-text {
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .prompt-card.highlight .copy-button {
+      background: var(--white);
+      color: var(--charcoal);
+    }
+
+    .prompt-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+      margin: 32px 0 16px;
+    }
+
+    /* ===== TOOLS TAB ===== */
+    .tool-tier-card {
+      background: var(--white);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+    }
+
+    .tool-tier-card:hover { box-shadow: var(--shadow-md); }
+
+    .tool-tier-header { margin-bottom: 20px; }
+
+    .tool-tier-label {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--charcoal);
+      font-family: var(--font-mono);
+      margin-bottom: 2px;
+      letter-spacing: -0.3px;
+    }
+
+    .tool-tier-subtitle { font-size: 13px; color: var(--medium); font-weight: 500; }
+
+    .tool-list { display: flex; flex-direction: column; gap: 14px; }
+
+    .tool-item { display: flex; gap: 14px; align-items: flex-start; }
+
+    .tool-item-check {
+      width: 20px;
+      height: 20px;
+      color: var(--green);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .tool-item-content { flex: 1; }
+    .tool-item-name { font-size: 14px; font-weight: 700; color: var(--charcoal); margin-bottom: 2px; }
+    .tool-item-purpose { font-size: 13px; color: var(--medium); line-height: 1.45; }
+    .tool-item-cost { font-size: 12px; color: var(--muted); font-family: var(--font-mono); margin-top: 2px; }
+
+    /* ===== 90-DAY TAB ===== */
+    .phase-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .phase-header { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 18px; }
+
+    .phase-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      background: var(--teal);
+      color: var(--white);
+      border-radius: 50%;
+      font-size: 18px;
+      font-weight: 800;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(13, 148, 136, 0.25);
+    }
+
+    .phase-title { font-size: 17px; font-weight: 700; color: var(--charcoal); }
+    .phase-timeframe { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .task-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .task-item {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      background: var(--cream);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .task-item:active { background: var(--teal-light); border-color: var(--teal-border); }
+
+    .task-checkbox {
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--border-strong);
+      border-radius: var(--radius-xs);
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s var(--ease-spring);
+    }
+
+    .task-item.checked .task-checkbox {
+      background: var(--green);
+      border-color: var(--green);
+      transform: scale(1.05);
+    }
+
+    .task-item.checked { opacity: 0.55; }
+    .task-text { flex: 1; line-height: 1.45; }
+    .task-item.checked .task-text { text-decoration: line-through; color: var(--muted); }
+
+    .blueprint-cta {
+      background: var(--charcoal);
+      color: var(--white);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      text-align: center;
+      margin-top: 28px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow-xl);
+    }
+
+    .blueprint-headline { font-size: 20px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.3px; }
+
+    .blueprint-subtext {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: 20px;
+      line-height: 1.65;
+    }
+
+    .blueprint-button {
+      background: var(--teal);
+      color: var(--white);
+      border: none;
+      padding: 14px 24px;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: var(--font-primary);
+      width: 100%;
+      box-shadow: 0 2px 8px rgba(13, 148, 136, 0.3);
+      transition: all 0.2s;
+    }
+
+    .blueprint-button:active { background: var(--teal-hover); transform: scale(0.98); }
+
+    .results-footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .start-over-link {
+      color: var(--teal);
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .start-over-link:active { text-decoration: underline; }
+
+    /* ===== ALL-GREEN STATE ===== */
+    .all-green-card {
+      background: linear-gradient(135deg, #F0FDF4, #DCFCE7);
+      border: 2px solid rgba(22, 163, 74, 0.2);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-align: center;
+      margin: 16px 0 24px;
+    }
+
+    .all-green-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+
+    .all-green-text {
+      font-size: 14px;
+      color: var(--medium);
+      line-height: 1.65;
+    }
+
+    /* Utility */
+    .hidden { display: none; }
+    .text-center { text-align: center; }
+    .icon { display: inline-flex; align-items: center; justify-content: center; }
+
+    @media (max-width: 500px) {
+      h1 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // ===== DATA ENGINE V2 =====
+    const BUSINESS_TYPES = [
+      { id: 'cleaning', label: 'Residential Cleaning', category: 'recurring' },
+      { id: 'landscaping', label: 'Landscaping & Lawn', category: 'recurring' },
+      { id: 'hvac', label: 'HVAC', category: 'emergency' },
+      { id: 'plumbing', label: 'Plumbing', category: 'emergency' },
+      { id: 'handyman', label: 'Handyman', category: 'project' },
+      { id: 'electrical', label: 'Electrical', category: 'project' },
+      { id: 'pest', label: 'Pest Control', category: 'recurring' },
+      { id: 'painting', label: 'Painting', category: 'project' },
+      { id: 'other', label: 'Other Home Service', category: 'project' }
+    ];
+
+    const REVENUE_OPTIONS = [
+      { label: 'Under $50K', value: 35000 },
+      { label: '$50K \u2013 $100K', value: 75000 },
+      { label: '$100K \u2013 $200K', value: 150000 },
+      { label: '$200K \u2013 $300K', value: 250000 },
+      { label: 'Over $300K', value: 350000 }
+    ];
+
+    const TEAM_SIZE_OPTIONS = [
+      { label: 'Just me', value: 1 },
+      { label: '2\u20133 people', value: 2.5 },
+      { label: '4\u20136 people', value: 5 },
+      { label: '7\u201310 people', value: 8.5 },
+      { label: 'More than 10', value: 12 }
+    ];
+
+    const JOBS_PER_WEEK_OPTIONS = [
+      { label: '1\u20135', value: 3 },
+      { label: '6\u201310', value: 8 },
+      { label: '11\u201320', value: 15 },
+      { label: '21\u201340', value: 30 },
+      { label: 'More than 40', value: 50 }
+    ];
+
+    const STAGE_WEIGHTS = {
+      recurring:  { lead_capture: 0.28, qualification: 0.06, quoting: 0.18, scheduling: 0.05, delivery: 0.05, invoicing: 0.12, reviews: 0.12, retention: 0.14 },
+      project:    { lead_capture: 0.25, qualification: 0.08, quoting: 0.20, scheduling: 0.06, delivery: 0.06, invoicing: 0.14, reviews: 0.10, retention: 0.11 },
+      emergency:  { lead_capture: 0.22, qualification: 0.10, quoting: 0.18, scheduling: 0.05, delivery: 0.06, invoicing: 0.16, reviews: 0.10, retention: 0.13 }
+    };
+
+    const STAGES = [
+      { id: 'lead_capture', label: 'Lead Capture', icon: 'phone', questionIds: ['q1', 'q2'] },
+      { id: 'qualification', label: 'Qualification', icon: 'target', questionIds: ['q3'] },
+      { id: 'quoting', label: 'Quoting', icon: 'dollarSign', questionIds: ['q4', 'q5'] },
+      { id: 'scheduling', label: 'Scheduling', icon: 'calendar', questionIds: ['q6'] },
+      { id: 'delivery', label: 'Delivery', icon: 'shield', questionIds: ['q7'] },
+      { id: 'invoicing', label: 'Invoicing', icon: 'fileText', questionIds: ['q8', 'q9'] },
+      { id: 'reviews', label: 'Reviews', icon: 'star', questionIds: ['q10'] },
+      { id: 'retention', label: 'Retention', icon: 'repeat', questionIds: ['q11', 'q12'] }
+    ];
+
+    const AUDIT_QUESTIONS = [
+      {
+        id: 'q1', stage: 'lead_capture',
+        question: "When a customer calls and you can\u2019t answer, what happens?",
+        subtext: "85% of callers who reach voicemail never call back. Every missed call is a lost job.",
+        options: [
+          { label: "Nothing \u2014 they get voicemail, maybe I call back later", score: 1, leakMultiplier: 0.85 },
+          { label: "They get voicemail, I try to call back within a few hours", score: 2, leakMultiplier: 0.60 },
+          { label: "I call back within an hour, pretty reliably", score: 3, leakMultiplier: 0.35 },
+          { label: "They get an auto text-back within minutes", score: 4, leakMultiplier: 0.15 },
+          { label: "Every call is answered \u2014 live or by a service", score: 5, leakMultiplier: 0.05 }
+        ]
+      },
+      {
+        id: 'q2', stage: 'lead_capture',
+        question: "If I asked you right now how many leads you got last month, could you tell me the exact number?",
+        subtext: "If you can\u2019t count your leads, you can\u2019t know how many you\u2019re losing.",
+        options: [
+          { label: "No idea \u2014 they come in from texts, calls, DMs, all over", score: 1, leakMultiplier: 0.30 },
+          { label: "I could estimate, but it\u2019d be a guess", score: 2, leakMultiplier: 0.18 },
+          { label: "Mostly tracked in one place, but some slip through", score: 3, leakMultiplier: 0.10 },
+          { label: "Yes \u2014 they all go into one system and I know the number", score: 5, leakMultiplier: 0.03 }
+        ]
+      },
+      {
+        id: 'q3', stage: 'qualification',
+        question: "How do you figure out if a new lead is worth your time?",
+        subtext: "The average operator spends 3\u20135 hours per week on leads that were never going to book.",
+        options: [
+          { label: "I just show up and hope it works out", score: 1, leakMultiplier: 0.25 },
+          { label: "I ask a couple questions on the phone first", score: 3, leakMultiplier: 0.10 },
+          { label: "I have a standard set of screening questions before I commit", score: 5, leakMultiplier: 0.03 }
+        ]
+      },
+      {
+        id: 'q4', stage: 'quoting',
+        question: "How fast do your quotes go out after a customer asks?",
+        subtext: "78% of customers hire the first company that sends a quote. Speed wins.",
+        options: [
+          { label: "Whenever I get around to it \u2014 could be days", score: 1, leakMultiplier: 0.40 },
+          { label: "Within a day or two usually", score: 3, leakMultiplier: 0.18 },
+          { label: "Same day, every time", score: 5, leakMultiplier: 0.05 }
+        ]
+      },
+      {
+        id: 'q5', stage: 'quoting',
+        question: "After you send a quote, what happens next?",
+        subtext: "48\u201360% of quotes never get a single follow-up. Half your proposals are dying in inboxes.",
+        options: [
+          { label: "I send it and wait. If they want it, they\u2019ll call.", score: 1, leakMultiplier: 0.55 },
+          { label: "I follow up once, maybe twice, if I remember", score: 2, leakMultiplier: 0.35 },
+          { label: "I follow up a couple times but it\u2019s not consistent", score: 3, leakMultiplier: 0.22 },
+          { label: "I have a system \u2014 follow up at day 1, day 3, and day 7", score: 5, leakMultiplier: 0.06 }
+        ]
+      },
+      {
+        id: 'q6', stage: 'scheduling',
+        question: "How do you manage your schedule and book jobs?",
+        subtext: "Double-bookings and empty slots cost the average operator $200\u2013$400/week in lost revenue.",
+        options: [
+          { label: "In my head or on paper", score: 1, leakMultiplier: 0.15 },
+          { label: "Phone calendar or spreadsheet", score: 3, leakMultiplier: 0.07 },
+          { label: "Scheduling tool with online booking", score: 5, leakMultiplier: 0.02 }
+        ]
+      },
+      {
+        id: 'q7', stage: 'delivery',
+        question: "If you got sick for a week, would your business keep running without you?",
+        subtext: "82% of solo operators say they can\u2019t take a full week off without losing revenue.",
+        options: [
+          { label: "No \u2014 everything stops if I stop", score: 1, leakMultiplier: 0.10 },
+          { label: "It would limp along, but quality would drop", score: 3, leakMultiplier: 0.05 },
+          { label: "Yes \u2014 I have systems and people who know the process", score: 5, leakMultiplier: 0.01 }
+        ]
+      },
+      {
+        id: 'q8', stage: 'invoicing',
+        question: "After you finish a job, when does the invoice go out?",
+        subtext: "Every day you delay invoicing, your chance of getting paid drops 10\u201315%.",
+        options: [
+          { label: "End of the week, sometimes longer", score: 1, leakMultiplier: 0.20 },
+          { label: "Within a day or two", score: 3, leakMultiplier: 0.08 },
+          { label: "Same day \u2014 automatically or before I leave", score: 5, leakMultiplier: 0.02 }
+        ]
+      },
+      {
+        id: 'q9', stage: 'invoicing',
+        question: "When a customer doesn\u2019t pay on time, what do you do?",
+        subtext: "Small service businesses write off an average of 5\u20138% of revenue to unpaid invoices every year.",
+        options: [
+          { label: "Wait and hope they pay eventually", score: 1, leakMultiplier: 0.25 },
+          { label: "Send a manual reminder after a while", score: 2, leakMultiplier: 0.14 },
+          { label: "Automatic reminders go out, or they\u2019re on autopay", score: 5, leakMultiplier: 0.03 }
+        ]
+      },
+      {
+        id: 'q10', stage: 'reviews',
+        question: "How many Google reviews does your business have right now?",
+        subtext: "Businesses with 50+ Google reviews get 266% more leads than those with under 10.",
+        options: [
+          { label: "Under 10 (or I\u2019m not sure)", score: 1, leakMultiplier: 0.35 },
+          { label: "10\u201325", score: 2, leakMultiplier: 0.22 },
+          { label: "25\u201350", score: 3, leakMultiplier: 0.12 },
+          { label: "Over 50", score: 5, leakMultiplier: 0.04 }
+        ]
+      },
+      {
+        id: 'q11', stage: 'retention',
+        question: "How often do past customers hear from you after a job is done?",
+        subtext: "A repeat customer is worth 3\u20135x more than a new one. Most operators never follow up.",
+        options: [
+          { label: "Never \u2014 once the job\u2019s done, that\u2019s it", score: 1, leakMultiplier: 0.30 },
+          { label: "Occasionally, if I think of it", score: 2, leakMultiplier: 0.18 },
+          { label: "Regularly \u2014 seasonal reminders, check-ins, rebooking offers", score: 5, leakMultiplier: 0.04 }
+        ]
+      },
+      {
+        id: 'q12', stage: 'retention',
+        question: "Do you have any kind of referral system?",
+        subtext: "73% of homeowners choose a service provider based on word of mouth. Are you making it easy?",
+        options: [
+          { label: "No \u2014 I just hope people recommend me", score: 1, leakMultiplier: 0.15 },
+          { label: "I mention it sometimes, but nothing formal", score: 3, leakMultiplier: 0.08 },
+          { label: "Yes \u2014 I have a referral incentive and I ask every time", score: 5, leakMultiplier: 0.02 }
+        ]
+      }
+    ];
+
+    const FIX_IT_KITS = {
+      lead_capture: {
+        headline: "Stop the bleeding: capture every call",
+        firstAction: "Set this as your voicemail greeting tonight. Then save the missed-call text as a shortcut on your phone.",
+        scripts: [
+          { name: "Voicemail Greeting", text: "Hey, you\u2019ve reached [Business Name]. I\u2019m on a job right now but your call is important to me. I\u2019ll call you back within [1 hour / 2 hours / end of day]. If it\u2019s urgent, text me at this number and I\u2019ll get back to you faster. Thanks!" },
+          { name: "Missed Call Auto Text-Back", text: "Hey! This is [Your Name] from [Business Name]. Sorry I missed your call \u2014 I\u2019m on a job right now. I\u2019ll call you back within [timeframe]. In the meantime, can you let me know what you need help with?" },
+          { name: "Lead Tracking Sheet", text: "Create a simple Google Sheet with columns: Date | Name | Phone | How They Found Me | What They Need | Status (New/Quoted/Booked/Lost) | Notes\n\nStart entering your last 10 leads from memory right now." }
+        ],
+        tool: { name: "OpenPhone", cost: "$15/mo", why: "Business phone number, auto text-back, call routing.", freeAlt: "Google Voice" }
+      },
+      qualification: {
+        headline: "Stop wasting time on bad-fit leads",
+        firstAction: "Write these 5 questions on a sticky note and put it next to your phone. Ask them before you commit to anything.",
+        scripts: [
+          { name: "5-Question Phone Screen", text: "1. What do you need done? (service type)\n2. Where are you located? (service area check)\n3. When do you need this done? (timeline)\n4. Have you gotten other quotes? (competition check)\n5. What\u2019s your budget range for this? (qualification)" },
+          { name: "Polite Decline", text: "Hey [Name], thanks for reaching out. Based on what you\u2019re looking for, I don\u2019t think I\u2019m the best fit for this project \u2014 but I\u2019d recommend checking [alternative resource]. Good luck with it!" }
+        ],
+        tool: { name: "Google Forms", cost: "Free", why: "Send a quick intake form link before scheduling.", freeAlt: "N/A (already free)" }
+      },
+      quoting: {
+        headline: "Follow up on every single quote",
+        firstAction: "Go through your texts and emails right now. Find every quote you sent in the last 2 weeks that didn\u2019t get a response. Send the Day 3 follow-up to each one.",
+        scripts: [
+          { name: "Day 1 Follow-Up", text: "Hey [Name], just wanted to make sure you got the estimate I sent over. Happy to answer any questions or adjust anything. No rush \u2014 just want to make sure it didn\u2019t end up in spam!" },
+          { name: "Day 3 Follow-Up", text: "Hey [Name], checking in on the estimate for [service]. I\u2019ve got some availability opening up [next week / this week] if you\u2019d like to get it scheduled. Let me know either way." },
+          { name: "Day 7 Final Follow-Up", text: "Hey [Name], last follow-up on the [service] estimate. If you\u2019re still interested, I\u2019d love to get you on the schedule. If not, totally understand. Feel free to reach out anytime down the road." }
+        ],
+        tool: { name: "Jobber", cost: "$49/mo", why: "Automated quote follow-ups, online approval, scheduling.", freeAlt: "Phone reminders + these scripts" }
+      },
+      scheduling: {
+        headline: "Let customers book without calling you",
+        firstAction: "Set up a free Calendly or Square Appointments link tonight. Put it in your texts and email signature.",
+        scripts: [
+          { name: "Booking Confirmation", text: "Hey [Name]! You\u2019re confirmed for [service] on [date] at [time]. I\u2019ll send you a reminder the day before. If anything changes, just text me here. See you then!" },
+          { name: "24-Hour Reminder", text: "Hey [Name], just a reminder \u2014 I\u2019ll be at [address / your place] tomorrow at [time] for [service]. Please make sure [any access instructions]. See you then!" },
+          { name: "On-My-Way Text", text: "Hey [Name], heading your way now! Should be there in about [X] minutes." }
+        ],
+        tool: { name: "Calendly or Square Appointments", cost: "$0\u2013$8/mo", why: "Online booking, auto confirmations, calendar sync.", freeAlt: "N/A (free tiers available)" }
+      },
+      delivery: {
+        headline: "Document your process so quality doesn\u2019t depend on you",
+        firstAction: "After your next 3 jobs, spend 5 minutes writing down every step you did. That\u2019s your first SOP.",
+        scripts: [
+          { name: "Job Complete Text", text: "Hey [Name], all done with [service] today! Everything went [great / smoothly]. [Any specific note about what was done]. If you notice anything or have questions, just text me. Thanks for trusting [Business Name]!" }
+        ],
+        tool: { name: "Google Docs", cost: "Free", why: "Write your SOPs here. Upgrade to Trainual ($99/mo) when you have a team.", freeAlt: "N/A (already free)" }
+      },
+      invoicing: {
+        headline: "Invoice the same day \u2014 every time, no exceptions",
+        firstAction: "After your next job today, send the invoice before you drive to the next one. Make it a rule.",
+        scripts: [
+          { name: "Day 3 Payment Reminder", text: "Hey [Name], just a friendly reminder that invoice #[number] for [service] ($[amount]) is still open. You can pay by [payment method]. Let me know if you have any questions!" },
+          { name: "Day 7 Reminder", text: "Hey [Name], following up on invoice #[number] for [service] ($[amount]). If there\u2019s an issue with the invoice, I\u2019m happy to sort it out. Otherwise, I\u2019d appreciate getting this settled when you get a chance. Thanks!" },
+          { name: "Day 14 Final Reminder", text: "Hey [Name], this is my final reminder on invoice #[number] for $[amount] from [date]. I need to get this wrapped up. Please let me know if there\u2019s a problem, otherwise I need payment by [date]. Thank you." }
+        ],
+        tool: { name: "Wave or Square Invoices", cost: "Free", why: "Professional invoices from your phone, online payment, automatic reminders.", freeAlt: "N/A (already free)" }
+      },
+      reviews: {
+        headline: "Ask every customer, every time \u2014 right after the job",
+        firstAction: "After your next job today, send this exact text within 2 hours. Don\u2019t wait. Don\u2019t overthink it.",
+        scripts: [
+          { name: "Review Request (2 hrs after job)", text: "Hey [Name]! Thanks for choosing [Business Name] for your [service] today. If you\u2019re happy with the work, it would mean the world if you could leave us a quick Google review. Here\u2019s the link: [Google Review Link]. It takes about 30 seconds and it really helps small businesses like mine. Thank you!" },
+          { name: "Follow-Up (Day 3)", text: "Hey [Name], hope everything\u2019s still looking good after [service]! If you have a spare minute, a Google review would really help us out: [link]. No pressure at all \u2014 and thanks again for your business!" },
+          { name: "Responding to Positive Review", text: "Thank you so much, [Name]! It was great working with you. We appreciate you taking the time to share your experience. Looking forward to helping you again anytime!" },
+          { name: "Responding to Negative Review", text: "[Name], I\u2019m sorry to hear that. Your experience matters to me and I want to make this right. Could you reach out to me directly at [phone/email] so we can discuss?" }
+        ],
+        tool: { name: "NiceJob", cost: "$75/mo", why: "Automated review requests after every job.", freeAlt: "Manual texts using these scripts" }
+      },
+      retention: {
+        headline: "Text your last 10 customers this week",
+        firstAction: "Open your phone right now. Find 10 past customers. Send them the seasonal rebooking text below. This will take 15 minutes and could generate $1,000+ in bookings.",
+        scripts: [
+          { name: "Seasonal Rebooking", text: "Hey [Name]! [Your Name] from [Business Name]. [Season] is coming up and I\u2019m booking [service type] for [month/season]. Since you\u2019re a past customer, I wanted to give you first pick of my schedule. Want me to get you on the books?" },
+          { name: "Referral Ask", text: "Hey [Name]! I hope [service] is still holding up great. Quick question \u2014 do you know anyone who might need [service type]? If you send them my way and they book, I\u2019d love to [offer \u2014 e.g., give you $25 off your next service]. Just have them mention your name. Thanks!" },
+          { name: "Win-Back (6+ months)", text: "Hey [Name], it\u2019s [Your Name] from [Business Name]. It\u2019s been a while! Just wanted to check in and see if you need any [service type] help. I\u2019ve got some availability [this week / next week] if you\u2019re interested. Hope you\u2019re doing well!" }
+        ],
+        tool: { name: "SimpleTexting", cost: "$29/mo", why: "Bulk text campaigns to past customers.", freeAlt: "Monday morning 15-min block \u2014 text 5 past customers manually" }
+      }
+    };
+
+    const TOOL_STACKS = {
+      free: {
+        label: "$0/month",
+        subtitle: "Free tools only",
+        tools: [
+          { name: "Google Voice", purpose: "Business phone number + voicemail", cost: "Free" },
+          { name: "Google Sheets", purpose: "Lead tracking", cost: "Free" },
+          { name: "Google Forms", purpose: "Intake/qualification form", cost: "Free" },
+          { name: "Google Calendar", purpose: "Basic scheduling", cost: "Free" },
+          { name: "Google Docs", purpose: "SOPs and process docs", cost: "Free" },
+          { name: "Wave", purpose: "Invoicing + payments", cost: "Free" },
+          { name: "Manual texting", purpose: "Reviews + retention (scripts above)", cost: "Free (your time)" }
+        ]
+      },
+      starter: {
+        label: "Under $50/month",
+        subtitle: "The essentials",
+        tools: [
+          { name: "OpenPhone", purpose: "Business number + auto text-back", cost: "$15/mo" },
+          { name: "Calendly or Square", purpose: "Online booking", cost: "$0\u2013$8/mo" },
+          { name: "SimpleTexting", purpose: "Bulk texts to past customers", cost: "$29/mo" }
+        ]
+      },
+      pro: {
+        label: "Under $150/month",
+        subtitle: "Full system",
+        tools: [
+          { name: "OpenPhone", purpose: "Business number", cost: "$15/mo" },
+          { name: "Jobber Core", purpose: "Quoting, scheduling, invoicing, follow-ups", cost: "$49/mo" },
+          { name: "NiceJob", purpose: "Automated review collection", cost: "$75/mo" }
+        ]
+      }
+    };
+
+    // ===== SVG ICONS =====
+    const ICONS = {
+      phone: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>,
+      target: <><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>,
+      dollarSign: <><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></>,
+      calendar: <><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></>,
+      shield: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>,
+      fileText: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></>,
+      star: <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>,
+      repeat: <><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></>,
+      barChart: <><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></>,
+      wrench: <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 1 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>,
+      cpu: <><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></>,
+      clipboard: <><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></>,
+      copy: <><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></>,
+      chevronDown: <polyline points="6 9 12 15 18 9"/>,
+      chevronLeft: <polyline points="15 18 9 12 15 6"/>,
+      check: <polyline points="20 6 9 17 4 12"/>,
+      alertTriangle: <><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></>,
+      checkCircle: <><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>,
+      trendingUp: <><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></>,
+    };
+
+    function Icon({ name, size = 24, color = 'currentColor', className = '', style = {} }) {
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`icon ${className}`} style={style}>
+          {ICONS[name]}
+        </svg>
+      );
+    }
+
+    // ===== CALCULATION ENGINE =====
+    function roundLeak(amount) {
+      if (amount > 1000) return Math.round(amount / 100) * 100;
+      return Math.round(amount / 50) * 50;
+    }
+
+    function getScoreBadge(totalScore) {
+      if (totalScore >= 45) return { label: 'Strong', color: '#16A34A' };
+      if (totalScore >= 30) return { label: 'Needs Work', color: '#D97706' };
+      return { label: 'Critical', color: '#DC2626' };
+    }
+
+    function getStageColor(stageId, totalScore) {
+      const stage = STAGES.find(s => s.id === stageId);
+      const isTwoQuestion = stage.questionIds.length === 2;
+      if (isTwoQuestion) {
+        if (totalScore <= 4) return '#DC2626';
+        if (totalScore <= 7) return '#D97706';
+        return '#16A34A';
+      } else {
+        if (totalScore <= 1) return '#DC2626';
+        if (totalScore <= 3) return '#D97706';
+        return '#16A34A';
+      }
+    }
+
+    function calculateResults(answers, profile) {
+      const businessType = BUSINESS_TYPES.find(bt => bt.id === profile.businessType);
+      const category = businessType.category;
+      const weights = STAGE_WEIGHTS[category];
+      const annualRevenue = profile.revenue;
+      const stageScores = {};
+      const stageLeaks = {};
+
+      STAGES.forEach(stage => {
+        const qIds = stage.questionIds;
+        const stageAnswers = qIds.map(qId => answers[qId]).filter(a => a !== undefined);
+        let totalStageScore = 0;
+        let leakMultiplierForStage = 1;
+
+        stageAnswers.forEach(answer => {
+          if (answer) {
+            const question = AUDIT_QUESTIONS.find(q => q.id === answer.questionId);
+            const option = question.options.find(o => o.label === answer.label);
+            totalStageScore += option.score;
+            leakMultiplierForStage *= option.leakMultiplier;
+          }
+        });
+
+        stageScores[stage.id] = totalStageScore;
+        const baseLeak = annualRevenue * weights[stage.id];
+        stageLeaks[stage.id] = Math.round(baseLeak * leakMultiplierForStage);
+      });
+
+      const totalLeak = Object.values(stageLeaks).reduce((a, b) => a + b, 0);
+      const totalScore = Object.values(stageScores).reduce((a, b) => a + b, 0);
+      const topLeaks = Object.entries(stageLeaks)
+        .map(([stageId, leak]) => ({ stageId, leak }))
+        .sort((a, b) => b.leak - a.leak)
+        .slice(0, 3);
+
+      return { stageScores, stageLeaks, totalLeak, totalScore, topLeaks };
+    }
+
+    // ===== PROMPT GENERATORS =====
+    function generateMasterPrompt(profile, results) {
+      const businessType = BUSINESS_TYPES.find(bt => bt.id === profile.businessType).label;
+      return `I'm a ${businessType} operator in the United States. My business generates approximately $${profile.revenue.toLocaleString()} in annual revenue. I manage a team of ${profile.teamSize} and handle about ${profile.jobsPerWeek} jobs per week.
+
+I've completed a business audit and identified my top 3 revenue leaks:
+${results.topLeaks.map((l, i) => `${i + 1}. ${STAGES.find(s => s.id === l.stageId).label}: $${l.leak.toLocaleString()} annually`).join('\n')}
+
+Help me create an action plan to plug these specific leaks. For each area, give me:
+1. The 2-3 most important quick wins I can implement this week
+2. The tools or processes I should set up
+3. Realistic timelines and metrics to track progress
+
+Focus on what's actually doable for a small operation, not enterprise-scale advice.`;
+    }
+
+    function generateStagePrompt(stage, profile, results) {
+      const businessType = BUSINESS_TYPES.find(bt => bt.id === profile.businessType).label;
+      const stageLeak = results.stageLeaks[stage.id];
+      return `I'm a ${businessType} operator. My "${stage.label}" stage is leaking approximately $${stageLeak.toLocaleString()} in annual revenue.
+
+Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my business. Include:
+1. The single biggest mistake I'm probably making
+2. A 30-day fix (quick and cheap)
+3. A 90-day system (more robust)
+4. Tools that could help (free or under $50/month)
+5. How to measure if it's working`;
+    }
+
+    // ===== 90-DAY PLAN =====
+    function generate90DayPlan() {
+      return {
+        phase1: { title: "Week 1\u20132: Stabilize the Bleeding", timeframe: "(Days 1\u201314)", tasks: [
+          "Implement voicemail greeting and lead tracking sheet",
+          "Set up basic qualification questions",
+          "Send follow-ups on open quotes (use Day 1, 3, 7 script)",
+          "Identify and fix your biggest process gap"
+        ]},
+        phase2: { title: "Week 3\u20134: Build Systems", timeframe: "(Days 15\u201328)", tasks: [
+          "Choose 1\u20132 key tools from your Fix-It kit",
+          "Document your service delivery process (SOP)",
+          "Start asking for reviews after every job",
+          "Create a simple lead scoring checklist"
+        ]},
+        phase3: { title: "Month 2: Automate & Delegate", timeframe: "(Days 29\u201360)", tasks: [
+          "Set up calendar or scheduling tool",
+          "Launch automated quote follow-up system",
+          "Begin weekly retention outreach (5\u201310 past customers)",
+          "Review metrics from phase 1\u20132 improvements"
+        ]},
+        phase4: { title: "Month 3: Measure & Optimize", timeframe: "(Days 61\u201390)", tasks: [
+          "Audit results: compare leads, quotes, closings to baseline",
+          "Scale what works; cut what doesn\u2019t",
+          "Train someone else on your new systems",
+          "Plan next 90 days with confidence"
+        ]}
+      };
+    }
+
+    // ===== ANIMATED COUNTER COMPONENT =====
+    function AnimatedNumber({ value, duration = 1200 }) {
+      const [display, setDisplay] = useState(0);
+      const prevRef = useRef(0);
+
+      useEffect(() => {
+        const start = prevRef.current;
+        const end = value;
+        const startTime = performance.now();
+        const animate = (now) => {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          setDisplay(Math.round(start + (end - start) * eased));
+          if (progress < 1) requestAnimationFrame(animate);
+          else prevRef.current = end;
+        };
+        requestAnimationFrame(animate);
+      }, [value]);
+
+      return <span>${display.toLocaleString()}</span>;
+    }
+
+    // ===== MAIN APP =====
+    function App() {
+      const [screen, setScreen] = useState('welcome');
+      const [setupStep, setSetupStep] = useState(1);
+      const [auditQuestion, setAuditQuestion] = useState(0);
+      const [profile, setProfile] = useState({ businessType: '', revenue: 0, teamSize: 0, jobsPerWeek: 0 });
+      const [answers, setAnswers] = useState({});
+      const [results, setResults] = useState(null);
+      const [activeTab, setActiveTab] = useState('results');
+      const [expandedKit, setExpandedKit] = useState(null);
+      const [copiedText, setCopiedText] = useState(null);
+      const [checkedTasks, setCheckedTasks] = useState({});
+      const [showFlash, setShowFlash] = useState(null);
+
+      useEffect(() => {
+        const saved = localStorage.getItem('autobotics_toolkit_v2');
+        if (saved) {
+          try {
+            const data = JSON.parse(saved);
+            if (data.screen) setScreen(data.screen);
+            if (data.profile) setProfile(data.profile);
+            if (data.answers) setAnswers(data.answers);
+            if (data.results) setResults(data.results);
+            if (data.screen === 'results' && data.activeTab) setActiveTab(data.activeTab);
+            if (data.checkedTasks) setCheckedTasks(data.checkedTasks);
+          } catch (e) {}
+        }
+      }, []);
+
+      useEffect(() => {
+        localStorage.setItem('autobotics_toolkit_v2', JSON.stringify({ screen, setupStep, profile, answers, results, activeTab, checkedTasks }));
+      }, [screen, setupStep, profile, answers, results, activeTab, checkedTasks]);
+
+      const handleStartAudit = () => setScreen('setup');
+
+      const handleSetupSelect = (field, value) => {
+        const newProfile = { ...profile, [field]: value };
+        setProfile(newProfile);
+        if (setupStep < 4) setSetupStep(setupStep + 1);
+        else { setScreen('audit'); setAuditQuestion(0); }
+      };
+
+      const handleAnswerQuestion = (questionId, label, leakAmount) => {
+        const newAnswers = { ...answers, [questionId]: { questionId, label } };
+        setAnswers(newAnswers);
+        if (leakAmount > 2000) {
+          setShowFlash({ text: `+$${leakAmount.toLocaleString()} \u00b7 ${STAGES.find(s => s.id === AUDIT_QUESTIONS.find(q => q.id === questionId).stage).label}` });
+          setTimeout(() => setShowFlash(null), 2200);
+        }
+        setTimeout(() => {
+          if (auditQuestion < AUDIT_QUESTIONS.length - 1) {
+            setAuditQuestion(auditQuestion + 1);
+          } else {
+            const calculated = calculateResults(newAnswers, profile);
+            setResults(calculated);
+            setScreen('results');
+            setActiveTab('results');
+          }
+        }, 200);
+      };
+
+      const handleBack = () => {
+        if (screen === 'setup' && setupStep > 1) setSetupStep(setupStep - 1);
+        else if (screen === 'setup') setScreen('welcome');
+        else if (screen === 'audit' && auditQuestion > 0) setAuditQuestion(auditQuestion - 1);
+        else if (screen === 'audit') setScreen('setup');
+        else if (screen === 'results') setScreen('welcome');
+      };
+
+      const handleCopy = (text, id) => {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+        } else { fallbackCopy(text); }
+        setCopiedText(id);
+        setTimeout(() => setCopiedText(null), 2000);
+      };
+
+      const fallbackCopy = (text) => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.cssText = 'position:fixed;left:-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      };
+
+      const handleStartOver = () => {
+        localStorage.removeItem('autobotics_toolkit_v2');
+        setScreen('welcome'); setSetupStep(1);
+        setProfile({ businessType: '', revenue: 0, teamSize: 0, jobsPerWeek: 0 });
+        setAnswers({}); setResults(null); setActiveTab('results');
+        setAuditQuestion(0); setCheckedTasks({});
+      };
+
+      // === WELCOME ===
+      if (screen === 'welcome') {
+        const features = [
+          { icon: 'barChart', text: 'Revenue leak analysis' },
+          { icon: 'wrench', text: 'Actionable fix-it kits' },
+          { icon: 'cpu', text: 'AI-powered prompts' },
+          { icon: 'clipboard', text: '90-day implementation plan' },
+          { icon: 'copy', text: 'Copy-paste scripts & templates' }
+        ];
+        return (
+          <div className="container">
+            <div className="welcome-container">
+              <div className="wordmark fade-in">
+                <span className="wordmark-auto">auto</span><span className="wordmark-botics">botics</span>
+              </div>
+              <div className="welcome-badge fade-in-delay-1">
+                <span className="welcome-badge-dot"></span>
+                Interactive Self-Audit
+              </div>
+              <h1 className="welcome-headline fade-in-delay-1">The Operator's Toolkit</h1>
+              <p className="welcome-subline fade-in-delay-2">
+                Score your business across 8 stages. See exactly where money is leaking. Get the scripts and tools to fix it — tonight.
+              </p>
+              <div className="features-grid fade-in-delay-2">
+                {features.map((f, i) => (
+                  <div key={i} className="feature-item" style={{ animationDelay: `${0.25 + i * 0.05}s` }}>
+                    <div className="feature-icon-wrap">
+                      <Icon name={f.icon} size={18} className="feature-icon" />
+                    </div>
+                    <span className="feature-text">{f.text}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="welcome-meta fade-in-delay-3">~5 min · works on your phone</div>
+              <div className="fade-in-delay-3" style={{ width: '100%', maxWidth: 400 }}>
+                <button className="button button-primary" onClick={handleStartAudit}>
+                  Start My Self-Audit →
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // === SETUP ===
+      if (screen === 'setup') {
+        const fields = [
+          { step: 1, eyebrow: 'Step 1 of 4', title: 'What type of business do you run?', options: BUSINESS_TYPES, key: 'businessType' },
+          { step: 2, eyebrow: 'Step 2 of 4', title: "What's your approximate annual revenue?", options: REVENUE_OPTIONS, key: 'revenue' },
+          { step: 3, eyebrow: 'Step 3 of 4', title: 'How many people, including you?', options: TEAM_SIZE_OPTIONS, key: 'teamSize' },
+          { step: 4, eyebrow: 'Step 4 of 4', title: 'How many jobs per week?', options: JOBS_PER_WEEK_OPTIONS, key: 'jobsPerWeek' }
+        ];
+        const cur = fields.find(f => f.step === setupStep);
+
+        return (
+          <div className="container fade-in">
+            <div className="setup-header">
+              <button className="back-button" onClick={handleBack}><Icon name="chevronLeft" size={22} /></button>
+              <div className="progress-steps">
+                {[1,2,3,4].map(i => <div key={i} className={`step-dot ${i === setupStep ? 'active' : i < setupStep ? 'completed' : ''}`} />)}
+              </div>
+              <div style={{ width: 42 }}></div>
+            </div>
+            <div className="setup-eyebrow">{cur.eyebrow}</div>
+            <h2 className="setup-title">{cur.title}</h2>
+            {setupStep === 1 ? (
+              <div className="business-types-grid">
+                {cur.options.map((opt, i) => (
+                  <div key={opt.id} className="type-card card-interactive" onClick={() => handleSetupSelect(cur.key, opt.id)}
+                    style={{ animation: `staggerIn 0.3s var(--ease-out) ${i * 0.04}s both` }}>
+                    <Icon name={['cleaning','landscaping','pest'].includes(opt.id) ? 'repeat' : ['hvac','plumbing'].includes(opt.id) ? 'alertTriangle' : 'wrench'} size={28} className="type-card-icon" />
+                    <div className="type-card-label">{opt.label}</div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div>
+                {cur.options.map((opt, i) => (
+                  <button key={opt.id || opt.value} className="option-button"
+                    onClick={() => handleSetupSelect(cur.key, opt.value)}
+                    style={{ animation: `staggerIn 0.3s var(--ease-out) ${i * 0.05}s both` }}>
+                    {opt.label}
+                    {profile[cur.key] === opt.value && <Icon name="check" size={20} color="var(--teal)" />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      // === AUDIT ===
+      if (screen === 'audit') {
+        const question = AUDIT_QUESTIONS[auditQuestion];
+        const stage = STAGES.find(s => s.id === question.stage);
+        let totalLeak = 0;
+        Object.entries(answers).forEach(([qId, ans]) => {
+          if (ans) {
+            const q = AUDIT_QUESTIONS.find(qq => qq.id === qId);
+            const opt = q.options.find(o => o.label === ans.label);
+            const w = STAGE_WEIGHTS[BUSINESS_TYPES.find(bt => bt.id === profile.businessType).category];
+            totalLeak += Math.round(profile.revenue * w[q.stage] * opt.leakMultiplier);
+          }
+        });
+        const isCritical = totalLeak >= 20000;
+        const progress = ((auditQuestion + 1) / AUDIT_QUESTIONS.length) * 100;
+
+        return (
+          <div className="container">
+            <div className="audit-container">
+              <div className="audit-header fade-in">
+                <div className={`counter ${isCritical ? 'critical' : ''}`}>
+                  <div className="counter-left">
+                    <div className="counter-label">Revenue leaking</div>
+                    <div className="counter-amount"><AnimatedNumber value={Math.round(totalLeak / 100) * 100} duration={600} /></div>
+                  </div>
+                  <Icon name="trendingUp" size={28} className="counter-icon" color="currentColor" />
+                </div>
+                <div className="progress-bar-container">
+                  <div className="progress-meta">
+                    <span className="progress-label">Question {auditQuestion + 1} of {AUDIT_QUESTIONS.length}</span>
+                    <span className="progress-label" style={{ fontFamily: 'var(--font-mono)' }}>{Math.round(progress)}%</span>
+                  </div>
+                  <div className="progress-bar"><div className="progress-fill" style={{ width: progress + '%' }}></div></div>
+                </div>
+                <div className="stage-chip">
+                  <Icon name={stage.icon} size={14} className="stage-chip-icon" />
+                  {stage.label}
+                </div>
+              </div>
+              <div className="question-container" key={question.id}>
+                <h2 className="question-title">{question.question}</h2>
+                <p className="question-subtext">{question.subtext}</p>
+                {question.options.map((opt, idx) => (
+                  <button key={idx} className="answer-option card-interactive" onClick={() => {
+                    const w = STAGE_WEIGHTS[BUSINESS_TYPES.find(bt => bt.id === profile.businessType).category];
+                    const leak = Math.round(profile.revenue * w[question.stage] * opt.leakMultiplier);
+                    handleAnswerQuestion(question.id, opt.label, leak);
+                  }} style={{ animation: `staggerIn 0.25s var(--ease-out) ${idx * 0.05}s both` }}>
+                    {opt.label}
+                  </button>
+                ))}
+                <div className="audit-nav">
+                  <button className="nav-button" disabled={auditQuestion === 0} onClick={() => { if (auditQuestion > 0) setAuditQuestion(auditQuestion - 1); }}>\u2190 Back</button>
+                  <button className="nav-button" onClick={handleBack}>Exit</button>
+                </div>
+              </div>
+            </div>
+            {showFlash && <div className="counter-flash">{showFlash.text}</div>}
+          </div>
+        );
+      }
+
+      // === RESULTS ===
+      if (screen === 'results' && results) {
+        const badge = getScoreBadge(results.totalScore);
+        const isAllGreen = results.totalScore >= 45 && roundLeak(results.totalLeak) < 8000;
+        const maxLeak = Math.max(...Object.values(results.stageLeaks));
+
+        return (
+          <div className="container fade-in">
+            <div className="results-container">
+              <div className="tabs">
+                {[
+                  { id: 'results', label: 'Results' },
+                  { id: 'fixit', label: 'Fix-It' },
+                  { id: 'prompts', label: 'Prompts' },
+                  { id: 'tools', label: 'Tools' },
+                  { id: 'ninetyDays', label: '90 Days' }
+                ].map(tab => (
+                  <button key={tab.id} className={`tab-button ${activeTab === tab.id ? 'active' : ''}`} onClick={() => setActiveTab(tab.id)}>
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* RESULTS TAB */}
+              {activeTab === 'results' && (
+                <div className="tab-content">
+                  <div className="results-header">
+                    <p className="results-intro fade-in">Your business is leaving approximately</p>
+                    <div className="big-number">${roundLeak(results.totalLeak).toLocaleString()}</div>
+                    <p className="big-number-context fade-in-delay-1">/year in revenue opportunity</p>
+                    <div className="score-badge fade-in-delay-2" style={{ backgroundColor: badge.color }}>{badge.label} \u00b7 {results.totalScore}/60</div>
+                    <p className="methodology fade-in-delay-2">Based on your profile, industry benchmarks, and answers</p>
+                  </div>
+
+                  {isAllGreen && (
+                    <div className="all-green-card fade-in-delay-2">
+                      <div className="all-green-title">You're doing great.</div>
+                      <div className="all-green-text">Your systems are solid. Focus on optimization and scaling, not fixing leaks. The 90-Day Plan and AI prompts can help you level up from here.</div>
+                    </div>
+                  )}
+
+                  <div className="stage-bars-section fade-in-delay-2">
+                    <div className="stage-bars-title">Revenue by Stage</div>
+                    {STAGES.map((stage, i) => {
+                      const leak = results.stageLeaks[stage.id];
+                      const score = results.stageScores[stage.id];
+                      const color = getStageColor(stage.id, score);
+                      const width = maxLeak > 0 ? (leak / maxLeak) * 100 : 0;
+                      return (
+                        <div key={stage.id} className="stage-bar" style={{ animation: `staggerIn 0.3s var(--ease-out) ${0.3 + i * 0.06}s both` }}>
+                          <div className="stage-bar-label">
+                            <span className="stage-bar-name">{stage.label}</span>
+                            <span className="stage-bar-amount">${leak.toLocaleString()}</span>
+                          </div>
+                          <div className="stage-bar-track">
+                            <div className="stage-bar-fill" style={{ width: Math.max(width, 3) + '%', background: color, animationDelay: `${0.4 + i * 0.08}s` }}>
+                              {width > 15 && <span>${Math.round(leak / 1000)}k</span>}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className="top-leaks">
+                    <div className="top-leaks-title">Your Top 3 Revenue Leaks</div>
+                    {results.topLeaks.map((leak, idx) => {
+                      const stage = STAGES.find(s => s.id === leak.stageId);
+                      return (
+                        <div key={stage.id} className="leak-card" style={{ animation: `staggerIn 0.3s var(--ease-out) ${0.5 + idx * 0.1}s both` }}>
+                          <div className="leak-rank">{idx + 1}</div>
+                          <div className="leak-content">
+                            <div className="leak-stage">{stage.label}</div>
+                            <div className="leak-amount">${leak.leak.toLocaleString()}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <button className="button button-primary" style={{ marginBottom: 32 }} onClick={() => setActiveTab('fixit')}>
+                    See Your Fix-It Kits \u2192
+                  </button>
+                </div>
+              )}
+
+              {/* FIX-IT TAB */}
+              {activeTab === 'fixit' && (
+                <div className="tab-content">
+                  <div style={{ marginBottom: 20 }}>
+                    <h2 style={{ marginBottom: 4 }}>Fix-It Kits</h2>
+                    <p className="caption">Scripts, tools, and actions for your top 3 leaks</p>
+                  </div>
+                  {results.topLeaks.map((leak, kitIdx) => {
+                    const stage = STAGES.find(s => s.id === leak.stageId);
+                    const kit = FIX_IT_KITS[stage.id];
+                    const isOpen = expandedKit === stage.id;
+                    return (
+                      <div key={stage.id} className="kit-card" style={{ animation: `staggerIn 0.3s var(--ease-out) ${kitIdx * 0.08}s both` }}>
+                        <div className="kit-header card-interactive" onClick={() => setExpandedKit(isOpen ? null : stage.id)}>
+                          <div className="kit-header-left">
+                            <div className="kit-icon-wrap">
+                              <Icon name={stage.icon} size={20} className="kit-header-icon" />
+                            </div>
+                            <div className="kit-header-title">
+                              <div className="kit-header-stage">{stage.label}</div>
+                              <div className="kit-leak-amount">-${leak.leak.toLocaleString()}/yr</div>
+                            </div>
+                          </div>
+                          <div className="kit-toggle" style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0)' }}>
+                            <Icon name="chevronDown" size={20} />
+                          </div>
+                        </div>
+                        <div className={`kit-body ${isOpen ? 'open' : ''}`}>
+                          <div className="kit-headline">{kit.headline}</div>
+                          <div className="kit-content">
+                            <div className="first-action"><strong>First action:</strong> {kit.firstAction}</div>
+                            {kit.scripts.map((script, idx) => (
+                              <div key={idx} className="script-item">
+                                <div className="script-title">{script.name}</div>
+                                <div className="script-text">{script.text}</div>
+                                <button className={`copy-button ${copiedText === 'script-'+stage.id+'-'+idx ? 'copied' : ''}`}
+                                  onClick={() => handleCopy(script.text, `script-${stage.id}-${idx}`)}>
+                                  <Icon name={copiedText === 'script-'+stage.id+'-'+idx ? 'check' : 'copy'} size={14} />
+                                  {copiedText === `script-${stage.id}-${idx}` ? 'Copied!' : 'Copy'}
+                                </button>
+                              </div>
+                            ))}
+                            <div className="tool-rec-card">
+                              <div className="tool-rec-label">Recommended Tool</div>
+                              <div className="tool-rec-name">{kit.tool.name}</div>
+                              <div className="tool-rec-cost">{kit.tool.cost}</div>
+                              <div className="tool-rec-why">{kit.tool.why}</div>
+                              <div className="tool-rec-alt">Free alternative: {kit.tool.freeAlt}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* PROMPTS TAB */}
+              {activeTab === 'prompts' && (
+                <div className="tab-content">
+                  <div style={{ marginBottom: 20 }}>
+                    <h2 style={{ marginBottom: 4 }}>AI Prompt Lab</h2>
+                    <p className="caption">Pre-filled prompts personalized to your results</p>
+                  </div>
+                  <div className="prompt-card ai-onramp" style={{ marginBottom: 24 }}>
+                    <h3>Never used ChatGPT before?</h3>
+                    <div className="onramp-steps">
+                      {['Go to chatgpt.com on your phone (it\'s free)', 'Sign up with your Google account', 'Paste the prompt below into the message box', 'Read the answer. Ask follow-ups like "Be more specific" or "Give me the exact steps"'].map((step, idx) => (
+                        <div key={idx} className="onramp-step">
+                          <div className="onramp-number">{idx + 1}</div>
+                          <div className="onramp-text">{step}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="prompt-card highlight">
+                    <h3 style={{ marginBottom: 12 }}>The Master Prompt</h3>
+                    <p style={{ fontSize: 13, opacity: 0.7, marginBottom: 12 }}>Contains all your audit data. Paste into ChatGPT for a full action plan.</p>
+                    <div className="prompt-text">{generateMasterPrompt(profile, results)}</div>
+                    <button className={`copy-button ${copiedText === 'master' ? 'copied' : ''}`} onClick={() => handleCopy(generateMasterPrompt(profile, results), 'master')}>
+                      <Icon name={copiedText === 'master' ? 'check' : 'copy'} size={14} />
+                      {copiedText === 'master' ? 'Copied!' : 'Copy Prompt'}
+                    </button>
+                  </div>
+                  <div className="prompt-section-title">Stage-Specific Prompts</div>
+                  {results.topLeaks.map(leak => {
+                    const stage = STAGES.find(s => s.id === leak.stageId);
+                    const prompt = generateStagePrompt(stage, profile, results);
+                    return (
+                      <div key={stage.id} className="prompt-card">
+                        <h3 style={{ marginBottom: 12 }}>{stage.label}</h3>
+                        <div className="prompt-text">{prompt}</div>
+                        <button className={`copy-button ${copiedText === 'stage-'+stage.id ? 'copied' : ''}`}
+                          onClick={() => handleCopy(prompt, `stage-${stage.id}`)}>
+                          <Icon name={copiedText === 'stage-'+stage.id ? 'check' : 'copy'} size={14} />
+                          {copiedText === `stage-${stage.id}` ? 'Copied!' : 'Copy Prompt'}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* TOOLS TAB */}
+              {activeTab === 'tools' && (
+                <div className="tab-content">
+                  <div style={{ marginBottom: 20 }}>
+                    <h2 style={{ marginBottom: 4 }}>Tool Stacks</h2>
+                    <p className="caption">Recommended tools by budget level</p>
+                  </div>
+                  {Object.entries(TOOL_STACKS).map(([key, tier], idx) => (
+                    <div key={key} className="tool-tier-card" style={{ animation: `staggerIn 0.3s var(--ease-out) ${idx * 0.08}s both` }}>
+                      <div className="tool-tier-header">
+                        <div className="tool-tier-label">{tier.label}</div>
+                        <div className="tool-tier-subtitle">{tier.subtitle}</div>
+                      </div>
+                      <div className="tool-list">
+                        {tier.tools.map((tool, tIdx) => (
+                          <div key={tIdx} className="tool-item">
+                            <Icon name="checkCircle" size={20} className="tool-item-check" />
+                            <div className="tool-item-content">
+                              <div className="tool-item-name">{tool.name}</div>
+                              <div className="tool-item-purpose">{tool.purpose}</div>
+                              <div className="tool-item-cost">{tool.cost}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* 90 DAYS TAB */}
+              {activeTab === 'ninetyDays' && (
+                <div className="tab-content">
+                  <div style={{ marginBottom: 20 }}>
+                    <h2 style={{ marginBottom: 4 }}>Your 90-Day Plan</h2>
+                    <p className="caption">A phased roadmap to plug your revenue leaks</p>
+                  </div>
+                  {(() => {
+                    const plan = generate90DayPlan();
+                    return [plan.phase1, plan.phase2, plan.phase3, plan.phase4].map((phase, idx) => (
+                      <div key={idx} className="phase-card" style={{ animation: `staggerIn 0.3s var(--ease-out) ${idx * 0.08}s both` }}>
+                        <div className="phase-header">
+                          <div className="phase-number">{idx + 1}</div>
+                          <div>
+                            <div className="phase-title">{phase.title}</div>
+                            <div className="phase-timeframe">{phase.timeframe}</div>
+                          </div>
+                        </div>
+                        <div className="task-list">
+                          {phase.tasks.map((task, tIdx) => (
+                            <div key={tIdx} className={`task-item ${checkedTasks[`${idx}-${tIdx}`] ? 'checked' : ''}`} onClick={() => {
+                              setCheckedTasks({ ...checkedTasks, [`${idx}-${tIdx}`]: !checkedTasks[`${idx}-${tIdx}`] });
+                            }}>
+                              <div className="task-checkbox">
+                                {checkedTasks[`${idx}-${tIdx}`] && <Icon name="check" size={14} color="var(--white)" />}
+                              </div>
+                              <div className="task-text">{task}</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ));
+                  })()}
+                  <div className="blueprint-cta">
+                    <div className="blueprint-headline">Ready for the deep analysis?</div>
+                    <div className="blueprint-subtext">
+                      The Toolkit shows you where to look. The Automation Blueprint does the heavy lifting for you — custom research, AI-powered analysis, and a step-by-step implementation spec.
+                    </div>
+                    <button className="blueprint-button" onClick={() => window.open('https://theautobotics.com/blueprint', '_blank')}>
+                      Learn About the Blueprint \u2192
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div className="results-footer">
+                <a className="start-over-link" onClick={handleStartOver} role="button">Start Over</a>
+                <span style={{ margin: '0 8px' }}>\u00b7</span>
+                <span>Autobotics Operator's Toolkit</span>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      return null;
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

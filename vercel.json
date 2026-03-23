@@ -9,6 +9,7 @@
     { "source": "/field-reports", "destination": "/field-reports.html" },
     { "source": "/log", "destination": "/log.html" },
     { "source": "/toolkit", "destination": "/toolkit.html" },
-    { "source": "/toolkit-success", "destination": "/toolkit-success.html" }
+    { "source": "/toolkit-success", "destination": "/toolkit-success.html" },
+    { "source": "/toolkit/app", "destination": "/toolkit-app.html" }
   ]
 }
