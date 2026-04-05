@@ -162,7 +162,7 @@ h3{font-size:1.15rem;font-weight:700;letter-spacing:-0.2px}
 .tk-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
 .tk-stat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:28px 20px;text-align:center;transition:border-color .25s,box-shadow .25s,transform .25s}
 .tk-stat-card:hover{border-color:var(--teal);box-shadow:var(--shadow-md);transform:translateY(-2px)}
-.tk-stat-num{font-size:36px;font-weight:800;color:var(--amber);line-height:1;margin-bottom:8px;letter-spacing:-1px}
+.tk-stat-num{font-size:28px;font-weight:800;color:var(--amber);line-height:1;margin-bottom:8px;letter-spacing:-1px}
 .tk-stat-label{font-size:.82rem;color:var(--medium);line-height:1.5}
 
 /* Charcoal divider strip */
@@ -176,19 +176,106 @@ h3{font-size:1.15rem;font-weight:700;letter-spacing:-0.2px}
 .tk-intro h2 .teal{color:var(--teal)}
 .tk-intro p{color:var(--medium);font-size:1rem;line-height:1.75;margin-bottom:16px}
 
-/* S5: Feature Cards */
-.tk-features{background:var(--cream)}
-.tk-features .eyebrow{display:block;text-align:center;margin-bottom:16px}
-.tk-features h2{text-align:center;margin-bottom:48px}
-.tk-features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.tk-features-grid .tk-feature-card:last-child{grid-column:1 / -1}
-.tk-feature-card{background:var(--white);border:1px solid var(--border);border-top:2px solid var(--teal);border-radius:12px;padding:24px;transition:border-color .25s,box-shadow .25s,transform .25s}
-.tk-feature-card:hover{border-color:var(--teal);box-shadow:var(--shadow-md);transform:translateY(-3px)}
-.tk-feature-header{display:flex;align-items:flex-start;gap:14px}
-.tk-feature-icon{width:40px;height:40px;background:var(--teal-subtle);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--teal);padding:8px}
-.tk-feature-icon svg{width:100%;height:100%}
-.tk-feature-title{font-size:1.1rem;font-weight:600;color:var(--charcoal);margin-bottom:4px}
-.tk-feature-desc{color:var(--medium);font-size:.9rem;line-height:1.7;margin-top:10px}
+/* Animated Hero Mockup */
+.tk-mockup-animated .score-num{font-family:var(--mono)}
+.tk-mockup-animated .tk-bar-fill{width:0%;transition:width 1.2s cubic-bezier(0.22,1,0.36,1)}
+.tk-mockup-animated .tk-leak-item{opacity:0;transform:translateY(8px);transition:opacity 0.4s ease,transform 0.4s ease}
+.tk-mockup-animated.animate .tk-leak-item:nth-child(1){opacity:1;transform:translateY(0);transition-delay:1.0s}
+.tk-mockup-animated.animate .tk-leak-item:nth-child(2){opacity:1;transform:translateY(0);transition-delay:1.3s}
+.tk-mockup-animated.animate .tk-leak-item:nth-child(3){opacity:1;transform:translateY(0);transition-delay:1.6s}
+
+/* Phone Frame */
+.phone-frame{width:260px;background:var(--charcoal);border-radius:32px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,0.2),0 4px 12px rgba(0,0,0,0.1),inset 0 1px 0 rgba(255,255,255,0.05);position:relative}
+.phone-notch{width:80px;height:6px;background:#000;border-radius:3px;margin:0 auto 8px}
+.phone-screen{background:var(--cream);border-radius:22px;overflow:hidden;min-height:420px;position:relative}
+
+/* Phone Screen: Question */
+.screen-question{padding:24px 18px}
+.screen-progress{display:flex;gap:3px;margin-bottom:24px}
+.screen-progress-dot{flex:1;height:4px;border-radius:2px;background:#E8E2D9}
+.screen-progress-dot.filled{background:var(--teal)}
+.screen-progress-dot.active{background:var(--amber)}
+.screen-q-num{font-size:11px;font-family:var(--mono);color:var(--muted);letter-spacing:1px;margin-bottom:12px}
+.screen-q-text{font-size:16px;font-weight:700;color:var(--charcoal);line-height:1.35;margin-bottom:24px;letter-spacing:-0.3px}
+.screen-option{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;font-size:14px;font-weight:500;color:var(--charcoal);cursor:pointer;transition:border-color 0.2s,background 0.2s,transform 0.15s}
+.screen-option:hover{border-color:var(--teal);background:var(--teal-subtle);transform:translateY(-1px)}
+.screen-option.selected{border-color:var(--teal);background:rgba(13,148,136,0.08);box-shadow:0 0 0 1px var(--teal)}
+.screen-option.selected::before{content:'✓';margin-right:8px;color:var(--teal);font-weight:700}
+
+/* Phone Screen: Leak Counter */
+.screen-counter{padding:24px 18px}
+.leak-banner{background:linear-gradient(135deg,#DC2626,#B91C1C);border-radius:12px;padding:20px;text-align:center;margin-bottom:20px;box-shadow:0 4px 16px rgba(220,38,38,0.25)}
+.leak-banner-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.7);font-weight:700;margin-bottom:4px}
+.leak-banner-num{font-size:32px;font-weight:800;color:white;font-family:var(--mono);letter-spacing:-1px}
+.leak-banner-sub{font-size:11px;color:rgba(255,255,255,0.6);margin-top:4px}
+.screen-counter .screen-q-text{font-size:15px}
+.leak-pulse{animation:leakPulse 2s ease-in-out infinite}
+@keyframes leakPulse{0%,100%{box-shadow:0 4px 16px rgba(220,38,38,0.25)}50%{box-shadow:0 4px 24px rgba(220,38,38,0.45)}}
+
+/* Phone Screen: Results */
+.screen-results{padding:20px 16px}
+.screen-results-header{text-align:center;margin-bottom:16px}
+.screen-results-label{font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
+.screen-results-score{font-size:42px;font-weight:800;color:var(--red);font-family:var(--mono);letter-spacing:-2px;line-height:1}
+.screen-results-sub{font-size:11px;color:var(--medium);margin-top:2px}
+.screen-bar{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.screen-bar-label{font-size:10px;font-weight:600;color:var(--medium);width:60px;text-align:right;flex-shrink:0}
+.screen-bar-track{flex:1;height:6px;background:#F3F0EB;border-radius:3px;overflow:hidden}
+.screen-bar-fill{height:100%;border-radius:3px}
+.screen-bar-fill.critical{background:var(--red)}
+.screen-bar-fill.warning{background:var(--amber)}
+.screen-bar-fill.ok{background:var(--teal)}
+.screen-bar-fill.good{background:#16A34A}
+.screen-mini-leak{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F3F0EB;font-size:11px}
+.screen-mini-leak:last-child{border-bottom:none}
+.screen-mini-leak .name{color:var(--charcoal);font-weight:600}
+.screen-mini-leak .val{color:var(--red);font-weight:700;font-family:var(--mono)}
+.screen-tab-bar{display:flex;background:var(--white);border-top:1px solid var(--border);position:absolute;bottom:0;left:0;right:0;border-radius:0 0 22px 22px}
+.screen-tab{flex:1;text-align:center;padding:10px 4px;font-size:9px;font-weight:600;color:var(--muted);border-top:2px solid transparent}
+.screen-tab.active{color:var(--teal);border-top-color:var(--teal)}
+
+/* Phone Screen: Fix-It Kit */
+.screen-fixit{padding:20px 16px}
+.fixit-stage-label{font-size:10px;font-family:var(--mono);color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.fixit-stage-amount{font-size:13px;font-weight:700;color:var(--charcoal);margin-bottom:16px}
+.fixit-card{background:var(--white);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:10px;padding:14px;margin-bottom:12px}
+.fixit-card-title{font-size:12px;font-weight:700;color:var(--charcoal);margin-bottom:8px}
+.fixit-script{background:#F8F6F1;border-radius:8px;padding:12px;font-size:12px;color:var(--medium);line-height:1.6;margin-bottom:10px;border:1px solid var(--border)}
+.fixit-copy-btn{display:flex;align-items:center;gap:6px;background:var(--teal);color:white;border:none;border-radius:6px;padding:8px 14px;font-size:11px;font-weight:700;font-family:var(--font);cursor:pointer;transition:background 0.2s}
+.fixit-copy-btn:hover{background:var(--teal-hover)}
+
+/* Product Tour Section */
+.tour-section{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden}
+.tour-header{text-align:center;margin-bottom:48px}
+.tour-scroll{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;max-width:1200px;margin:0 auto}
+.tour-item{text-align:center}
+.tour-caption{margin-top:20px;font-size:0.88rem;font-weight:600;color:var(--charcoal);max-width:220px;margin-left:auto;margin-right:auto}
+.tour-caption-sub{font-size:0.78rem;color:var(--medium);margin-top:4px;line-height:1.5}
+
+/* Interactive Mini-Demo */
+.demo-section{background:var(--charcoal);color:var(--white);position:relative;overflow:hidden}
+.demo-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(13,148,136,0.08) 0%,transparent 60%);pointer-events:none}
+.demo-inner{max-width:560px;margin:0 auto;text-align:center;position:relative;z-index:1}
+.demo-inner h2{color:var(--white);margin-bottom:12px}
+.demo-inner .demo-sub{color:rgba(255,255,255,0.6);font-size:0.95rem;margin-bottom:40px}
+.demo-phone{width:320px;margin:0 auto;background:#111316;border-radius:36px;padding:14px;box-shadow:0 24px 80px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.06)}
+.demo-phone .phone-notch{width:90px;height:7px;background:#000;border-radius:4px;margin:0 auto 10px}
+.demo-screen{background:var(--cream);border-radius:24px;min-height:400px;overflow:hidden;position:relative}
+.demo-state{padding:24px 20px;display:none}
+.demo-state.active{display:block;animation:demoFade 0.4s ease}
+@keyframes demoFade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.demo-leak-banner{background:linear-gradient(135deg,#DC2626,#B91C1C);border-radius:12px;padding:16px;text-align:center;margin-bottom:20px;transition:all 0.6s ease}
+.demo-leak-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.7);font-weight:700}
+.demo-leak-num{font-size:28px;font-weight:800;color:white;font-family:var(--mono)}
+.demo-option{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;font-size:14px;font-weight:500;color:var(--charcoal);cursor:pointer;text-align:left;transition:border-color 0.2s,transform 0.15s;font-family:var(--font)}
+.demo-option:hover{border-color:var(--teal);transform:translateY(-1px)}
+.demo-result{text-align:center;padding:32px 20px}
+.demo-result-num{font-size:48px;font-weight:800;color:var(--red);font-family:var(--mono);letter-spacing:-2px;margin:16px 0 8px}
+.demo-result-sub{font-size:13px;color:var(--medium);margin-bottom:24px;line-height:1.6}
+.demo-result .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font);font-weight:700;font-size:0.95rem;padding:16px 32px;border-radius:var(--radius-sm);text-decoration:none;border:none;cursor:pointer;background:var(--teal);color:white;transition:transform 0.2s,box-shadow 0.2s}
+.demo-result .btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(13,148,136,0.3)}
+.demo-result-fine{font-size:11px;color:var(--muted);margin-top:12px}
+.demo-footer{margin-top:32px;font-size:0.82rem;color:rgba(255,255,255,0.4)}
 
 /* S6: How It Works */
 .tk-how{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
@@ -289,14 +376,11 @@ h3{font-size:1.15rem;font-weight:700;letter-spacing:-0.2px}
   .tk-hero{padding:120px 0 80px}
   .tk-badges{flex-direction:column}
   .tk-stats-grid{grid-template-columns:1fr 1fr}
-  .tk-stat-num{font-size:32px}
-  .tk-features-grid{grid-template-columns:1fr}
-  .tk-features-grid .tk-feature-card:last-child{grid-column:auto}
-  /* Collapsible feature cards on mobile */
-  .tk-feature-card{padding:0}
-  .tk-feature-card summary.tk-feature-header{padding:18px;cursor:pointer;list-style:none}
-  .tk-feature-card summary.tk-feature-header::-webkit-details-marker{display:none}
-  .tk-feature-desc{padding:0 18px 18px;margin-top:0}
+  .tk-stat-num{font-size:24px}
+  .tour-scroll{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding:0 28px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  .tour-item{scroll-snap-align:center;flex-shrink:0}
+  .phone-frame{width:240px}
+  .phone-screen{min-height:380px}
   .tk-compare-grid{grid-template-columns:1fr}
   .tk-pricing-card{padding:28px 24px}
   .footer-inner{flex-direction:column;gap:20px;text-align:center}
@@ -362,36 +446,36 @@ h3{font-size:1.15rem;font-weight:700;letter-spacing:-0.2px}
       <p class="tk-trust-line">Works on your phone · Takes 5 minutes · <span class="amber">Less than the revenue from one missed call</span></p>
     </div>
     <div class="tk-mockup-wrap">
-      <div class="tk-mockup" role="img" aria-label="Revenue leak score showing $47,200 annual opportunity for a cleaning business">
+      <div class="tk-mockup tk-mockup-animated" id="heroMockup" role="img" aria-label="Revenue leak score showing $47,200 annual opportunity for a cleaning business">
         <div class="tk-mockup-header">
           <span class="tk-mockup-label">Revenue Leak Score</span>
           <span class="tk-mockup-biz">Cleaning · $100K rev</span>
         </div>
         <div class="tk-mockup-score">
           <div class="score-label">Estimated Annual Leak</div>
-          <div class="score-num">$47,200</div>
+          <div class="score-num" id="heroScoreNum">$0</div>
           <div class="score-sub">across 8 business stages</div>
         </div>
         <div class="tk-mockup-bars">
           <div class="tk-bar">
             <span class="tk-bar-label">Leads</span>
-            <div class="tk-bar-track"><div class="tk-bar-fill red" style="width:82%"></div></div>
+            <div class="tk-bar-track"><div class="tk-bar-fill red" data-width="82%"></div></div>
           </div>
           <div class="tk-bar">
             <span class="tk-bar-label">Follow-Up</span>
-            <div class="tk-bar-track"><div class="tk-bar-fill red" style="width:74%"></div></div>
+            <div class="tk-bar-track"><div class="tk-bar-fill red" data-width="74%"></div></div>
           </div>
           <div class="tk-bar">
             <span class="tk-bar-label">Reviews</span>
-            <div class="tk-bar-track"><div class="tk-bar-fill amber" style="width:58%"></div></div>
+            <div class="tk-bar-track"><div class="tk-bar-fill amber" data-width="58%"></div></div>
           </div>
           <div class="tk-bar">
             <span class="tk-bar-label">Retention</span>
-            <div class="tk-bar-track"><div class="tk-bar-fill teal" style="width:40%"></div></div>
+            <div class="tk-bar-track"><div class="tk-bar-fill teal" data-width="40%"></div></div>
           </div>
           <div class="tk-bar">
             <span class="tk-bar-label">Referrals</span>
-            <div class="tk-bar-track"><div class="tk-bar-fill green" style="width:28%"></div></div>
+            <div class="tk-bar-track"><div class="tk-bar-fill green" data-width="28%"></div></div>
           </div>
         </div>
         <div class="tk-mockup-leaks">
@@ -415,6 +499,227 @@ h3{font-size:1.15rem;font-weight:700;letter-spacing:-0.2px}
   </div>
 </header>
 
+<!-- PRODUCT TOUR — 4 phone mockups showing real app screens -->
+<section class="tour-section section" aria-label="Product tour">
+  <div class="container">
+    <div class="tour-header">
+      <span class="eyebrow">SEE THE PRODUCT</span>
+      <h2 style="margin-top:12px">Here's what $29 looks like on your phone.</h2>
+    </div>
+    <div class="tour-scroll">
+
+      <!-- Phone 1: Question Screen -->
+      <div class="tour-item">
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="screen-question">
+              <div class="screen-progress">
+                <div class="screen-progress-dot filled"></div>
+                <div class="screen-progress-dot filled"></div>
+                <div class="screen-progress-dot filled"></div>
+                <div class="screen-progress-dot active"></div>
+                <div class="screen-progress-dot"></div>
+                <div class="screen-progress-dot"></div>
+                <div class="screen-progress-dot"></div>
+                <div class="screen-progress-dot"></div>
+                <div class="screen-progress-dot"></div>
+                <div class="screen-progress-dot"></div>
+                <div class="screen-progress-dot"></div>
+                <div class="screen-progress-dot"></div>
+              </div>
+              <div class="screen-q-num">QUESTION 4 OF 12</div>
+              <div class="screen-q-text">When a customer calls and you can't answer, what happens next?</div>
+              <div class="screen-option">They get voicemail. I call back when I can.</div>
+              <div class="screen-option">They get an auto text-back within 60 seconds</div>
+              <div class="screen-option selected">I try to call back same day, but sometimes it's the next day</div>
+              <div class="screen-option">I have someone else who answers calls for me</div>
+            </div>
+          </div>
+        </div>
+        <div class="tour-caption">One question at a time. Tap your answer.</div>
+        <div class="tour-caption-sub">No typing. 12 questions across all 8 stages.</div>
+      </div>
+
+      <!-- Phone 2: Leak Counter -->
+      <div class="tour-item">
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="screen-counter">
+              <div class="leak-banner leak-pulse">
+                <div class="leak-banner-label">Revenue Leaking</div>
+                <div class="leak-banner-num">$23,400</div>
+                <div class="leak-banner-sub">and counting...</div>
+              </div>
+              <div class="screen-progress" style="margin-bottom:20px">
+                <div class="screen-progress-dot filled"></div>
+                <div class="screen-progress-dot filled"></div>
+                <div class="screen-progress-dot filled"></div>
+                <div class="screen-progress-dot filled"></div>
+                <div class="screen-progress-dot filled"></div>
+                <div class="screen-progress-dot filled"></div>
+                <div class="screen-progress-dot active"></div>
+                <div class="screen-progress-dot"></div>
+                <div class="screen-progress-dot"></div>
+                <div class="screen-progress-dot"></div>
+                <div class="screen-progress-dot"></div>
+                <div class="screen-progress-dot"></div>
+              </div>
+              <div class="screen-q-num">QUESTION 7 OF 12</div>
+              <div class="screen-q-text" style="font-size:15px">After a job is done, how do you ask for reviews?</div>
+              <div class="screen-option">I don't, really. Sometimes I ask in person.</div>
+              <div class="screen-option">I send a text or email with a review link</div>
+              <div class="screen-option">Automated — every customer gets a request</div>
+            </div>
+          </div>
+        </div>
+        <div class="tour-caption">Watch your number climb.</div>
+        <div class="tour-caption-sub">The red banner grows with every honest answer.</div>
+      </div>
+
+      <!-- Phone 3: Results Dashboard -->
+      <div class="tour-item">
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="screen-results">
+              <div class="screen-results-header">
+                <div class="screen-results-label">Your Revenue Leak Score</div>
+                <div class="screen-results-score">$47,200</div>
+                <div class="screen-results-sub">estimated annual leak</div>
+              </div>
+              <div style="margin-bottom:16px">
+                <div class="screen-bar"><span class="screen-bar-label">Leads</span><div class="screen-bar-track"><div class="screen-bar-fill critical" style="width:82%"></div></div></div>
+                <div class="screen-bar"><span class="screen-bar-label">Follow-Up</span><div class="screen-bar-track"><div class="screen-bar-fill critical" style="width:74%"></div></div></div>
+                <div class="screen-bar"><span class="screen-bar-label">Quoting</span><div class="screen-bar-track"><div class="screen-bar-fill warning" style="width:52%"></div></div></div>
+                <div class="screen-bar"><span class="screen-bar-label">Reviews</span><div class="screen-bar-track"><div class="screen-bar-fill warning" style="width:58%"></div></div></div>
+                <div class="screen-bar"><span class="screen-bar-label">Retention</span><div class="screen-bar-track"><div class="screen-bar-fill ok" style="width:40%"></div></div></div>
+                <div class="screen-bar"><span class="screen-bar-label">Schedule</span><div class="screen-bar-track"><div class="screen-bar-fill ok" style="width:35%"></div></div></div>
+                <div class="screen-bar"><span class="screen-bar-label">Invoicing</span><div class="screen-bar-track"><div class="screen-bar-fill good" style="width:22%"></div></div></div>
+                <div class="screen-bar"><span class="screen-bar-label">Referrals</span><div class="screen-bar-track"><div class="screen-bar-fill ok" style="width:28%"></div></div></div>
+              </div>
+              <div style="font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Top 3 Leaks</div>
+              <div class="screen-mini-leak"><span class="name">Missed calls</span><span class="val">$18,400</span></div>
+              <div class="screen-mini-leak"><span class="name">Quote follow-up</span><span class="val">$14,200</span></div>
+              <div class="screen-mini-leak"><span class="name">No reviews</span><span class="val">$8,600</span></div>
+            </div>
+            <div class="screen-tab-bar">
+              <div class="screen-tab active">Results</div>
+              <div class="screen-tab">Fix-It</div>
+              <div class="screen-tab">Prompts</div>
+              <div class="screen-tab">Tools</div>
+              <div class="screen-tab">90 Days</div>
+            </div>
+          </div>
+        </div>
+        <div class="tour-caption">Your full Revenue Leak Score.</div>
+        <div class="tour-caption-sub">Every stage scored. Top leaks ranked by dollars.</div>
+      </div>
+
+      <!-- Phone 4: Fix-It Kit -->
+      <div class="tour-item">
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="screen-fixit">
+              <div class="fixit-stage-label">Stage 1: Lead Capture — $18,400/yr</div>
+              <div class="fixit-stage-amount">Your biggest leak. Here's how to fix it tonight.</div>
+              <div class="fixit-card">
+                <div class="fixit-card-title">Missed Call Text-Back Script</div>
+                <div class="fixit-script">
+                  "Hey [Name], sorry I missed your call! I'm on a job right now but wanted to reach out. Are you looking for a cleaning quote? I can get you one within the hour."
+                </div>
+                <button class="fixit-copy-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  Copy Script
+                </button>
+              </div>
+              <div class="fixit-card">
+                <div class="fixit-card-title">Quote Follow-Up — Day 1</div>
+                <div class="fixit-script">
+                  "Hi [Name], just following up on the quote I sent yesterday. Any questions? Happy to adjust if needed."
+                </div>
+                <button class="fixit-copy-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  Copy Script
+                </button>
+              </div>
+            </div>
+            <div class="screen-tab-bar">
+              <div class="screen-tab">Results</div>
+              <div class="screen-tab active">Fix-It</div>
+              <div class="screen-tab">Prompts</div>
+              <div class="screen-tab">Tools</div>
+              <div class="screen-tab">90 Days</div>
+            </div>
+          </div>
+        </div>
+        <div class="tour-caption">Scripts you can send tonight.</div>
+        <div class="tour-caption-sub">Copy, paste, done. 28 scripts total.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- INTERACTIVE MINI-DEMO -->
+<section class="demo-section section" aria-label="Interactive demo">
+  <div class="container">
+    <div class="demo-inner">
+      <span class="eyebrow" style="color:rgba(13,148,136,0.8)">TRY IT NOW</span>
+      <h2 style="margin-top:12px">Answer two questions. See what you're losing.</h2>
+      <p class="demo-sub">This is a taste of the full 12-question Toolkit. Takes 30 seconds.</p>
+
+      <div class="demo-phone">
+        <div class="phone-notch"></div>
+        <div class="demo-screen" id="demoScreen">
+
+          <!-- State 1: First Question -->
+          <div class="demo-state active" id="demoQ1">
+            <div style="padding:24px 20px">
+              <div class="screen-q-num" style="color:var(--muted)">QUESTION 1 OF 2</div>
+              <div class="screen-q-text" style="color:var(--charcoal)">When a customer calls and you can't answer, what happens?</div>
+              <div class="demo-option" onclick="demoAnswer(1, 'voicemail')">They get voicemail. I call back when I can.</div>
+              <div class="demo-option" onclick="demoAnswer(1, 'textback')">Auto text-back goes out within 60 seconds</div>
+              <div class="demo-option" onclick="demoAnswer(1, 'nextday')">I try to call back, but sometimes it's the next day</div>
+            </div>
+          </div>
+
+          <!-- State 2: Second Question (with leak counter) -->
+          <div class="demo-state" id="demoQ2">
+            <div style="padding:24px 20px">
+              <div class="demo-leak-banner" id="demoLeak1">
+                <div class="demo-leak-label">Revenue Leaking</div>
+                <div class="demo-leak-num" id="demoLeakNum1">$0</div>
+              </div>
+              <div class="screen-q-num" style="color:var(--muted)">QUESTION 2 OF 2</div>
+              <div class="screen-q-text" style="color:var(--charcoal)">After you send a quote, what's your follow-up process?</div>
+              <div class="demo-option" onclick="demoAnswer(2, 'none')">I don't really follow up. They call if they want it.</div>
+              <div class="demo-option" onclick="demoAnswer(2, 'manual')">I try to follow up, but it's not consistent</div>
+              <div class="demo-option" onclick="demoAnswer(2, 'system')">Automated follow-up at 1, 3, and 7 days</div>
+            </div>
+          </div>
+
+          <!-- State 3: Result -->
+          <div class="demo-state" id="demoResult">
+            <div class="demo-result">
+              <div style="font-size:11px;font-family:var(--mono);color:var(--muted);letter-spacing:1px;text-transform:uppercase">From just 2 questions</div>
+              <div class="demo-result-num" id="demoFinalNum">$0</div>
+              <div style="font-size:13px;color:var(--medium);margin-bottom:4px">estimated annual leak</div>
+              <div class="demo-result-sub">That's just 2 of 8 stages. The full Toolkit scores all 12 questions across your entire business — and gives you the scripts to start fixing it tonight.</div>
+              <a href="/api/checkout-toolkit" class="btn">See My Full Score — $29</a>
+              <div class="demo-result-fine">Works on your phone · Takes 5 minutes · Instant results</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <p class="demo-footer">No signup required. Your data stays on your device.</p>
+    </div>
+  </div>
+</section>
+
 <!-- SECTION 2: GUT PUNCH + PROOF -->
 <section class="tk-gutpunch section" aria-label="The problem">
   <div class="container">
@@ -426,7 +731,7 @@ h3{font-size:1.15rem;font-weight:700;letter-spacing:-0.2px}
           <p>None of that means you're bad at what you do. It means nobody taught you how to run the business side. And every week it stays this way, more money walks out the door.</p>
         </div>
         <div class="tk-proof-card">
-          <p>We know because we built a business with this exact problem. Lenny's Cleaning runs on AI — it handles the phones, the scheduling, the follow-ups, the reviews, and the invoicing for a real cleaning company. And when we looked at the numbers, we realized every home service business has the same eight places where money disappears.</p>
+          <p>We built Lenny's Cleaning from scratch — could AI handle the phones, the scheduling, the follow-ups, the reviews, and the invoicing for a real cleaning company? It could. And when we looked at the numbers, we realized every home service business has the same eight places where money disappears.</p>
         </div>
         <p>The Operator's Toolkit is the same framework we use. The same audit. The same benchmarks. The same scripts we actually run.</p>
       </div>
@@ -499,84 +804,6 @@ h3{font-size:1.15rem;font-weight:700;letter-spacing:-0.2px}
       <p>The Operator's Toolkit is a guided self-audit. You answer 12 honest questions about how your business actually runs — from how you capture leads to how you get repeat customers. The Toolkit does the math and shows you a Revenue Leak Score: a dollar amount estimating how much your business is leaving on the table every year.</p>
       <p>Then it hands you everything you need to start closing those gaps: copy-paste scripts, AI prompts pre-filled with your data, tool recommendations at three price points, and a 90-day plan built around your specific weak spots.</p>
       <p>No software to install. No account to create. Works in your phone's browser. Takes about 5 minutes.</p>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 5: FEATURE CARDS -->
-<section class="tk-features section" aria-label="What's inside">
-  <div class="container">
-    <div class="narrow">
-      <span class="eyebrow reveal">WHAT'S INSIDE</span>
-      <h2 class="reveal">Everything you need to stop the bleeding.</h2>
-    </div>
-    <div class="tk-features-grid reveal rd1" style="max-width:720px;margin-left:auto;margin-right:auto">
-
-      <!-- Card 1: Revenue Leak Score -->
-      <details class="tk-feature-card" open>
-        <summary class="tk-feature-header">
-          <div class="tk-feature-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          </div>
-          <div>
-            <div class="tk-feature-title">See the number.</div>
-          </div>
-        </summary>
-        <p class="tk-feature-desc">Your personalized estimate of how much revenue your business is leaving on the table every year. Calculated from industry benchmarks for your business type and revenue level. Based on the same methodology we use in our paid Automation Blueprint — adapted for self-service.</p>
-      </details>
-
-      <!-- Card 2: Fix-It Kits -->
-      <details class="tk-feature-card" open>
-        <summary class="tk-feature-header">
-          <div class="tk-feature-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-          </div>
-          <div>
-            <div class="tk-feature-title">Copy-paste scripts that work tonight.</div>
-          </div>
-        </summary>
-        <p class="tk-feature-desc">For every weak spot, you get specific scripts you can copy and send right now. Missed call text-backs. Quote follow-ups at day 1, 3, and 7. Review requests. Referral asks. 28 scripts total — real words, not templates that sound like a robot wrote them.</p>
-      </details>
-
-      <!-- Card 3: AI Prompt Lab -->
-      <details class="tk-feature-card" open>
-        <summary class="tk-feature-header">
-          <div class="tk-feature-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <div>
-            <div class="tk-feature-title">AI prompts pre-filled with your numbers.</div>
-          </div>
-        </summary>
-        <p class="tk-feature-desc">Never used AI? Four steps, we walk you through it. Then you get prompts already loaded with your business type, revenue, and problem areas. Paste them into ChatGPT, get specific advice. No prompt engineering required — just copy and paste.</p>
-      </details>
-
-      <!-- Card 4: Tool Recommendations -->
-      <details class="tk-feature-card" open>
-        <summary class="tk-feature-header">
-          <div class="tk-feature-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-          </div>
-          <div>
-            <div class="tk-feature-title">The right tools at the right price.</div>
-          </div>
-        </summary>
-        <p class="tk-feature-desc">Three tiers: free tools only, under $50/month, under $150/month. No affiliate links. No kickbacks. Just the tools we'd actually recommend if you were our friend asking at a barbecue.</p>
-      </details>
-
-      <!-- Card 5: 90-Day Action Plan -->
-      <details class="tk-feature-card" open>
-        <summary class="tk-feature-header">
-          <div class="tk-feature-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          </div>
-          <div>
-            <div class="tk-feature-title">Your personal fix-it roadmap.</div>
-          </div>
-        </summary>
-        <p class="tk-feature-desc">Week 1–2: stop the biggest leak. Week 3–4: fix the second one. Month 2–3: build the habits and measure results. Every task is specific to your business type and your actual weak spots — not generic advice.</p>
-      </details>
-
     </div>
   </div>
 </section>
@@ -820,6 +1047,114 @@ h3{font-size:1.15rem;font-weight:700;letter-spacing:-0.2px}
 </footer>
 
 <script>
+// Hero Mockup Animation — count up score, grow bars, fade in leaks
+function animateHeroMockup() {
+  const mockup = document.getElementById('heroMockup');
+  const scoreEl = document.getElementById('heroScoreNum');
+  if (!mockup || !scoreEl) return;
+
+  mockup.classList.add('animate');
+
+  const target = 47200;
+  const duration = 1800;
+  const start = performance.now();
+
+  function updateCount(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(target * eased);
+    scoreEl.textContent = '$' + current.toLocaleString();
+    if (progress < 1) requestAnimationFrame(updateCount);
+  }
+  requestAnimationFrame(updateCount);
+
+  mockup.querySelectorAll('.tk-bar-fill').forEach((bar, i) => {
+    const targetWidth = bar.dataset.width;
+    setTimeout(() => { bar.style.width = targetWidth; }, 200 + i * 150);
+  });
+}
+
+if ('IntersectionObserver' in window) {
+  const heroObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { animateHeroMockup(); heroObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.3 });
+  const hm = document.getElementById('heroMockup');
+  if (hm) heroObs.observe(hm);
+}
+
+// Interactive Mini-Demo
+let demoScore = 0;
+const leakValues = {
+  voicemail: 18400, textback: 0, nextday: 12200,
+  none: 14200, manual: 8400, system: 0
+};
+
+function demoAnswer(q, answer) {
+  const value = leakValues[answer] || 0;
+  demoScore += value;
+
+  if (q === 1) {
+    document.getElementById('demoQ1').classList.remove('active');
+    document.getElementById('demoQ2').classList.add('active');
+    const numEl = document.getElementById('demoLeakNum1');
+    animateNumber(numEl, 0, demoScore, 1200);
+  } else if (q === 2) {
+    document.getElementById('demoQ2').classList.remove('active');
+    document.getElementById('demoResult').classList.add('active');
+    const finalEl = document.getElementById('demoFinalNum');
+    animateNumber(finalEl, 0, demoScore, 1600);
+  }
+}
+
+function animateNumber(el, from, to, duration) {
+  const start = performance.now();
+  function update(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(from + (to - from) * eased);
+    el.textContent = '$' + current.toLocaleString();
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+// Stat Count-Up Animation
+if ('IntersectionObserver' in window) {
+  const statsObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const cards = e.target.querySelectorAll('.tk-stat-num');
+        cards.forEach((card, i) => {
+          if (i === 0) {
+            // "85%" — count from 0 to 85
+            const start = performance.now();
+            function countUp(now) {
+              const elapsed = now - start;
+              const progress = Math.min(elapsed / 1400, 1);
+              const eased = 1 - Math.pow(1 - progress, 3);
+              card.textContent = Math.round(85 * eased) + '%';
+              if (progress < 1) requestAnimationFrame(countUp);
+            }
+            requestAnimationFrame(countUp);
+          } else {
+            // Fade in ranges
+            card.style.opacity = '0';
+            card.style.transition = 'opacity 0.6s ease';
+            setTimeout(() => { card.style.opacity = '1'; }, 400 + i * 300);
+          }
+        });
+        statsObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  const statsGrid = document.querySelector('.tk-stats-grid');
+  if (statsGrid) statsObs.observe(statsGrid);
+}
+
 // Nav scroll behavior
 const nav=document.getElementById('nav');
 window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>40)},{passive:true});
@@ -847,20 +1182,6 @@ document.querySelectorAll('.tk-faq-item').forEach(item=>{
     }
   });
 });
-
-// Feature cards: collapse on mobile (close all except first by default)
-function setupMobileFeatureCards(){
-  const isMobile=window.matchMedia('(max-width:768px)').matches;
-  document.querySelectorAll('.tk-feature-card').forEach((card,i)=>{
-    if(isMobile){
-      if(i>0) card.removeAttribute('open');
-    }else{
-      card.setAttribute('open','');
-    }
-  });
-}
-setupMobileFeatureCards();
-window.addEventListener('resize',setupMobileFeatureCards);
 
 // Sticky mobile CTA — show after hero CTA scrolls out, hide when pricing enters
 const mobileBar=document.getElementById('tkMobileBar');
