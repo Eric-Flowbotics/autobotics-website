@@ -115,7 +115,7 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
 .transition-text{text-align:center;font-size:17px;color:var(--dt-s);padding:80px 0 60px;font-weight:500;position:relative;z-index:1}
 .mk-section{padding:0 0 80px;position:relative;z-index:1}
 .mk-h{font-size:28px;font-weight:800;letter-spacing:-.6px;margin-bottom:14px;color:var(--dt)}
-.mk-body{font-size:15px;color:var(--dt-s);line-height:1.7;max-width:620px;margin-bottom:32px}
+.mk-body{font-size:16px;color:var(--dt-s);line-height:1.7;max-width:620px;margin-bottom:32px}
 .mk-caption{font-size:13px;color:var(--dt-d);font-style:italic;text-align:center;max-width:600px;margin:16px auto 0}
 
 /* ===================== */
@@ -140,6 +140,10 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
 .orb-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:400px;height:400px;background:radial-gradient(circle,rgba(13,148,136,.1) 0%,transparent 65%);border-radius:50%;animation:gp 5s ease-in-out infinite;pointer-events:none}
 @keyframes gp{0%,100%{opacity:.4;transform:translate(-50%,-50%) scale(1)}50%{opacity:.8;transform:translate(-50%,-50%) scale(1.12)}}
 
+/* Screen containers — embedded UI feel */
+.screen-container{background:rgba(13,148,136,.03);border:1px solid rgba(13,148,136,.1);border-radius:16px;padding:40px 32px;margin-top:8px}
+@media(max-width:768px){.screen-container{padding:28px 20px}}
+
 /* ===================== */
 /* LIVE CONVERSATION     */
 /* ===================== */
@@ -151,7 +155,7 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
 .msg .spk{font-size:9px;font-family:var(--mono);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px}
 .msg.ai .spk{color:var(--teal)}
 .msg.user .spk{color:var(--dt-d);text-align:right}
-.msg .txt{font-size:14px;line-height:1.65;max-width:480px}
+.msg .txt{font-size:16px;line-height:1.65;max-width:480px}
 .msg.ai .txt{color:var(--dt)}
 .msg.user .txt{color:var(--dt-s);text-align:right}
 .msg .probe{margin-top:6px;font-size:13px;color:var(--teal-bright);font-weight:500;font-style:italic}
@@ -169,7 +173,7 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
 .badge-scan{background:rgba(217,119,6,.12);color:var(--amber);border:1px solid rgba(217,119,6,.2)}
 .ic-val{font-family:var(--mono);font-size:26px;font-weight:700;color:var(--amber-bright);line-height:1;margin-bottom:4px;text-shadow:0 0 16px var(--amber-glow)}
 .ic-val .pre{font-size:14px;opacity:.7}.ic-val .suf{font-size:12px;color:var(--dt-d);font-weight:400;text-shadow:none}
-.ic-detail{font-size:11px;color:var(--dt-s);line-height:1.5}
+.ic-detail{font-size:13px;color:var(--dt-s);line-height:1.5}
 .ic-title{font-size:13px;font-weight:700;color:var(--dt);margin-bottom:8px}
 
 /* Competitor bars */
@@ -216,7 +220,7 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
 .ec-fin .ec-fc{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.15)}
 .ec-tec .ec-fc{background:rgba(59,130,246,.1);color:var(--blue);border:1px solid rgba(59,130,246,.15)}
 .ec-ind .ec-fc{background:rgba(139,92,246,.1);color:var(--purple);border:1px solid rgba(139,92,246,.15)}
-.ec-finding{font-size:11px;line-height:1.5;color:var(--dt-s)}
+.ec-finding{font-size:13px;line-height:1.5;color:var(--dt-s)}
 .ec-finding strong{color:var(--dt);font-weight:600}
 .ec-hl{font-family:var(--mono);font-weight:700;font-size:11px}
 .ec-ops .ec-hl{color:var(--teal-bright)}.ec-mkt .ec-hl{color:var(--amber-bright)}.ec-fin .ec-hl{color:var(--green)}.ec-tec .ec-hl{color:var(--blue)}.ec-ind .ec-hl{color:var(--purple)}
@@ -441,7 +445,8 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
     <h3 class="mk-h reveal-on-scroll">An AI that already knows your industry.</h3>
     <p class="mk-body reveal-on-scroll">This isn't a form. It's a conversation with an AI built from real research on how home service businesses actually run. Say you run a 4-person cleaning crew, and it already knows to ask about your recurring vs. one-time ratio, your quote follow-up timing, and whether you have after-hours coverage. It listens. It follows up. It goes deep where it matters.</p>
 
-    <!-- LIVE ORB -->
+    <!-- LIVE ORB + CONVERSATION + INTEL -->
+    <div class="screen-container">
     <div class="orb-scene" style="position:relative">
       <div class="orb-glow"></div>
       <div class="orb-wrap">
@@ -501,6 +506,8 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
       </div>
     </div>
 
+    </div><!-- /.screen-container -->
+
     <p class="mk-caption">You talk for 10 minutes. The AI builds a complete operational profile of your business.</p>
   </div>
 
@@ -518,6 +525,7 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
     <h3 class="mk-h reveal-on-scroll">Five experts. 47 findings. Every angle covered.</h3>
     <p class="mk-body reveal-on-scroll">Your intake data and our research get analyzed from five different perspectives. Not one generic report — five expert lenses focused on your specific business. Then everything gets combined into one prioritized plan — what to fix first, what it costs, and what it'll save you.</p>
 
+    <div class="screen-container">
     <div class="experts-grid" id="expertsGrid">
       <div class="expert-card ec-ops" data-delay="0">
         <div class="ec-icon">&#9881;&#65039;</div>
@@ -560,6 +568,7 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
         <div class="ec-metric"><span class="ec-ml">Retention gap</span><span class="ec-mv">$14.4K</span></div>
       </div>
     </div>
+    </div><!-- /.screen-container -->
 
     <p class="mk-caption">Every finding includes specific dollar amounts, confidence scores, and source data — not guesswork.</p>
   </div>
