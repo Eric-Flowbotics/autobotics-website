@@ -703,6 +703,7 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
     <p class="close-sub">We're opening Blueprint spots now. Drop your email and we'll reach out personally within 48 hours to schedule your intake conversation.</p>
     <div class="wl-form" id="wlForm">
       <input type="email" class="wl-input" id="emailIn" placeholder="Your email address" required>
+      <input type="text" name="website" id="wlHoneypot" style="display:none" tabindex="-1" autocomplete="off">
       <button class="wl-btn" id="wlBtn">Join the Blueprint Waitlist →</button>
     </div>
     <p class="wl-note" id="wlNote">No payment today. We'll reach out to make sure it's a good fit first.</p>
@@ -830,7 +831,7 @@ function submitWL() {
   fetch('/api/blueprint-waitlist', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: email })
+    body: JSON.stringify({ email: email, website: document.getElementById('wlHoneypot').value })
   })
   .then(function() {
     document.getElementById('wlForm').classList.add('hidden');

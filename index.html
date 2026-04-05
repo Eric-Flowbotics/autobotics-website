@@ -426,6 +426,7 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
       <form class="inline-capture-form" id="inlineCaptureForm">
         <label for="inlineEmail" class="sr-only">Email address</label>
         <input type="email" id="inlineEmail" name="email" placeholder="Your email address" required autocomplete="email">
+        <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
         <button type="submit" class="btn btn-primary">Download the Free Guide →</button>
       </form>
       <p class="inline-capture-fine">Free PDF · No spam · Unsubscribe anytime</p>
@@ -560,6 +561,7 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
         <form class="ebook-form" id="ebookForm" aria-label="Download the free ebook">
           <label for="emailInput" class="sr-only">Email address</label>
           <input type="email" id="emailInput" name="email" placeholder="Your email address" required autocomplete="email">
+          <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
           <button type="submit" class="btn btn-primary">Download the Free Guide →</button>
         </form>
         <p class="ebook-fine">No spam · Unsubscribe anytime</p>
@@ -761,7 +763,7 @@ function handleEmailForm(formId, inputId){
     const orig=btn.textContent;
     btn.textContent='Sending...';btn.disabled=true;
     try{
-      const r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+      const hp=this.querySelector('[name="website"]').value;const r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,website:hp})});
       if(r.ok){btn.textContent='✓ Downloading your free guide...';btn.style.background='#D97706';setTimeout(()=>{window.open('/The-Leaking-Business.pdf','_blank');btn.textContent='✓ Downloaded — Open Again';btn.disabled=false;btn.onclick=function(){window.open('/The-Leaking-Business.pdf','_blank')}},1200)}
       else throw new Error()
     }catch{btn.textContent=orig;btn.disabled=false;alert('Something went wrong. Try again or email eric@theautobotics.com')}
