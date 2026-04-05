@@ -2094,6 +2094,14 @@ Give me specific, actionable steps to improve ${stage.label.toLowerCase()} in my
       const [browseOpen, setBrowseOpen] = useState(false);
 
       useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('fresh') === '1') {
+          localStorage.removeItem('autobotics_toolkit_v2');
+          window.history.replaceState({}, '', window.location.pathname);
+        }
+      }, []);
+
+      useEffect(() => {
         const saved = localStorage.getItem('autobotics_toolkit_v2');
         if (saved) {
           try {
