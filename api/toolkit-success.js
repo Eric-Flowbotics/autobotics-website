@@ -27,6 +27,8 @@ module.exports = async (req, res) => {
           fldVVgY89sMco4X0H: true,
           fld65Pd4dhqLnnP5o: today,
           fld0XVEetTYi0hTFt: 'Toolkit Customer',
+          fldonT5AiKWKhEvOG: session.id,
+          fld0JheFqBZ77DJF9: session.amount_total / 100,
         };
         if (name) {
           fields.fldJ2LpKHwaiTGTr5 = name;
