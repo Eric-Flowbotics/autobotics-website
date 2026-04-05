@@ -147,20 +147,20 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
 .orb-scene{display:flex;justify-content:center;margin-bottom:32px}
 .orb-wrap{position:relative;width:160px;height:160px}
 .orb-ring{position:absolute;border-radius:50%;border:1px solid}
-.r1{inset:-24px;border-color:rgba(13,148,136,.08);animation:rr 20s linear infinite}
-.r2{inset:-48px;border-color:rgba(13,148,136,.04);animation:rr 30s linear infinite reverse}
-.r3{inset:-72px;border-color:rgba(13,148,136,.02);animation:rr 45s linear infinite}
+.r1{inset:-24px;border-color:rgba(13,148,136,.08);animation:rr 10s linear infinite}
+.r2{inset:-48px;border-color:rgba(13,148,136,.04);animation:rr 15s linear infinite reverse}
+.r3{inset:-72px;border-color:rgba(13,148,136,.02);animation:rr 22s linear infinite}
 .r1::after{content:'';position:absolute;top:-2px;left:50%;width:4px;height:4px;background:var(--teal-bright);border-radius:50%;box-shadow:0 0 8px var(--teal-glow)}
 .r2::after{content:'';position:absolute;bottom:10%;right:-2px;width:3px;height:3px;background:var(--teal);border-radius:50%;opacity:.5}
 @keyframes rr{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.orb-core{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 38% 33%,rgba(20,184,166,.22) 0%,rgba(13,148,136,.1) 40%,rgba(13,148,136,.03) 70%,transparent 100%);border:1.5px solid rgba(13,148,136,.3);animation:of 6s ease-in-out infinite;overflow:hidden}
-.orb-core::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(13,148,136,.08),transparent,rgba(13,148,136,.04),transparent);animation:os 10s linear infinite}
+.orb-core{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 38% 33%,rgba(20,184,166,.22) 0%,rgba(13,148,136,.1) 40%,rgba(13,148,136,.03) 70%,transparent 100%);border:1.5px solid rgba(13,148,136,.3);animation:of 3s ease-in-out infinite;overflow:hidden}
+.orb-core::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(13,148,136,.08),transparent,rgba(13,148,136,.04),transparent);animation:os 5s linear infinite}
 @keyframes of{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 @keyframes os{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .orb-wave{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:2.5px;z-index:2}
 .orb-wave .b{width:2.5px;border-radius:2px;background:var(--teal-bright);box-shadow:0 0 4px var(--teal-glow);animation:w 1s ease-in-out infinite}
 @keyframes w{0%,100%{transform:scaleY(.25);opacity:.35}35%{transform:scaleY(1);opacity:1}65%{transform:scaleY(.5);opacity:.6}}
-.orb-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:400px;height:400px;background:radial-gradient(circle,rgba(13,148,136,.1) 0%,transparent 65%);border-radius:50%;animation:gp 5s ease-in-out infinite;pointer-events:none}
+.orb-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:400px;height:400px;background:radial-gradient(circle,rgba(13,148,136,.1) 0%,transparent 65%);border-radius:50%;animation:gp 2.5s ease-in-out infinite;pointer-events:none}
 @keyframes gp{0%,100%{opacity:.4;transform:translate(-50%,-50%) scale(1)}50%{opacity:.8;transform:translate(-50%,-50%) scale(1.12)}}
 
 /* Screen containers — embedded UI feel */
@@ -171,7 +171,7 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
 /* LIVE CONVERSATION     */
 /* ===================== */
 .convo{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
-.msg{opacity:0;transform:translateY(12px);filter:blur(3px);transition:all .6s cubic-bezier(.16,1,.3,1)}
+.msg{opacity:0;transform:translateY(12px);filter:blur(3px);transition:all .3s cubic-bezier(.16,1,.3,1)}
 .msg.show{opacity:1;transform:translateY(0);filter:blur(0)}
 .msg.ai{align-self:flex-start}
 .msg.user{align-self:flex-end}
@@ -187,7 +187,7 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
 /* LIVE INTEL PANEL      */
 /* ===================== */
 .intel-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:40px}
-.intel-card{background:var(--dk-c);border:1px solid var(--dk-b);border-radius:10px;padding:14px;opacity:0;transform:translateY(10px);transition:all .6s cubic-bezier(.16,1,.3,1)}
+.intel-card{background:var(--dk-c);border:1px solid var(--dk-b);border-radius:10px;padding:14px;opacity:0;transform:translateY(10px);transition:all .3s cubic-bezier(.16,1,.3,1)}
 .intel-card.show{opacity:1;transform:translateY(0)}
 .ic-label{font-size:9px;font-family:var(--mono);letter-spacing:1.5px;text-transform:uppercase;color:var(--dt-d);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
 .badge{font-size:7px;padding:2px 6px;border-radius:4px;font-weight:700;letter-spacing:.5px}
@@ -519,15 +519,15 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
 
     <!-- LIVE CONVERSATION -->
     <div class="convo" id="convo">
-      <div class="msg ai" data-delay="800">
+      <div class="msg ai" data-delay="400">
         <div class="spk">Autobotics AI</div>
         <div class="txt">I can see you're running 4 crews in the Dallas area. When a new lead calls in during the day, what's the process — do you answer personally, or does someone else handle it?</div>
       </div>
-      <div class="msg user" data-delay="2400">
+      <div class="msg user" data-delay="1200">
         <div class="spk">You</div>
         <div class="txt">Voicemail usually. But honestly, most people don't leave one. They just call the next person on Google.</div>
       </div>
-      <div class="msg ai" data-delay="4200">
+      <div class="msg ai" data-delay="2100">
         <div class="spk">Autobotics AI</div>
         <div class="txt">That matches what we see — 85% of callers who hit voicemail never call back. With 4 crews running, I'm estimating 3 to 5 missed calls per day during peak season.</div>
         <div class="probe">Pulling your Google Business Profile now to see how you're showing up against competitors in the Dallas market...</div>
@@ -536,12 +536,12 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
 
     <!-- INTEL CARDS -->
     <div class="intel-row" id="intelRow">
-      <div class="intel-card" data-delay="5000">
+      <div class="intel-card" data-delay="2500">
         <div class="ic-label">Revenue Leak · Stage 1 <span class="badge badge-live">LIVE</span></div>
         <div class="ic-val"><span class="pre">$</span>24,700<span class="suf">/yr</span></div>
         <div class="ic-detail">From missed calls alone — based on crew size, avg job value, and call volume</div>
       </div>
-      <div class="intel-card" data-delay="5600">
+      <div class="intel-card" data-delay="2800">
         <div class="ic-label">Google Reviews <span class="badge badge-done">PULLED</span></div>
         <div class="ic-title">Dallas Cleaning — Top 5</div>
         <div class="cr"><span class="cr-n you">★ You</span><div class="cr-t"><div class="cr-f" style="width:12%;background:var(--amber)"></div></div><span class="cr-c hl">23</span></div>
@@ -549,7 +549,7 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
         <div class="cr"><span class="cr-n">Two Maids</span><div class="cr-t"><div class="cr-f" style="width:58%;background:var(--teal);opacity:.8"></div></div><span class="cr-c">142</span></div>
         <div class="cr"><span class="cr-n">Molly Maid</span><div class="cr-t"><div class="cr-f" style="width:44%;background:var(--teal);opacity:.6"></div></div><span class="cr-c">98</span></div>
       </div>
-      <div class="intel-card" data-delay="6200">
+      <div class="intel-card" data-delay="3100">
         <div class="ic-label">8-Stage Assessment</div>
         <div class="sg">
           <div class="sp c"><div class="sd"></div>1. Leads</div>
