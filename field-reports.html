@@ -117,7 +117,7 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
 .reports-header h2{margin-bottom:16px}
 .reports-header p{color:var(--medium);font-size:1.05rem;line-height:1.8}
 .reports-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.report-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:32px 28px;display:flex;flex-direction:column;transition:border-color .25s,box-shadow .25s,transform .25s}
+.report-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:32px 28px;display:flex;flex-direction:column;transition:border-color .25s,box-shadow .25s,transform .25s;text-decoration:none;color:inherit;cursor:pointer}
 .report-card:hover{border-color:var(--teal);box-shadow:var(--shadow-md);transform:translateY(-3px)}
 .report-tag{display:inline-flex;align-items:center;font-family:var(--mono);font-size:.72rem;font-weight:600;color:var(--teal);background:var(--teal-subtle);border:1px solid rgba(13,148,136,.15);padding:5px 12px;border-radius:100px;margin-bottom:16px;width:fit-content}
 .report-card h3{font-size:1.1rem;margin-bottom:12px}
@@ -181,7 +181,7 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
     <div class="nav-links" id="navLinks">
       <a href="/#how">How It Works</a>
       <a href="/blueprint">The Blueprint</a>
-      <a href="/products">Products</a>
+      <a href="/#pricing">Products</a>
       <a href="/about">About</a>
       <a href="/field-reports" class="active">Field Reports</a>
       <a href="/toolkit" class="btn btn-cta">Get the Toolkit — $29</a>
@@ -239,50 +239,50 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
     </div>
     <div class="reports-grid">
 
-      <div class="report-card reveal rd1">
+      <a href="/field-reports/cleaning" class="report-card reveal rd1">
         <span class="report-tag">Residential Cleaning</span>
         <h3>Where Cleaning Businesses Lose Money</h3>
         <div class="report-leak">~$27,400/yr lost</div>
         <p class="report-preview">Solo cleaners work 8–10 hours a day but only clean for 4–6. The rest is admin, communication, and driving. Three missed calls a week costs $20K+ annually — and that's just stage one.</p>
-        <a href="/field-reports/cleaning" class="report-link">Read the full report →</a>
+        <span class="report-link">Read the full report →</span>
         <div class="report-date">March 2026</div>
-      </div>
+      </a>
 
-      <div class="report-card reveal rd2">
+      <a href="/field-reports/landscaping" class="report-card reveal rd2">
         <span class="report-tag">Landscaping &amp; Lawn</span>
         <h3>Where Landscaping Businesses Lose Money</h3>
         <div class="report-leak">~$34,000/yr lost</div>
         <p class="report-preview">Every winter, landscaping businesses lose 30–50% of their clients to silence. Not because the clients were unhappy — because nobody asked them to come back. Plus seasonal scheduling chaos, missed peak-season calls, and zero upsell outreach.</p>
-        <a href="/field-reports/landscaping" class="report-link">Read the full report →</a>
+        <span class="report-link">Read the full report →</span>
         <div class="report-date">March 2026</div>
-      </div>
+      </a>
 
-      <div class="report-card reveal rd3">
+      <a href="/field-reports/hvac" class="report-card reveal rd3">
         <span class="report-tag">HVAC</span>
         <h3>Where HVAC Businesses Lose Money</h3>
         <div class="report-leak">~$52,000/yr lost</div>
         <p class="report-preview">In HVAC, the first to answer wins. Missed emergency calls at 2 AM, estimates that go cold, and zero maintenance contracts — the highest-ticket trade in home services has the biggest gaps.</p>
-        <a href="/field-reports/hvac" class="report-link">Read the full report →</a>
+        <span class="report-link">Read the full report →</span>
         <div class="report-date">March 2026</div>
-      </div>
+      </a>
 
-      <div class="report-card reveal rd4">
+      <a href="/field-reports/plumbing" class="report-card reveal rd4">
         <span class="report-tag">Plumbing</span>
         <h3>Where Plumbing Businesses Lose Money</h3>
         <div class="report-leak">~$41,000/yr lost</div>
         <p class="report-preview">Someone's toilet is overflowing at 11 PM. They call you. You're asleep. Your competitor answers. That emergency call was worth $400–$800. With 550,000 fewer plumbers by 2027, every missed call costs more each year.</p>
-        <a href="/field-reports/plumbing" class="report-link">Read the full report →</a>
+        <span class="report-link">Read the full report →</span>
         <div class="report-date">March 2026</div>
-      </div>
+      </a>
 
-      <div class="report-card reveal rd5">
+      <a href="/field-reports/handyman" class="report-card reveal rd5">
         <span class="report-tag">Handyman</span>
         <h3>Where Handyman Businesses Lose Money</h3>
         <div class="report-leak">~$22,000/yr lost</div>
         <p class="report-preview">73% of homeowners choose their handyman through word-of-mouth. If you're not systematically asking for reviews and referrals after every job, you're invisible to your best marketing channel.</p>
-        <a href="/field-reports/handyman" class="report-link">Read the full report →</a>
+        <span class="report-link">Read the full report →</span>
         <div class="report-date">March 2026</div>
-      </div>
+      </a>
 
     </div>
   </div>
@@ -309,7 +309,7 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
       <p class="footer-copy">© 2026 Autobotics. All rights reserved.</p>
       <nav class="footer-links" aria-label="Footer navigation">
         <a href="/blueprint">The Blueprint</a>
-      <a href="/products">Products</a>
+      <a href="/#pricing">Products</a>
         <a href="/about">About</a>
         <a href="/field-reports">Field Reports</a>
         <a href="https://x.com/AstroAgent253" target="_blank" rel="noopener">@AstroAgent253</a>

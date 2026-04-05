@@ -4,7 +4,6 @@
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
     { "source": "/blueprint", "destination": "/blueprint.html" },
-    { "source": "/products", "destination": "/products.html" },
     { "source": "/about", "destination": "/about.html" },
     { "source": "/field-reports", "destination": "/field-reports.html" },
     { "source": "/field-reports/:slug", "destination": "/field-reports/:slug.html" },

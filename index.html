@@ -338,7 +338,7 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
     <div class="nav-links" id="navLinks">
       <a href="#how">How It Works</a>
       <a href="/blueprint">The Blueprint</a>
-      <a href="/products">Products</a>
+      <a href="/#pricing">Products</a>
       <a href="/about">About</a>
       <a href="/field-reports">Field Reports</a>
       <a href="/toolkit" class="btn btn-cta">Get the Toolkit — $29</a>
@@ -735,7 +735,7 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
       <p class="footer-copy">© 2026 Autobotics. All rights reserved.</p>
       <nav class="footer-links" aria-label="Footer navigation">
         <a href="/blueprint">The Blueprint</a>
-      <a href="/products">Products</a>
+      <a href="/#pricing">Products</a>
         <a href="/about">About</a>
         <a href="/field-reports">Field Reports</a>
         <a href="https://x.com/AstroAgent253" target="_blank" rel="noopener">@AstroAgent253</a>
@@ -769,6 +769,19 @@ function handleEmailForm(formId, inputId){
 }
 handleEmailForm('ebookForm','emailInput');
 handleEmailForm('inlineCaptureForm','inlineEmail');
+
+// Smooth-scroll anchor links via JS to prevent scroll bounce-back
+document.querySelectorAll('a[href^="#"]').forEach(link=>{
+  link.addEventListener('click',function(e){
+    const id=this.getAttribute('href').slice(1);
+    const target=document.getElementById(id);
+    if(target){
+      e.preventDefault();
+      target.scrollIntoView({behavior:'smooth',block:'start'});
+      history.replaceState(null,null,'#'+id);
+    }
+  });
+});
 
 // Hide mobile CTA bar when near an email capture section
 const mobileCta=document.getElementById('mobileCta');
