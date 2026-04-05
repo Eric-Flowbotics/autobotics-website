@@ -318,7 +318,7 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
 .close-price{font-size:52px;font-weight:800;color:var(--dt);letter-spacing:-1.5px;margin-bottom:4px}
 .close-ps{font-size:16px;color:var(--dt-s);margin-bottom:28px}
 .close-sub{font-size:16px;color:var(--dt-s);max-width:480px;margin:0 auto 32px;line-height:1.6}
-.wl-form{display:flex;gap:10px;max-width:460px;margin:0 auto 12px}
+.wl-form{display:flex;gap:10px;max-width:600px;margin:0 auto 12px}
 .wl-input{flex:1;height:50px;background:var(--dk-c);border:1.5px solid rgba(255,255,255,.4);border-radius:10px;padding:0 18px;font-size:15px;font-family:var(--font);color:var(--dt);outline:none;transition:border-color .3s}
 .wl-input::placeholder{color:rgba(255,255,255,.5)}
 .wl-input:focus{border-color:var(--teal)}
@@ -702,7 +702,8 @@ h1,h2,h3,h4{line-height:1.15;font-weight:800;letter-spacing:-0.5px}
     <div class="close-ps">One time. No subscription. No upsell.</div>
     <p class="close-sub">We're building the Blueprint now and opening spots soon. Drop your email and you'll be first in line.</p>
     <div class="wl-form" id="wlForm">
-      <input type="email" class="wl-input" id="emailIn" placeholder="Your email address" required>
+      <input type="text" class="wl-input" id="nameIn" placeholder="First name" autocomplete="given-name" style="flex:1">
+      <input type="email" class="wl-input" id="emailIn" placeholder="Your email address" required style="flex:1">
       <input type="text" name="website" id="wlHoneypot" style="display:none" tabindex="-1" autocomplete="off">
       <button class="wl-btn" id="wlBtn">Join the Blueprint Waitlist →</button>
     </div>
@@ -823,6 +824,7 @@ function submitWL() {
     emailInput.style.borderColor = '#EF4444';
     return;
   }
+  var name = document.getElementById('nameIn').value.trim();
   var btn = document.getElementById('wlBtn');
   var orig = btn.textContent;
   btn.textContent = 'Sending...';
@@ -831,22 +833,29 @@ function submitWL() {
   fetch('/api/blueprint-waitlist', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: email, website: document.getElementById('wlHoneypot').value })
+    body: JSON.stringify({ email: email, name: name, website: document.getElementById('wlHoneypot').value })
   })
   .then(function() {
     document.getElementById('wlForm').classList.add('hidden');
     document.getElementById('wlNote').style.display = 'none';
+    var title = document.getElementById('wlConfirm').querySelector('.cf-title');
+    if(name) title.textContent = "You're on the list, " + name + ".";
     document.getElementById('wlConfirm').classList.add('show');
   })
   .catch(function() {
     document.getElementById('wlForm').classList.add('hidden');
     document.getElementById('wlNote').style.display = 'none';
+    var title = document.getElementById('wlConfirm').querySelector('.cf-title');
+    if(name) title.textContent = "You're on the list, " + name + ".";
     document.getElementById('wlConfirm').classList.add('show');
   });
 }
 
 document.getElementById('wlBtn').addEventListener('click', submitWL);
 document.getElementById('emailIn').addEventListener('keypress', function(e) {
+  if(e.key === 'Enter') submitWL();
+});
+document.getElementById('nameIn').addEventListener('keypress', function(e) {
   if(e.key === 'Enter') submitWL();
 });
 </script>

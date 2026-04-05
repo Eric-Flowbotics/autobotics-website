@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { email, website } = req.body;
+  const { email, name, website } = req.body;
 
   // Honeypot — bots fill this hidden field, real users don't
   if (website) {
@@ -33,12 +33,15 @@ export default async function handler(req, res) {
         typecast: true,
         records: [
           {
-            fields: {
-              fldJ08DTKhozkDJWE: email,
-              fld5KmOTl7wiBGIKB: true,
-              fldUW1uDfyi9nx4jL: today,
-              fld0XVEetTYi0hTFt: 'Blueprint Waitlist',
-            },
+            fields: Object.assign(
+              {
+                fldJ08DTKhozkDJWE: email,
+                fld5KmOTl7wiBGIKB: true,
+                fldUW1uDfyi9nx4jL: today,
+                fld0XVEetTYi0hTFt: 'Blueprint Waitlist',
+              },
+              name ? { fldJ2LpKHwaiTGTr5: name } : {}
+            ),
           },
         ],
       }),
