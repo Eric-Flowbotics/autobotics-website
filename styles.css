@@ -129,7 +129,7 @@ p{line-height:1.7}
 /* ---------- Bio ---------- */
 .bio-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px;align-items:start}
 .bio-photo{width:100%;aspect-ratio:1/1;background:var(--charcoal-soft);border-radius:var(--radius-lg);overflow:hidden;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.8rem;font-family:var(--mono);text-align:center;padding:20px;box-shadow:var(--shadow-lg)}
-.bio-photo img{width:100%;height:100%;object-fit:cover}
+.bio-photo img{width:100%;height:100%;object-fit:cover;object-position:center 15%}
 .bio-body p{margin-bottom:18px;color:var(--medium);font-size:1.05rem;line-height:1.8}
 .bio-body p strong{color:var(--charcoal)}
 
@@ -198,7 +198,7 @@ p{line-height:1.7}
 .story{background:var(--cream);padding:88px 0}
 .story-grid{display:grid;grid-template-columns:320px 1fr;gap:64px;align-items:start}
 .story-photo-col{position:sticky;top:104px}
-.story-photo{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:var(--radius-md);box-shadow:var(--shadow-lg)}
+.story-photo{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:center 15%;border-radius:var(--radius-md);box-shadow:var(--shadow-lg)}
 .story-text h2{font-size:1.4rem;margin:44px 0 14px}
 .story-text h2:first-child{margin-top:0}
 .story-text p{color:var(--medium);font-size:1.06rem;line-height:1.8;margin-bottom:18px;max-width:var(--max-prose)}
