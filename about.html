@@ -115,6 +115,15 @@ window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scr
 
 // Scroll reveal animations
 if('IntersectionObserver' in window){const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))}else{document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'))}
+
+// Fade out each capture card's loading skeleton once its Beehiiv iframe loads
+document.querySelectorAll('.capture-embed').forEach(embed=>{
+  const reveal=()=>embed.classList.add('embed-loaded');
+  const arm=f=>{f.addEventListener('load',reveal,{once:true});setTimeout(reveal,8000)};
+  const existing=embed.querySelector('iframe');
+  if(existing){arm(existing);return}
+  new MutationObserver((muts,obs)=>{const f=embed.querySelector('iframe');if(f){obs.disconnect();arm(f)}}).observe(embed,{childList:true,subtree:true});
+});
 </script>
 
 <!-- Beehiiv attribution / UTM forwarder -->
