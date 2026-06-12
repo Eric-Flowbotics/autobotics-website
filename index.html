@@ -22,18 +22,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css">
 </head>
-<body>
+<body class="has-mobile-cta">
 
 <!-- SLOT: nav -->
-<nav class="nav" role="navigation" aria-label="Main navigation">
+<nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
   <div class="nav-inner">
     <a href="/" class="nav-logo" aria-label="Autobotics home">
       <svg viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Autobotics logo">
         <rect x="2" y="2" width="44" height="44" rx="10" stroke="#0D9488" stroke-width="2.5" fill="none"/>
-        <path d="M15 34L24 12L33 34" stroke="#1C2024" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M15 34L24 12L33 34" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
         <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2" stroke-linecap="round"/>
         <text x="60" y="34" font-family="'Plus Jakarta Sans',sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5">
-          <tspan fill="#1C2024">auto</tspan><tspan fill="#0D9488">botics</tspan>
+          <tspan fill="#FFFFFF">auto</tspan><tspan fill="#0D9488">botics</tspan>
         </text>
       </svg>
     </a>
@@ -46,6 +46,10 @@
 
 <!-- HERO -->
 <header class="hero">
+  <div class="hero-image" aria-hidden="true">
+    <img src="/images/hero-web.png" alt="" width="1200" height="654">
+  </div>
+  <div class="hero-overlay" aria-hidden="true"></div>
   <div class="container">
     <div class="hero-grid">
       <div class="hero-text">
@@ -69,65 +73,65 @@
 <!-- THE LEAK -->
 <section class="section leak">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="eyebrow">The Leak</span>
       <h2>The money isn't missing. It's leaking.</h2>
       <p>You got into this because you're great with your hands — not because you wanted to be an office manager, a marketer, and an accountant all at once. But the numbers don't care how busy you are:</p>
     </div>
     <div class="stats-grid">
-      <div class="stat-card">
+      <div class="stat-card reveal rd1">
         <div class="stat-num">85%</div>
         <div class="stat-label">callers who hit voicemail never call back</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card reveal rd2">
         <div class="stat-num">48–60%</div>
         <div class="stat-label">of quotes never get a follow-up</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card reveal rd3">
         <div class="stat-num">90%+</div>
         <div class="stat-label">of operators never ask for reviews (#1 way neighbors pick a local service)</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card reveal rd4">
         <div class="stat-num">$20K–$33K</div>
         <div class="stat-label">leaking yearly (3 missed calls/wk × $130–210)</div>
       </div>
     </div>
-    <p class="source-line">Sources: industry research across 875,000+ cleaning businesses and 2.5M home service operators.</p>
-    <p class="leak-closer">You don't have a revenue problem. You have a leak problem. And plugging these leaks with AI is something you can learn — faster and cheaper than you've been told.</p>
+    <p class="source-line reveal">Sources: industry research across 875,000+ cleaning businesses and 2.5M home service operators.</p>
+    <p class="leak-closer reveal rd1">You don't have a revenue problem. You have a leak problem. And plugging these leaks with AI is something you can learn — faster and cheaper than you've been told.</p>
   </div>
 </section>
 
 <!-- WHAT YOU GET WEEKLY -->
 <section class="section">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="eyebrow">What You Get Weekly</span>
       <h2>The Home Service Edge. One email. Five minutes. Every week.</h2>
     </div>
     <div class="cards-grid">
-      <div class="feature-card">
+      <div class="feature-card reveal rd1">
         <span class="num">01</span>
         <h3>One workflow you can copy</h3>
         <p>A system that plugs a leak — laid out step by step.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card reveal rd2">
         <span class="num">02</span>
         <h3>One prompt that works</h3>
         <p>Copy it, paste it, watch it earn its keep.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card reveal rd3">
         <span class="num">03</span>
         <h3>One real story</h3>
         <p>What worked, what it cost, what it returned.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card reveal rd4">
         <span class="num">04</span>
         <h3>One tool worth knowing</h3>
         <p>Vetted, in plain English, no affiliate fluff.</p>
       </div>
     </div>
     <!-- SLOT: mid-cta -->
-    <div style="text-align:center;margin-top:44px">
+    <div class="reveal" style="text-align:center;margin-top:44px">
       <a href="#hero-capture" class="btn btn-primary">Get the newsletter — free</a>
     </div>
   </div>
@@ -138,10 +142,10 @@
   <div class="container">
     <div class="bio-grid">
       <!-- SLOT: eric-photo -->
-      <div class="bio-photo">
+      <div class="bio-photo reveal">
         <img src="/images/eric-headshot.jpg" alt="Eric Lenhardt" onerror="this.style.display='none';this.parentNode.textContent='Photo: Eric Lenhardt'">
       </div>
-      <div class="bio-body">
+      <div class="bio-body reveal rd1">
         <span class="eyebrow">Who's Writing This</span>
         <h2 style="margin:14px 0 22px">I'm Eric.</h2>
         <p>The Army first — I joined at 17, went to Iraq twice, and was out just before my 21st birthday. The sixteen years since: building products for companies you'd recognize, co-founding Potentia Labs — which won a Department of Veterans Affairs Industry Innovation Competition — and a day job that's now all-in on AI.</p>
@@ -152,40 +156,53 @@
   </div>
 </section>
 
+<!-- BREATHER — full-bleed photo break -->
+<section class="breather" aria-label="Breather">
+  <div class="breather-image" aria-hidden="true">
+    <img src="/images/breather-web.jpg" alt="" width="1200" height="669">
+  </div>
+  <div class="breather-overlay" aria-hidden="true"></div>
+  <div class="container">
+    <div class="breather-content reveal">
+      <div class="breather-stat">The end of a long day shouldn't be the start of a longer night.</div>
+    </div>
+  </div>
+</section>
+
 <!-- THE ROAD AHEAD -->
 <section class="section road">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="eyebrow">The Road Ahead</span>
       <h2>Where this is going.</h2>
       <p>Autobotics is being built in the open. Here's the map — newsletter readers get first access to everything.</p>
     </div>
     <div class="road-grid">
-      <div class="road-card">
+      <div class="road-card reveal rd1">
         <!-- SLOT: road-card-1-chip --><span class="chip chip-live">Live</span>
         <h3>The Home Service Edge</h3>
         <p>One AI fix a week, in plain English.</p>
         <a href="#hero-capture" class="btn btn-primary btn-sm">Subscribe</a>
       </div>
-      <div class="road-card">
+      <div class="road-card reveal rd2">
         <!-- SLOT: road-card-2-chip --><span class="chip chip-soon">First Videos Coming</span>
         <h3>YouTube — Eric Lenhardt</h3>
         <p>Real operator problems, solved on screen — and a business built on AI, documented in the open.</p>
         <a href="#hero-capture" class="btn btn-ghost btn-sm">Get notified</a>
       </div>
-      <div class="road-card">
+      <div class="road-card reveal rd3">
         <!-- SLOT: road-card-3-chip --><span class="chip chip-soon">Opens Soon</span>
         <h3>The Operator Community</h3>
         <p>Free courses, prompt libraries, and copy-paste AI systems for home service businesses — everything in one place.</p>
         <a href="#hero-capture" class="btn btn-ghost btn-sm">Get notified</a>
       </div>
-      <div class="road-card">
+      <div class="road-card reveal rd4">
         <!-- SLOT: road-card-4-chip --><span class="chip chip-soon">Coming</span>
         <h3>Live Workshop</h3>
         <p>A working session, not a webinar. Founding seats go to the list first.</p>
         <a href="#hero-capture" class="btn btn-ghost btn-sm">Get notified</a>
       </div>
-      <div class="road-card">
+      <div class="road-card reveal rd5">
         <!-- SLOT: road-card-5-chip --><span class="chip chip-soon">Coming</span>
         <h3>The Operator Playbook</h3>
         <p>The complete written system, shaped by what real operators ask for.</p>
@@ -196,22 +213,22 @@
 </section>
 
 <!-- STRAIGHT QUESTIONS -->
-<section class="section">
+<section class="section leak">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="eyebrow">Straight Questions</span>
       <h2>Straight questions, straight answers.</h2>
     </div>
     <div class="qa">
-      <div class="qa-item">
+      <div class="qa-item reveal rd1">
         <h3>Why is this free?</h3>
         <p>Because trust is earned in public. Paid things come later — the free stuff is the real work, never bait.</p>
       </div>
-      <div class="qa-item">
+      <div class="qa-item reveal rd2">
         <h3>I'm not tech-savvy.</h3>
         <p>You don't need a tech background. You need plain English and working examples — that's what I do. Every fix comes as steps you can follow and prompts you can copy. If you've ever learned a new piece of equipment, you can learn this.</p>
       </div>
-      <div class="qa-item">
+      <div class="qa-item reveal rd3">
         <h3>Is this just AI hype?</h3>
         <p>Most of it is. I'll never tell you about a result I haven't produced or verified.</p>
       </div>
@@ -221,11 +238,11 @@
 
 <!-- FINAL CTA -->
 <section class="section final">
+  <div class="final-glow" aria-hidden="true"></div>
   <div class="container">
-    <h2>Stop leaking. Start here.</h2>
-    <p class="final-line">The end of a long day shouldn't be the start of a longer night.</p>
+    <h2 class="reveal">Stop leaking. Start here.</h2>
     <!-- SLOT: final-cta -->
-    <div class="capture">
+    <div class="capture reveal rd1" id="final-capture">
       <span class="capture-eyebrow">The Home Service Edge · Free · Weekly</span>
       <div class="capture-embed">
         <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="17c265de-441e-48e5-a5c8-0a0e4b63b4e1"></script>
@@ -235,6 +252,11 @@
   </div>
 </section>
 
+<!-- STICKY MOBILE CTA -->
+<div class="mobile-cta-bar" id="mobileCta">
+  <a href="#hero-capture" class="btn btn-primary">Get the newsletter — free</a>
+</div>
+
 <!-- SLOT: footer -->
 <footer class="footer">
   <div class="container">
@@ -242,10 +264,10 @@
       <a href="/" class="footer-logo" aria-label="Autobotics home">
         <svg viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Autobotics logo">
           <rect x="2" y="2" width="44" height="44" rx="10" stroke="#0D9488" stroke-width="2.5" fill="none"/>
-          <path d="M15 34L24 12L33 34" stroke="#1C2024" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M15 34L24 12L33 34" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
           <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2" stroke-linecap="round"/>
           <text x="60" y="34" font-family="'Plus Jakarta Sans',sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5">
-            <tspan fill="#1C2024">auto</tspan><tspan fill="#0D9488">botics</tspan>
+            <tspan fill="#FFFFFF">auto</tspan><tspan fill="#0D9488">botics</tspan>
           </text>
         </svg>
       </a>
@@ -259,6 +281,38 @@
     </div>
   </div>
 </footer>
+
+<script>
+// Fixed nav: transparent over the hero, dark blur once scrolled
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>40)},{passive:true});
+
+// Scroll reveal animations
+if('IntersectionObserver' in window){const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))}else{document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'))}
+
+// Smooth-scroll anchor links via JS to prevent scroll bounce-back
+document.querySelectorAll('a[href^="#"]').forEach(link=>{
+  link.addEventListener('click',function(e){
+    const id=this.getAttribute('href').slice(1);
+    const target=document.getElementById(id);
+    if(target){
+      e.preventDefault();
+      target.scrollIntoView({behavior:'smooth',block:'start'});
+      history.replaceState(null,null,'#'+id);
+    }
+  });
+});
+
+// Hide the sticky mobile CTA bar when an email capture section is in view
+const mobileCta=document.getElementById('mobileCta');
+if(mobileCta){
+  const captures=[document.getElementById('hero-capture'),document.getElementById('final-capture')].filter(Boolean);
+  window.addEventListener('scroll',()=>{
+    const visible=captures.some(c=>{const r=c.getBoundingClientRect();return r.top<window.innerHeight&&r.bottom>0});
+    mobileCta.style.transform=visible?'translateY(100%)':'translateY(0)';
+  },{passive:true});
+}
+</script>
 
 <!-- Beehiiv attribution / UTM forwarder -->
 <script type="text/javascript" async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>

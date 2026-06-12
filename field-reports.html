@@ -69,31 +69,31 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
 .btn-ghost:hover{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.04);transform:translateY(-2px)}
 
 /* Nav */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 28px;transition:background .3s;background:rgba(250,247,242,0.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 28px;transition:background .3s;background:rgba(28,32,36,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border-light)}
 .nav-inner{max-width:var(--max-w);margin:0 auto;height:72px;display:flex;align-items:center;justify-content:space-between}
 .nav-logo{display:flex;align-items:center;text-decoration:none}
 .nav-logo svg{height:30px;width:auto}
 .nav-links{display:flex;align-items:center;gap:36px}
-.nav-links a{color:var(--charcoal);text-decoration:none;font-size:.875rem;font-weight:500;transition:color .2s;position:relative}
+.nav-links a{color:#FFFFFF;text-decoration:none;font-size:.875rem;font-weight:500;transition:color .2s;position:relative}
 .nav-links a:hover{color:var(--white)}
 .nav-links a:not(.btn)::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1.5px;background:var(--teal);transition:width .2s}
 .nav-links a:not(.btn):hover::after{width:100%}
 .nav-links a.active::after{width:100%}
 .nav-links .btn{padding:10px 22px;font-size:.82rem}
 .nav-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px}
-.nav-toggle span{display:block;width:20px;height:1.5px;background:var(--charcoal);margin:5px 0;border-radius:1px}
+.nav-toggle span{display:block;width:20px;height:1.5px;background:rgba(255,255,255,.8);margin:5px 0;border-radius:1px}
 
-/* Hero — compact */
-.hero{position:relative;overflow:hidden;background:var(--cream);color:var(--charcoal);padding:140px 0 80px}
+/* Hero — compact, dark */
+.hero{position:relative;overflow:hidden;background:var(--charcoal);color:var(--white);padding:140px 0 80px}
 .hero-glow{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,var(--teal-glow),transparent 70%);left:-150px;top:-150px;pointer-events:none}
 .hero-content{position:relative;z-index:1;max-width:680px}
-.hero .eyebrow{margin-bottom:24px;padding:8px 18px;background:var(--teal-subtle);border:1px solid rgba(13,148,136,0.25);border-radius:100px;font-size:.72rem;color:var(--teal)}
+.hero .eyebrow{margin-bottom:24px;padding:8px 18px;background:rgba(13,148,136,0.3);border:1px solid rgba(13,148,136,0.4);border-radius:100px;font-size:.72rem;color:#5EEAD4}
 .hero h1{margin-bottom:24px}
 .hero h1 .highlight{color:var(--teal)}
-.hero-sub{font-size:1.1rem;color:var(--medium);line-height:1.8;margin-bottom:16px;max-width:560px}
-.hero-byline{font-size:.88rem;color:var(--muted);font-style:italic}
-.hero-byline a{color:var(--teal);text-decoration:underline;text-decoration-color:rgba(13,148,136,.3);transition:color .2s}
-.hero-byline a:hover{color:var(--teal-hover)}
+.hero-sub{font-size:1.1rem;color:rgba(255,255,255,.82);line-height:1.8;margin-bottom:16px;max-width:560px}
+.hero-byline{font-size:.88rem;color:rgba(255,255,255,.45);font-style:italic}
+.hero-byline a{color:rgba(255,255,255,.55);text-decoration:underline;text-decoration-color:rgba(255,255,255,.2);transition:color .2s}
+.hero-byline a:hover{color:var(--white)}
 @keyframes heroFadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
 .hero-content>*:nth-child(1){animation:heroFadeUp .8s cubic-bezier(.22,1,.36,1) both}
 .hero-content>*:nth-child(2){animation:heroFadeUp .8s cubic-bezier(.22,1,.36,1) .12s both}
@@ -133,11 +133,11 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
 .cta p{color:rgba(255,255,255,.55);font-size:1.05rem;margin-bottom:36px;line-height:1.7}
 
 /* Footer */
-.footer{background:var(--cream);color:var(--medium);padding:48px 0;border-top:1px solid var(--border)}
+.footer{background:var(--charcoal);color:rgba(255,255,255,.4);padding:48px 0;border-top:1px solid var(--border-light)}
 .footer-inner{display:flex;justify-content:space-between;align-items:center}
 .footer-links{display:flex;gap:32px}
-.footer-links a{color:var(--medium);text-decoration:none;font-size:.82rem;font-weight:500;transition:color .2s}
-.footer-links a:hover{color:var(--teal)}
+.footer-links a{color:rgba(255,255,255,.45);text-decoration:none;font-size:.82rem;font-weight:500;transition:color .2s}
+.footer-links a:hover{color:var(--white)}
 .footer-copy{font-size:.78rem}
 
 /* Responsive */
@@ -168,10 +168,10 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
     <a href="/" class="nav-logo" aria-label="Autobotics home">
       <svg viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Autobotics logo">
         <rect x="2" y="2" width="44" height="44" rx="10" stroke="#0D9488" stroke-width="2.5" fill="none"/>
-        <path d="M15 34L24 12L33 34" stroke="#1C2024" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M15 34L24 12L33 34" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
         <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2" stroke-linecap="round"/>
         <text x="60" y="34" font-family="'Plus Jakarta Sans',sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5">
-          <tspan fill="#1C2024">auto</tspan><tspan fill="#0D9488">botics</tspan>
+          <tspan fill="#FFFFFF">auto</tspan><tspan fill="#0D9488">botics</tspan>
         </text>
       </svg>
     </a>

@@ -24,15 +24,15 @@
 <body>
 
 <!-- SLOT: nav -->
-<nav class="nav" role="navigation" aria-label="Main navigation">
+<nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
   <div class="nav-inner">
     <a href="/" class="nav-logo" aria-label="Autobotics home">
       <svg viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Autobotics logo">
         <rect x="2" y="2" width="44" height="44" rx="10" stroke="#0D9488" stroke-width="2.5" fill="none"/>
-        <path d="M15 34L24 12L33 34" stroke="#1C2024" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M15 34L24 12L33 34" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
         <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2" stroke-linecap="round"/>
         <text x="60" y="34" font-family="'Plus Jakarta Sans',sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5">
-          <tspan fill="#1C2024">auto</tspan><tspan fill="#0D9488">botics</tspan>
+          <tspan fill="#FFFFFF">auto</tspan><tspan fill="#0D9488">botics</tspan>
         </text>
       </svg>
     </a>
@@ -64,10 +64,10 @@
       <a href="/" class="footer-logo" aria-label="Autobotics home">
         <svg viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Autobotics logo">
           <rect x="2" y="2" width="44" height="44" rx="10" stroke="#0D9488" stroke-width="2.5" fill="none"/>
-          <path d="M15 34L24 12L33 34" stroke="#1C2024" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M15 34L24 12L33 34" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
           <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2" stroke-linecap="round"/>
           <text x="60" y="34" font-family="'Plus Jakarta Sans',sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5">
-            <tspan fill="#1C2024">auto</tspan><tspan fill="#0D9488">botics</tspan>
+            <tspan fill="#FFFFFF">auto</tspan><tspan fill="#0D9488">botics</tspan>
           </text>
         </svg>
       </a>
@@ -82,5 +82,13 @@
   </div>
 </footer>
 
+<script>
+// Fixed nav: transparent over the dark hero, dark blur once scrolled
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>40)},{passive:true});
+
+// Scroll reveal animations
+if('IntersectionObserver' in window){const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))}else{document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'))}
+</script>
 </body>
 </html>

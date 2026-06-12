@@ -24,15 +24,15 @@
 <body>
 
 <!-- SLOT: nav -->
-<nav class="nav" role="navigation" aria-label="Main navigation">
+<nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
   <div class="nav-inner">
     <a href="/" class="nav-logo" aria-label="Autobotics home">
       <svg viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Autobotics logo">
         <rect x="2" y="2" width="44" height="44" rx="10" stroke="#0D9488" stroke-width="2.5" fill="none"/>
-        <path d="M15 34L24 12L33 34" stroke="#1C2024" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M15 34L24 12L33 34" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
         <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2" stroke-linecap="round"/>
         <text x="60" y="34" font-family="'Plus Jakarta Sans',sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5">
-          <tspan fill="#1C2024">auto</tspan><tspan fill="#0D9488">botics</tspan>
+          <tspan fill="#FFFFFF">auto</tspan><tspan fill="#0D9488">botics</tspan>
         </text>
       </svg>
     </a>
@@ -51,27 +51,34 @@
   </div>
 </header>
 
-<main class="page-body">
+<main class="story">
   <div class="container">
-    <h2>The short version of me</h2>
-    <p>I went into the Army at 17 — to Iraq twice, out just before my 21st birthday. The sixteen years since: building products for companies you'd recognize, a company I co-founded that won a Department of Veterans Affairs Industry Innovation Competition, and a day job that's now all-in on AI. I'm not new to any of this. I'm just new to telling you about it.</p>
-
-    <h2>What Autobotics is</h2>
-    <p>Autobotics is a weekly newsletter (The Home Service Edge), a YouTube channel, a free operator community, and live workshops — all focused on one question: how does a home service business stop leaking money with AI? It's built for operators who want to learn this and run it themselves. And for the ones who'd rather have it done for them — that path is coming too, and this list hears about it first.</p>
-
-    <h2>The bet I'm making</h2>
-    <p>Most people giving AI advice have never run anything on it. So I'm building a home services company — designed from day one to run on AI: the phones, the quotes, the follow-ups, the books. It isn't operating yet, and that's deliberate — you get the build, not the highlight reel. The documentation starts now: every system, every cost, every failure goes into the newsletter and the channel as it happens.</p>
-
-    <h2>One promise, and it's the whole brand</h2>
-    <p>I will never sell you an outcome I haven't produced. When I've done the thing, I'll say so. When I'm showing you something that worked for someone else, I'll name where it came from. Sixteen years of building taught me that trust compounds faster than hype.</p>
-
-    <!-- SLOT: about-cta -->
-    <div class="capture" style="max-width:520px;margin:48px 0 0">
-      <span class="capture-eyebrow">The Home Service Edge · Free · Weekly</span>
-      <div class="capture-embed">
-        <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="17c265de-441e-48e5-a5c8-0a0e4b63b4e1"></script>
+    <div class="story-grid">
+      <div class="story-photo-col reveal">
+        <img src="/images/eric-headshot.jpg" alt="Eric Lenhardt" class="story-photo" width="320" height="427">
       </div>
-      <p class="capture-micro">One email a week, five minutes, unsubscribe anytime.</p>
+      <div class="story-text">
+        <h2 class="reveal">The short version of me</h2>
+        <p class="reveal rd1">I went into the Army at 17 — to Iraq twice, out just before my 21st birthday. The sixteen years since: building products for companies you'd recognize, a company I co-founded that won a Department of Veterans Affairs Industry Innovation Competition, and a day job that's now all-in on AI. I'm not new to any of this. I'm just new to telling you about it.</p>
+
+        <h2 class="reveal">What Autobotics is</h2>
+        <p class="reveal rd1">Autobotics is a weekly newsletter (The Home Service Edge), a YouTube channel, a free operator community, and live workshops — all focused on one question: how does a home service business stop leaking money with AI? It's built for operators who want to learn this and run it themselves. And for the ones who'd rather have it done for them — that path is coming too, and this list hears about it first.</p>
+
+        <h2 class="reveal">The bet I'm making</h2>
+        <p class="reveal rd1">Most people giving AI advice have never run anything on it. So I'm building a home services company — designed from day one to run on AI: the phones, the quotes, the follow-ups, the books. It isn't operating yet, and that's deliberate — you get the build, not the highlight reel. The documentation starts now: every system, every cost, every failure goes into the newsletter and the channel as it happens.</p>
+
+        <h2 class="reveal">One promise, and it's the whole brand</h2>
+        <p class="reveal rd1">I will never sell you an outcome I haven't produced. When I've done the thing, I'll say so. When I'm showing you something that worked for someone else, I'll name where it came from. Sixteen years of building taught me that trust compounds faster than hype.</p>
+
+        <!-- SLOT: about-cta -->
+        <div class="capture reveal" style="max-width:520px;margin:48px 0 0">
+          <span class="capture-eyebrow">The Home Service Edge · Free · Weekly</span>
+          <div class="capture-embed">
+            <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="17c265de-441e-48e5-a5c8-0a0e4b63b4e1"></script>
+          </div>
+          <p class="capture-micro">One email a week, five minutes, unsubscribe anytime.</p>
+        </div>
+      </div>
     </div>
   </div>
 </main>
@@ -83,10 +90,10 @@
       <a href="/" class="footer-logo" aria-label="Autobotics home">
         <svg viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Autobotics logo">
           <rect x="2" y="2" width="44" height="44" rx="10" stroke="#0D9488" stroke-width="2.5" fill="none"/>
-          <path d="M15 34L24 12L33 34" stroke="#1C2024" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M15 34L24 12L33 34" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
           <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2" stroke-linecap="round"/>
           <text x="60" y="34" font-family="'Plus Jakarta Sans',sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5">
-            <tspan fill="#1C2024">auto</tspan><tspan fill="#0D9488">botics</tspan>
+            <tspan fill="#FFFFFF">auto</tspan><tspan fill="#0D9488">botics</tspan>
           </text>
         </svg>
       </a>
@@ -100,6 +107,15 @@
     </div>
   </div>
 </footer>
+
+<script>
+// Fixed nav: transparent over the dark hero, dark blur once scrolled
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>40)},{passive:true});
+
+// Scroll reveal animations
+if('IntersectionObserver' in window){const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))}else{document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'))}
+</script>
 
 <!-- Beehiiv attribution / UTM forwarder -->
 <script type="text/javascript" async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
