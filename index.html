@@ -303,6 +303,15 @@ document.querySelectorAll('a[href^="#"]').forEach(link=>{
   });
 });
 
+// Re-snap to the hash target after fonts/layout settle — the browser's initial
+// anchor scroll happens before web fonts load, leaving the target slightly off
+if(location.hash){
+  Promise.all([new Promise(r=>window.addEventListener('load',r,{once:true})),document.fonts?document.fonts.ready:Promise.resolve()]).then(()=>{
+    const t=document.getElementById(location.hash.slice(1));
+    if(t)t.scrollIntoView({behavior:'instant',block:'start'});
+  });
+}
+
 // Hide the sticky mobile CTA bar when an email capture section is in view
 const mobileCta=document.getElementById('mobileCta');
 if(mobileCta){

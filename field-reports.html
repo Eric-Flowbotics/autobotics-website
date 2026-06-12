@@ -51,6 +51,7 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
 .eyebrow{font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;font-weight:700;color:var(--teal);display:inline-block}
 .container{max-width:var(--max-w);margin:0 auto;padding:0 28px}
 .section{padding:120px 0}
+[id]{scroll-margin-top:96px}
 
 .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
 .reveal.visible{opacity:1;transform:translateY(0)}
@@ -68,8 +69,8 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
 .btn-ghost{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,.25)}
 .btn-ghost:hover{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.04);transform:translateY(-2px)}
 
-/* Nav */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 28px;transition:background .3s;background:rgba(28,32,36,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border-light)}
+/* Nav — opaque so content scrolling beneath can't ghost through */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 28px;transition:background .3s;background:var(--charcoal);border-bottom:1px solid var(--border-light)}
 .nav-inner{max-width:var(--max-w);margin:0 auto;height:72px;display:flex;align-items:center;justify-content:space-between}
 .nav-logo{display:flex;align-items:center;text-decoration:none}
 .nav-logo svg{height:30px;width:auto}

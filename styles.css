@@ -36,6 +36,8 @@ p{line-height:1.7}
 .prose{max-width:var(--max-prose)}
 .section{padding:100px 0}
 .section-sm{padding:72px 0}
+/* Anchor targets land fully below the fixed nav (72px) with breathing room */
+[id]{scroll-margin-top:96px}
 
 /* ---------- Scroll reveals ---------- */
 .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
@@ -60,7 +62,8 @@ p{line-height:1.7}
 
 /* ---------- Nav — transparent over dark heroes, dark blur once scrolled ---------- */
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:transparent;border-bottom:1px solid transparent;transition:background .3s,border-color .3s}
-.nav.scrolled{background:rgba(28,32,36,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border-light)}
+/* Opaque when scrolled — a translucent nav lets dark cards behind it ghost through as boxes */
+.nav.scrolled{background:var(--charcoal);border-bottom:1px solid var(--border-light)}
 .nav-inner{max-width:var(--max-w);margin:0 auto;height:72px;padding:0 28px;display:flex;align-items:center;justify-content:space-between}
 .nav-logo{display:flex;align-items:center;text-decoration:none}
 .nav-logo svg{height:28px;width:auto}
@@ -91,11 +94,13 @@ p{line-height:1.7}
 .hero-trades{font-size:.92rem;color:#fff;font-style:italic}
 
 /* ---------- Capture block ---------- */
-.capture{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px 28px 24px;box-shadow:var(--shadow-md)}
-.capture-eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;color:var(--amber);display:block;margin-bottom:14px;text-align:center}
-.capture-embed{display:flex;justify-content:center;width:100%}
-.capture-embed iframe{max-width:100%!important}
-.capture-micro{font-size:.82rem;color:var(--muted);text-align:center;margin-top:14px;line-height:1.6}
+.capture{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px 26px 20px;box-shadow:var(--shadow-md)}
+.capture-eyebrow{font-family:var(--mono);font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--amber);display:block;margin-bottom:18px;text-align:center}
+/* The Beehiiv iframe reserves 207px but the form sits at a fixed 80px offset, 47px tall.
+   Clip the container to a 90px window centered on the form (rows 58–148 of the iframe). */
+.capture-embed{display:block;width:100%;height:90px;overflow:hidden;border-radius:var(--radius-sm)}
+.capture-embed iframe{max-width:100%!important;margin-top:-58px}
+.capture-micro{font-size:.82rem;color:var(--muted);text-align:center;margin-top:18px;line-height:1.6}
 /* Dark glass treatment for the capture card on the photo hero */
 .hero .capture{background:rgba(37,42,46,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);box-shadow:0 12px 40px rgba(0,0,0,.35);animation:heroFadeUp .8s cubic-bezier(.22,1,.36,1) .3s both}
 .hero .capture-micro{color:rgba(255,255,255,.55)}
@@ -223,7 +228,7 @@ p{line-height:1.7}
   .story-photo{aspect-ratio:4/3}
 }
 @media (max-width:640px){
-  .mobile-cta-bar{display:block;position:fixed;bottom:0;left:0;right:0;padding:12px 20px;background:rgba(28,32,36,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--border-light);z-index:99;text-align:center;transition:transform .3s ease}
+  .mobile-cta-bar{display:block;position:fixed;bottom:0;left:0;right:0;padding:12px 20px;background:var(--charcoal);border-top:1px solid var(--border-light);z-index:99;text-align:center;transition:transform .3s ease}
   .mobile-cta-bar .btn{width:100%;justify-content:center;padding:13px 24px;font-size:.875rem;min-height:44px}
   body.has-mobile-cta{padding-bottom:72px}
 }
