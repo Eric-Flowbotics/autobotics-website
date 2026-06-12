@@ -11,13 +11,15 @@
 <meta property="og:url" content="https://theautobotics.com/field-reports/handyman">
 <meta property="og:image" content="https://theautobotics.com/images/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:site" content="@AstroAgent253">
 <meta name="twitter:image" content="https://theautobotics.com/images/og-image.jpg">
 <link rel="canonical" href="https://theautobotics.com/field-reports/handyman">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EG6CSRBKY6"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-EG6CSRBKY6');</script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Article","headline":"Where Handyman Businesses Lose Money","description":"A solo handyman at $85K revenue loses ~$22,000/yr to vague scoping, inconsistent pricing, zero reviews, and no retention. Free 8-stage breakdown.","author":{"@type":"Organization","name":"Autobotics","url":"https://theautobotics.com"},"publisher":{"@type":"Organization","name":"Autobotics","url":"https://theautobotics.com"},"datePublished":"2026-03","url":"https://theautobotics.com/field-reports/handyman"}
 </script>
@@ -67,19 +69,19 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
 .btn-ghost:hover{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.04);transform:translateY(-2px)}
 
 /* Nav */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 28px;transition:background .3s;background:rgba(28,32,36,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border-light)}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 28px;transition:background .3s;background:rgba(250,247,242,0.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
 .nav-inner{max-width:var(--max-w);margin:0 auto;height:72px;display:flex;align-items:center;justify-content:space-between}
 .nav-logo{display:flex;align-items:center;text-decoration:none}
 .nav-logo svg{height:30px;width:auto}
 .nav-links{display:flex;align-items:center;gap:36px}
-.nav-links a{color:#FFFFFF;text-decoration:none;font-size:.875rem;font-weight:500;transition:color .2s;position:relative}
+.nav-links a{color:var(--charcoal);text-decoration:none;font-size:.875rem;font-weight:500;transition:color .2s;position:relative}
 .nav-links a:hover{color:var(--white)}
 .nav-links a:not(.btn)::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1.5px;background:var(--teal);transition:width .2s}
 .nav-links a:not(.btn):hover::after{width:100%}
 .nav-links a.active::after{width:100%}
 .nav-links .btn{padding:10px 22px;font-size:.82rem}
 .nav-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px}
-.nav-toggle span{display:block;width:20px;height:1.5px;background:rgba(255,255,255,.8);margin:5px 0;border-radius:1px}
+.nav-toggle span{display:block;width:20px;height:1.5px;background:var(--charcoal);margin:5px 0;border-radius:1px}
 
 /* Breadcrumb */
 .breadcrumb{padding-top:100px;padding-bottom:0;font-size:.85rem;color:var(--muted)}
@@ -148,11 +150,11 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
 .cta p{color:rgba(255,255,255,.55);font-size:1.05rem;margin-bottom:36px;line-height:1.7}
 
 /* Footer */
-.footer{background:var(--charcoal);color:rgba(255,255,255,.4);padding:48px 0;border-top:1px solid var(--border-light)}
+.footer{background:var(--cream);color:var(--medium);padding:48px 0;border-top:1px solid var(--border)}
 .footer-inner{display:flex;justify-content:space-between;align-items:center}
 .footer-links{display:flex;gap:32px}
-.footer-links a{color:rgba(255,255,255,.4);text-decoration:none;font-size:.82rem;font-weight:500;transition:color .2s}
-.footer-links a:hover{color:var(--white)}
+.footer-links a{color:var(--medium);text-decoration:none;font-size:.82rem;font-weight:500;transition:color .2s}
+.footer-links a:hover{color:var(--teal)}
 .footer-copy{font-size:.78rem}
 
 /* Responsive */
@@ -185,20 +187,17 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
     <a href="/" class="nav-logo" aria-label="Autobotics home">
       <svg viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Autobotics logo">
         <rect x="2" y="2" width="44" height="44" rx="10" stroke="#0D9488" stroke-width="2.5" fill="none"/>
-        <path d="M15 34L24 12L33 34" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M15 34L24 12L33 34" stroke="#1C2024" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
         <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2" stroke-linecap="round"/>
         <text x="60" y="34" font-family="'Plus Jakarta Sans',sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5">
-          <tspan fill="#FFFFFF">auto</tspan><tspan fill="#0D9488">botics</tspan>
+          <tspan fill="#1C2024">auto</tspan><tspan fill="#0D9488">botics</tspan>
         </text>
       </svg>
     </a>
     <div class="nav-links" id="navLinks">
-      <a href="/#how">How It Works</a>
-      <a href="/blueprint">The Blueprint</a>
-      <a href="/#pricing">Products</a>
       <a href="/about">About</a>
       <a href="/field-reports" class="active">Field Reports</a>
-      <a href="/toolkit" class="btn btn-cta">Get the Toolkit — $29</a>
+      <a href="/#hero-capture" class="btn btn-primary">Get the newsletter</a>
     </div>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -220,7 +219,7 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
   <div class="container">
     <span class="report-tag">Handyman</span>
     <h1>Where Handyman Businesses Lose Money</h1>
-    <p class="report-byline">By Astro, AI Automation Analyst at Autobotics — March 2026</p>
+    <p class="report-byline">An Autobotics field report &middot; reviewed by <a href="/about">Eric Lenhardt</a></p>
   </div>
 </header>
 
@@ -425,8 +424,8 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
     <div class="cta-glow" aria-hidden="true"></div>
     <div class="cta-inner reveal">
       <h2>Want this for <span class="highlight">YOUR</span> business?</h2>
-      <p>This report shows what's typical for the handyman industry. The Automation Blueprint shows what's happening in your specific business — with your numbers, your competitors, and a custom implementation plan.</p>
-      <a href="/blueprint?utm_source=field-reports&utm_medium=cta&utm_campaign=handyman" class="btn btn-primary">Learn About the Blueprint — $197 →</a>
+      <p>This report shows what's typical for the trade. The Home Service Edge shows you how to plug these leaks in your own business &mdash; one AI fix a week, in plain English, free.</p>
+      <a href="/#hero-capture" class="btn btn-primary">Get the newsletter &mdash; free &rarr;</a>
     </div>
   </div>
 </section>
@@ -437,14 +436,12 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
 <footer class="footer" role="contentinfo">
   <div class="container">
     <div class="footer-inner">
-      <p class="footer-copy">&copy; 2026 Autobotics. All rights reserved.</p>
+      <p class="footer-copy">&copy; 2026 Autobotics &middot; 1712 6th Ave, Ste 100 PMB 1124, Tacoma, WA 98405</p>
       <nav class="footer-links" aria-label="Footer navigation">
-        <a href="/blueprint">The Blueprint</a>
-      <a href="/#pricing">Products</a>
         <a href="/about">About</a>
         <a href="/field-reports">Field Reports</a>
-        <a href="https://x.com/AstroAgent253" target="_blank" rel="noopener">@AstroAgent253</a>
-        <a href="mailto:eric@theautobotics.com">Contact</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy</a>
       </nav>
     </div>
   </div>

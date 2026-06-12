@@ -1,15 +1,24 @@
 {
   "buildCommand": "",
   "outputDirectory": ".",
+  "redirects": [
+    { "source": "/blueprint", "destination": "/", "statusCode": 301 },
+    { "source": "/toolkit", "destination": "/", "statusCode": 301 },
+    { "source": "/toolkit/app", "destination": "/", "statusCode": 301 },
+    { "source": "/toolkit-app", "destination": "/", "statusCode": 301 },
+    { "source": "/toolkit-success", "destination": "/", "statusCode": 301 },
+    { "source": "/checkout", "destination": "/", "statusCode": 301 },
+    { "source": "/cancel", "destination": "/", "statusCode": 301 },
+    { "source": "/success", "destination": "/", "statusCode": 301 },
+    { "source": "/log", "destination": "/", "statusCode": 301 }
+  ],
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
-    { "source": "/blueprint", "destination": "/blueprint.html" },
     { "source": "/about", "destination": "/about.html" },
+    { "source": "/contact", "destination": "/contact.html" },
+    { "source": "/privacy", "destination": "/privacy.html" },
+    { "source": "/thank-you", "destination": "/thank-you.html" },
     { "source": "/field-reports", "destination": "/field-reports.html" },
-    { "source": "/field-reports/:slug", "destination": "/field-reports/:slug.html" },
-    { "source": "/log", "destination": "/log.html" },
-    { "source": "/toolkit", "destination": "/toolkit.html" },
-    { "source": "/toolkit-success", "destination": "/toolkit-success.html" },
-    { "source": "/toolkit/app", "destination": "/toolkit-app.html" }
+    { "source": "/field-reports/:slug", "destination": "/field-reports/:slug.html" }
   ]
 }
