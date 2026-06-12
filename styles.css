@@ -81,7 +81,7 @@ p{line-height:1.7}
 .hero-image img{width:100%;height:100%;object-fit:cover;animation:kenBurns 8s ease-in-out infinite alternate}
 .hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,rgba(28,32,36,.82) 0%,rgba(28,32,36,.65) 45%,rgba(28,32,36,.85) 100%)}
 .hero .container{position:relative;z-index:2;width:100%}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;padding:150px 0 110px}
+.hero-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:56px;align-items:center;padding:150px 0 110px}
 .hero-text{max-width:640px;text-shadow:0 2px 12px rgba(0,0,0,.4)}
 .hero-text>*:nth-child(1){animation:heroFadeUp .8s cubic-bezier(.22,1,.36,1) both}
 .hero-text>*:nth-child(2){animation:heroFadeUp .8s cubic-bezier(.22,1,.36,1) .12s both}
@@ -93,17 +93,16 @@ p{line-height:1.7}
 .hero-sub{font-size:1.12rem;color:rgba(255,255,255,.82);line-height:1.78;margin-bottom:18px;max-width:540px}
 .hero-trades{font-size:.92rem;color:#fff;font-style:italic}
 
-/* ---------- Capture block ---------- */
-.capture{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px 26px 20px;box-shadow:var(--shadow-md)}
+/* ---------- Capture block — one white variant everywhere ---------- */
+.capture{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px 20px 20px;box-shadow:var(--shadow-md)}
 .capture-eyebrow{font-family:var(--mono);font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--amber);display:block;margin-bottom:18px;text-align:center}
 /* The Beehiiv iframe reserves 207px but the form sits at a fixed 80px offset, 47px tall.
    Clip the container to a 90px window centered on the form (rows 58–148 of the iframe). */
 .capture-embed{display:block;width:100%;height:90px;overflow:hidden;border-radius:var(--radius-sm)}
 .capture-embed iframe{max-width:100%!important;margin-top:-58px}
 .capture-micro{font-size:.82rem;color:var(--muted);text-align:center;margin-top:18px;line-height:1.6}
-/* Dark glass treatment for the capture card on the photo hero */
-.hero .capture{background:rgba(37,42,46,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);box-shadow:0 12px 40px rgba(0,0,0,.35);animation:heroFadeUp .8s cubic-bezier(.22,1,.36,1) .3s both}
-.hero .capture-micro{color:rgba(255,255,255,.55)}
+/* On dark sections the white card sits on an elevated shadow instead of a border glow */
+.hero .capture{box-shadow:0 8px 30px rgba(0,0,0,.35);animation:heroFadeUp .8s cubic-bezier(.22,1,.36,1) .3s both}
 
 /* ---------- Leak / stats ---------- */
 .leak{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
@@ -164,8 +163,7 @@ p{line-height:1.7}
 .final-glow{position:absolute;width:600px;height:400px;border-radius:50%;background:radial-gradient(circle,var(--teal-glow),transparent 70%);left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none}
 .final .container{position:relative;z-index:1}
 .final h2{color:var(--white);margin-bottom:36px}
-.final .capture{max-width:520px;margin:0 auto;background:var(--charcoal-soft);border-color:rgba(255,255,255,.12)}
-.final .capture-micro{color:rgba(255,255,255,.5)}
+.final .capture{max-width:540px;margin:0 auto;box-shadow:0 8px 30px rgba(0,0,0,.35)}
 
 /* ---------- Sticky mobile CTA ---------- */
 .mobile-cta-bar{display:none}
