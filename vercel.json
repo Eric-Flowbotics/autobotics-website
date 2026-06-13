@@ -18,6 +18,7 @@
     { "source": "/contact", "destination": "/contact.html" },
     { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/thank-you", "destination": "/thank-you.html" },
+    { "source": "/message-received", "destination": "/message-received.html" },
     { "source": "/field-reports", "destination": "/field-reports.html" },
     { "source": "/field-reports/:slug", "destination": "/field-reports/:slug.html" }
   ]
