@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Home Service Edge — Issue Template v2 (Design Mock)</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #0D9488;
+    --teal-bright: #2DD4BF;   /* legibility tint for teal on charcoal */
+    --amber: #D97706;
+    --charcoal: #1C2024;
+    --cream: #FAF7F2;
+    --white: #FFFFFF;
+    --medium: #5C6370;
+    --muted: #9CA3AF;
+    --border: #E8E2D9;
+    --bench: #EFE9DF;
+    --card-plate: #FBF8F2;
+    --font-primary: 'Plus Jakarta Sans', Arial, sans-serif;   /* email fallback: Arial */
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace;  /* email fallback: Courier New */
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bench);
+    font-family: var(--font-primary);
+    color: var(--charcoal);
+    -webkit-font-smoothing: antialiased;
+    transition: background .25s ease;
+  }
+
+  /* ===== MOCK CHROME (not part of the email) ===== */
+  .mock-bar {
+    max-width: 600px; margin: 0 auto; padding: 18px 8px 10px;
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  }
+  .mock-bar .label {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--muted); line-height: 1.5;
+  }
+  .mode-toggle {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--medium);
+    background: transparent; border: 1px solid var(--border);
+    border-radius: 6px; padding: 6px 12px; cursor: pointer; white-space: nowrap;
+  }
+  .mode-toggle:hover { border-color: var(--teal); color: var(--teal); }
+  .spec-line {
+    max-width: 600px; margin: 36px auto 48px; padding: 0 8px;
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: .8px;
+    color: var(--muted); text-align: center; line-height: 1.8;
+  }
+
+  /* ===== THE EMAIL ===== */
+  .email {
+    max-width: 600px; margin: 0 auto;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: background .25s ease, border-color .25s ease;
+  }
+  .inner { padding: 28px 36px 34px; }
+  @media (max-width: 620px) { .inner { padding: 24px 20px 28px; } }
+
+  /* Meta row */
+  .meta-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 1.2px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 22px;
+  }
+  .meta-row a { color: var(--teal); text-decoration: none; }
+
+  /* Masthead */
+  .masthead { padding-bottom: 20px; border-bottom: 2px solid var(--charcoal); margin-bottom: 26px; }
+  .lockup { display: flex; align-items: center; gap: 13px; }
+  .wordmark {
+    font-weight: 800; font-size: 27px; letter-spacing: -0.6px; line-height: 1.1; color: var(--charcoal);
+  }
+  .wordmark .accent { color: var(--teal); }
+  .byline { display: flex; align-items: center; gap: 10px; margin-top: 14px; }
+  .headshot {
+    width: 34px; height: 34px; border-radius: 50%; background: var(--charcoal);
+    color: var(--cream); font-weight: 800; font-size: 12px; letter-spacing: .5px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .byline p { font-size: 13.5px; color: var(--medium); line-height: 1.45; }
+  .byline p strong { color: var(--charcoal); font-weight: 700; }
+  .trades {
+    font-size: 12px; color: var(--muted); margin-top: 9px; letter-spacing: .2px;
+  }
+
+  /* Today line */
+  .today { font-size: 16.5px; line-height: 1.65; color: var(--charcoal); margin-bottom: 34px; }
+  .today .lead { font-weight: 700; }
+  .today .money { font-family: var(--font-mono); font-weight: 600; color: var(--amber); }
+
+  /* Section marker — the skim spine. Crossbar motif from the Cornerstone "A". */
+  .marker { margin: 38px 0 16px; }
+  .marker .bar { width: 26px; height: 3px; background: var(--teal); border-radius: 2px; margin-bottom: 9px; }
+  .marker .name {
+    font-weight: 800; font-size: 13px; letter-spacing: 2.4px;
+    text-transform: uppercase; color: var(--charcoal);
+  }
+  .marker:first-of-type { margin-top: 0; }
+
+  /* The Leak */
+  .leak-number {
+    font-family: var(--font-mono); font-weight: 700; font-size: 44px;
+    letter-spacing: -1px; color: var(--amber); line-height: 1; margin: 14px 0 6px;
+  }
+  .leak-math {
+    font-family: var(--font-mono); font-size: 11.5px; color: var(--muted);
+    letter-spacing: .3px; margin-bottom: 16px;
+  }
+  .body-copy { font-size: 15.5px; line-height: 1.7; color: var(--medium); }
+  .body-copy strong { color: var(--charcoal); font-weight: 700; }
+  .body-copy + .body-copy { margin-top: 14px; }
+  .stat-source {
+    font-family: var(--font-mono); font-size: 10.5px; color: var(--muted);
+    margin-top: 12px; letter-spacing: .3px;
+  }
+
+  /* The Fix — steps */
+  .steps { list-style: none; margin: 20px 0 24px; }
+  .steps li { display: flex; gap: 14px; padding: 11px 0; border-top: 1px solid var(--border); }
+  .steps li:last-child { border-bottom: 1px solid var(--border); }
+  .step-num {
+    font-family: var(--font-mono); font-weight: 700; font-size: 13px;
+    color: var(--teal); flex-shrink: 0; padding-top: 2px; min-width: 22px;
+  }
+  .step-text { font-size: 15px; line-height: 1.62; color: var(--medium); }
+  .step-text strong { color: var(--charcoal); font-weight: 700; }
+
+  /* Copy-paste cards — the signature units */
+  .card { border: 1.5px solid var(--charcoal); border-radius: 9px; overflow: hidden; margin: 26px 0 8px; background: var(--card-plate); }
+  .card-head {
+    background: var(--charcoal); color: var(--cream);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 9px 14px;
+  }
+  .card-brand { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; }
+  .card-tag {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.6px;
+    text-transform: uppercase; color: var(--amber); font-weight: 700;
+  }
+  .card-tag.teal { color: var(--teal-bright); }
+  .card-body {
+    font-family: var(--font-mono); font-size: 13.5px; line-height: 1.75;
+    color: var(--charcoal); padding: 18px 20px;
+  }
+  .card-body .slot { background: rgba(13,148,136,.10); color: var(--teal); font-weight: 600; padding: 0 3px; border-radius: 3px; }
+  .card-caption { font-size: 12.5px; color: var(--muted); line-height: 1.55; margin-bottom: 4px; }
+  .connector { font-size: 15px; line-height: 1.6; color: var(--medium); margin-top: 26px; }
+  .connector strong { color: var(--charcoal); font-weight: 700; }
+
+  /* Visual slot — one real screenshot max per issue */
+  .visual-slot {
+    border: 1.5px dashed var(--border); border-radius: 9px;
+    padding: 26px 20px; margin: 28px 0 6px; text-align: center;
+  }
+  .visual-slot .vs-label {
+    font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+  }
+  .visual-slot .vs-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* House / sponsor slot */
+  .house { margin: 40px 0; padding: 18px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .house .slot-label {
+    font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 9px;
+  }
+  .house p { font-size: 14.5px; line-height: 1.6; color: var(--medium); }
+  .house p strong { color: var(--charcoal); }
+  .house a { color: var(--teal); font-weight: 700; text-decoration: none; }
+
+  /* The Upgrade */
+  .upgrade-tool { font-size: 15.5px; line-height: 1.7; color: var(--medium); }
+  .upgrade-tool .tool-name { font-weight: 800; color: var(--charcoal); }
+  .upgrade-tool .tool-cost { font-family: var(--font-mono); font-size: 13px; color: var(--teal); font-weight: 600; }
+  .verdict { margin-top: 12px; padding-left: 14px; border-left: 3px solid var(--amber); font-size: 15px; line-height: 1.65; color: var(--charcoal); }
+  .verdict strong { font-weight: 800; }
+
+  /* Footer stack */
+  .footer { margin-top: 44px; padding-top: 24px; border-top: 2px solid var(--charcoal); }
+  .fwd-line {
+    font-size: 13.5px; color: var(--medium); margin-bottom: 22px;
+  }
+  .fwd-line a { color: var(--teal); font-weight: 700; text-decoration: none; }
+  .poll-label { font-weight: 700; font-size: 14px; color: var(--charcoal); margin-bottom: 12px; }
+  .poll { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .poll a {
+    font-size: 13px; font-weight: 600; color: var(--teal); text-decoration: none;
+    border: 1.5px solid var(--teal); border-radius: 999px; padding: 7px 16px;
+  }
+  .reply-line { font-size: 14.5px; line-height: 1.6; color: var(--medium); margin-bottom: 22px; }
+  .reply-line strong { color: var(--charcoal); }
+  .ladder { font-size: 13.5px; line-height: 1.8; color: var(--medium); margin-bottom: 26px; }
+  .ladder .n { font-family: var(--font-mono); color: var(--teal); font-weight: 700; }
+  .ladder a { color: var(--teal); text-decoration: none; font-weight: 600; }
+  .signoff { font-size: 15.5px; color: var(--charcoal); font-weight: 700; }
+  .signoff-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .compliance {
+    margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--border);
+    font-family: var(--font-mono); font-size: 10px; line-height: 1.9;
+    color: var(--muted); letter-spacing: .3px;
+  }
+  .compliance a { color: var(--muted); text-decoration: underline; }
+
+  /* ===== DARK MODE PREVIEW (approximate) ===== */
+  body.dark { background: #121417; }
+  body.dark .email { background: #1C2024; border-color: #2A2F36; }
+  body.dark .masthead, body.dark .footer { border-color: #E8E2D9; }
+  body.dark .wordmark, body.dark .marker .name, body.dark .today,
+  body.dark .body-copy strong, body.dark .step-text strong,
+  body.dark .poll-label, body.dark .signoff, body.dark .verdict,
+  body.dark .upgrade-tool .tool-name, body.dark .house p strong,
+  body.dark .byline p strong, body.dark .connector strong { color: #FAF7F2; }
+  body.dark .body-copy, body.dark .step-text, body.dark .byline p,
+  body.dark .reply-line, body.dark .ladder, body.dark .house p,
+  body.dark .upgrade-tool, body.dark .connector, body.dark .fwd-line { color: #B9BFC6; }
+  body.dark .steps li, body.dark .house, body.dark .compliance,
+  body.dark .visual-slot { border-color: #2A2F36; }
+  body.dark .headshot { background: #FAF7F2; color: #1C2024; }
+  body.dark .card { background: #15181B; border-color: #FAF7F2; }
+  body.dark .card-body { color: #EDE8E0; }
+  body.dark .card-caption, body.dark .leak-math, body.dark .stat-source,
+  body.dark .meta-row, body.dark .house .slot-label, body.dark .compliance,
+  body.dark .signoff-sub, body.dark .trades, body.dark .visual-slot .vs-label,
+  body.dark .visual-slot .vs-desc { color: #7B828B; }
+  body.dark .mock-bar .label, body.dark .spec-line { color: #7B828B; }
+  body.dark .mode-toggle { border-color: #2A2F36; color: #B9BFC6; }
+</style>
+</head>
+<body>
+
+<div class="mock-bar">
+  <div class="label">Design mock v2 · The Home Service Edge — issue template · punch list applied · sample copy, not fact-checked for send</div>
+  <button class="mode-toggle" onclick="document.body.classList.toggle('dark'); this.textContent = document.body.classList.contains('dark') ? 'Light mode' : 'Dark mode (approx.)';">Dark mode (approx.)</button>
+</div>
+
+<!-- ============ THE EMAIL ============ -->
+<div class="email">
+  <div class="inner">
+
+    <!-- Meta row -->
+    <div class="meta-row">
+      <span>Issue #001 · [DATE] · 4 min</span>
+      <a href="#">Read online →</a>
+    </div>
+
+    <!-- 1. MASTHEAD -->
+    <div class="masthead">
+      <div class="lockup">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="38" height="38" aria-label="Autobotics">
+          <rect x="2" y="2" width="44" height="44" rx="10" stroke="#0D9488" stroke-width="2.5"/>
+          <path d="M15 34L24 12L33 34" stroke="#1C2024" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <div class="wordmark">The Home Service <span class="accent">Edge</span></div>
+      </div>
+      <div class="byline">
+        <div class="headshot">EL</div>
+        <p><strong>Eric Lenhardt</strong> · One AI fix a week, in plain English.</p>
+      </div>
+      <div class="trades">For cleaners, landscapers, HVAC techs, plumbers, and every other trade that runs on a phone and a truck.</div>
+    </div>
+
+    <!-- 2. THE OPEN (2 sentences) -->
+    <p class="today">
+      <span class="lead">Today:</span> if you miss even three calls a week, that's about <span class="money">$1,680 a month</span> walking off your books. We plug it in 15 minutes — no new software, no monthly fee.
+    </p>
+
+    <!-- 3. THE LEAK -->
+    <div class="marker">
+      <div class="bar"></div>
+      <div class="name">The Leak</div>
+    </div>
+    <div class="leak-number">$1,680/mo</div>
+    <div class="leak-math">3 missed calls a week × $140 average job × 4 weeks</div>
+    <p class="body-copy">
+      Tuesday, 2pm. You're elbow-deep in a job when the phone buzzes — by the time you check it, there's a voicemail from a number you don't know. And most of those callers are already dialing the next company on the list: <strong>85% of people who hit a voicemail never call back.</strong>
+    </p>
+    <div class="stat-source">Stat: industry research across 875,000+ U.S. cleaning businesses</div>
+
+    <!-- 4. THE FIX -->
+    <div class="marker">
+      <div class="bar"></div>
+      <div class="name">The Fix</div>
+    </div>
+    <p class="body-copy">
+      <strong>Missed-call text-back:</strong> anyone who calls and doesn't reach you gets a text within seconds. They know you exist, they know a quote is coming — and they stop dialing your competitor.
+    </p>
+    <ol class="steps">
+      <li><span class="step-num">01</span><span class="step-text"><strong>Write your message.</strong> Take the one on the card below word-for-word, or make it sound like you.</span></li>
+      <li><span class="step-num">02</span><span class="step-text"><strong>Set the trigger:</strong> every missed call during work hours. After-hours gets its own message — that's a future issue. One leak at a time.</span></li>
+      <li><span class="step-num">03</span><span class="step-text"><strong>Turn it on for your line.</strong> Every phone hides this setting somewhere different — the second card below walks you through yours, step by step.</span></li>
+      <li><span class="step-num">04</span><span class="step-text"><strong>Test it.</strong> Have someone call you and hang up. The text should land before they've pocketed their phone.</span></li>
+      <li><span class="step-num">05</span><span class="step-text"><strong>Tally it.</strong> Keep a note on the dash — every reply your text-back catches this week gets a mark.</span></li>
+      <li><span class="step-num">06</span><span class="step-text"><strong>Friday, do the math.</strong> Marks × your average job = what this fix caught in week one. That number goes on the fridge.</span></li>
+    </ol>
+
+    <!-- Card A — the artifact -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-brand">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14">
+            <rect x="2" y="2" width="44" height="44" rx="10" stroke="#FAF7F2" stroke-width="3"/>
+            <path d="M15 34L24 12L33 34" stroke="#FAF7F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <span>The Home Service Edge</span>
+        </div>
+        <span class="card-tag">Copy this</span>
+      </div>
+      <div class="card-body">
+        Hey, this is <span class="slot">[YOUR NAME]</span> at <span class="slot">[COMPANY]</span> — sorry I missed you, I'm on a job. Text me what you need plus your zip, and I'll get you a quote today. Urgent? Reply URGENT and I'll call you within the hour.
+      </div>
+    </div>
+    <p class="card-caption">Swap the brackets, keep the promise — only offer the one-hour callback if you'll honor it.</p>
+
+    <!-- Card B — the installer -->
+    <p class="connector"><strong>Want it set up step by step?</strong> Paste this into Claude and it walks you through your exact phone:</p>
+    <div class="card">
+      <div class="card-head">
+        <div class="card-brand">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14">
+            <rect x="2" y="2" width="44" height="44" rx="10" stroke="#FAF7F2" stroke-width="3"/>
+            <path d="M15 34L24 12L33 34" stroke="#FAF7F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <span>The Home Service Edge</span>
+        </div>
+        <span class="card-tag teal">Paste into Claude</span>
+      </div>
+      <div class="card-body">
+        I run a small <span class="slot">[cleaning / landscaping / HVAC / plumbing / handyman]</span> business. My business calls ring on <span class="slot">[iPhone / Android / Google Voice / other]</span>. Walk me through setting up an automatic text reply for missed calls — one step at a time, and wait for my answer before moving to the next step. The message it should send: "Hey, this is <span class="slot">[NAME]</span> at <span class="slot">[COMPANY]</span> — sorry I missed you, I'm on a job. Text me what you need plus your zip, and I'll get you a quote today. Urgent? Reply URGENT and I'll call you within the hour."
+      </div>
+    </div>
+    <p class="card-caption">It asks one question at a time and waits for you — you can't get lost.</p>
+
+    <!-- One real screenshot, max, per issue -->
+    <div class="visual-slot">
+      <div class="vs-label">Visual slot · max one per issue</div>
+      <div class="vs-desc">[ Real screenshot only — e.g., your text-back landing in an actual customer thread. Never stock. ]</div>
+    </div>
+
+    <!-- Reserved slot: house ads now, sponsors later (non-reviewed categories only) -->
+    <div class="house">
+      <div class="slot-label">From the workshop</div>
+      <p><strong>The Operator Community is opening soon</strong> — free courses, prompt libraries, and copy-paste AI systems for home service businesses. Founding readers get in first. <a href="#">Save my spot →</a></p>
+    </div>
+
+    <!-- 5. THE UPGRADE -->
+    <div class="marker">
+      <div class="bar"></div>
+      <div class="name">The Upgrade</div>
+    </div>
+    <p class="upgrade-tool">
+      <span class="tool-name">Google Voice</span> · <span class="tool-cost">Free</span> — a second phone number for the business that rings your same cell. Customers get a number that's permanently yours; your personal line stays out of your marketing.
+    </p>
+    <p class="verdict"><strong>Verdict:</strong> the free starting point for splitting business from personal. It won't do everything — but it costs nothing to outgrow.</p>
+
+    <!-- 6. FOOTER -->
+    <div class="footer">
+      <p class="fwd-line">Forwarded by a friend? <a href="#">Get the Edge free →</a></p>
+      <div class="poll-label">Today's fix:</div>
+      <div class="poll">
+        <a href="#">Used it</a>
+        <a href="#">Saving it for Saturday</a>
+        <a href="#">Not my leak</a>
+      </div>
+      <p class="reply-line"><strong>Hit reply</strong> and tell me what's leaking in your business. I read every one.</p>
+      <p class="ladder">
+        Whenever you're ready: <span class="n">1.</span> Forward this to one operator who's drowning in admin. <span class="n">2.</span> <a href="#">The Operator Community</a> opens soon — founding readers first.
+      </p>
+      <div class="signoff">— Eric</div>
+      <div class="signoff-sub">Eric Lenhardt · AI for home service businesses</div>
+      <div class="compliance">
+        The Home Service Edge · Autobotics · 1712 6th Ave, Ste 100 PMB 1124, Tacoma, WA 98405<br>
+        You're getting this because you signed up at theautobotics.com · <a href="#">Unsubscribe</a> · <a href="#">Update preferences</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="spec-line">
+  600px single column · Plus Jakarta Sans → Arial · JetBrains Mono → Courier New · #0D9488 · #D97706 · #1C2024 · #FAF7F2<br>
+  Card A (amber) = the artifact, every issue · Card B (teal) = the installer, whenever the fix has setup · markers + amber number + bold step leads = the 60-second skim spine
+</div>
+
+</body>
+</html>
