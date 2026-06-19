@@ -16,14 +16,14 @@
 <link rel="stylesheet" href="/styles.css">
 <style>
 /* ---- Results — page-scoped, on top of /styles.css brand tokens ---- */
-.lr-hero{background:var(--charcoal);color:var(--white);position:relative;overflow:hidden;padding:128px 0 56px;text-align:center}
+.lr-hero{background:var(--charcoal);color:var(--white);position:relative;overflow:hidden;padding:92px 0 32px;text-align:center}
 .lr-hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:680px;max-width:100%;height:90%;background:radial-gradient(ellipse at 50% 10%,rgba(13,148,136,0.16) 0%,transparent 62%);pointer-events:none}
 .lr-hero .container{position:relative;z-index:1}
 .lr-eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;color:var(--amber);display:block;margin-bottom:18px}
 .lr-headline{font-size:1.12rem;color:rgba(255,255,255,.82);max-width:560px;margin:0 auto 6px;line-height:1.55}
-.lr-bignum{font-family:var(--mono);font-weight:700;font-size:clamp(2.8rem,9vw,4.6rem);letter-spacing:-2px;line-height:1.02;margin:8px 0 2px;color:var(--amber)}
-.lr-bigctx{font-family:var(--mono);font-size:.8rem;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:14px}
-.lr-method{font-size:.82rem;color:rgba(255,255,255,.5);line-height:1.6;max-width:540px;margin:0 auto 22px}
+.lr-bignum{font-family:var(--mono);font-weight:700;font-size:clamp(2.3rem,7.5vw,3.6rem);letter-spacing:-1.5px;line-height:1.03;margin:4px 0 2px;color:var(--amber)}
+.lr-bigctx{font-family:var(--mono);font-size:.8rem;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:10px}
+.lr-method{font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.5;max-width:540px;margin:0 auto 12px}
 .lr-badges{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
 .lr-badge{display:inline-block;font-family:var(--mono);font-size:.72rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:#fff;padding:6px 14px;border-radius:100px}
 .lr-scorepill{font-family:var(--mono);font-size:.82rem;color:rgba(255,255,255,.75)}
@@ -36,8 +36,8 @@
 
 /* ---- The gate (email unlocks the per-leak $, the ranking, and the fixes — spec §7/§9) ---- */
 .lr-gatewrap{position:relative;max-width:760px;margin:0 auto}
-.lr-locked-preview{filter:blur(7px);opacity:.5;pointer-events:none;user-select:none;max-height:320px;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 58%,transparent);mask-image:linear-gradient(180deg,#000 58%,transparent)}
-.lr-gate{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:32px 30px;max-width:520px;margin:-220px auto 0;position:relative;z-index:2;text-align:center}
+.lr-locked-preview{filter:blur(7px);opacity:.5;pointer-events:none;user-select:none;max-height:150px;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 58%,transparent);mask-image:linear-gradient(180deg,#000 58%,transparent)}
+.lr-gate{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:28px 26px;max-width:520px;margin:-80px auto 0;position:relative;z-index:2;text-align:center}
 .lr-gate .lock{width:30px;height:30px;color:var(--amber);margin:0 auto 12px;display:block}
 .lr-gate h2{font-size:1.4rem;line-height:1.2;margin-bottom:10px}
 .lr-gate p{color:var(--medium);font-size:.98rem;line-height:1.6;margin-bottom:18px}
@@ -107,9 +107,9 @@
 .lr-retake{text-align:center;padding:8px 0 0}
 .lr-retake a{font-weight:600}
 
-@media (max-width:760px){ .lr-bridge-grid{grid-template-columns:1fr} .lr-gate{margin-top:-180px} }
+@media (max-width:760px){ .lr-bridge-grid{grid-template-columns:1fr} .lr-gate{margin-top:-70px} }
 @media (max-width:600px){
-  .lr-hero{padding:108px 0 44px}
+  .lr-hero{padding:80px 0 22px}
   .lr-section{padding:44px 0}
   .lr-gate{padding:26px 20px}
 }

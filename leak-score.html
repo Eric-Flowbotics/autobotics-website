@@ -71,6 +71,7 @@
 .ls-counter{font-family:var(--mono);font-size:.7rem;font-weight:600;text-align:right;line-height:1.3;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}
 .ls-counter .amt{font-size:1.15rem;color:var(--amber);display:block;letter-spacing:-.5px;text-transform:none;transition:transform .25s}
 .ls-counter .amt.bump{transform:scale(1.12)}
+.ls-counter.tallying{font-size:.78rem;text-transform:none;letter-spacing:.2px;font-weight:500;opacity:.8}
 .ls-progress{height:6px;background:var(--border);border-radius:100px;overflow:hidden;margin-bottom:6px}
 .ls-progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),#14b8a6);border-radius:100px;transition:width .35s cubic-bezier(.22,1,.36,1)}
 .ls-progress-meta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.68rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:22px}
@@ -229,7 +230,7 @@
     card.className='ls-card ls-fade';
     card.innerHTML =
       '<span class="ls-eyebrow">Revenue Leak Score</span>'+
-      '<h1>Find your #1 money leak in 3 minutes.</h1>'+
+      '<h1>Find your biggest <span style="color:var(--amber)">money leak</span>.</h1>'+
       '<p class="ls-sub">Missed calls, dead quotes, invoices that go out late — the money isn’t missing, it’s leaking. Answer a few quick questions and see exactly where yours is going, across the 8 stages of your business.</p>'+
       '<div>'+
         feature('A real dollar estimate of what’s leaking each year')+
@@ -296,7 +297,12 @@
     var n = state.qIndex+1, total = 12;
     var pct = Math.round((state.qIndex/total)*100);
     var lk = moneyShown();
-    var counter = '<div class="ls-counter" aria-hidden="true">Money found so far<span class="amt" id="moneyAmt">'+LS.money(lk)+'</span></div>';
+    // Stage 1 spans Q1–Q2, so "money found" is legitimately $0 until a stage completes.
+    // Show a neutral "tallying" state until the first real number lands (>$0), then reveal
+    // it climbing — fixes the "dead $0" perception without touching the additive math.
+    var counter = lk > 0
+      ? '<div class="ls-counter" aria-hidden="true">Money found so far<span class="amt" id="moneyAmt">'+LS.money(lk)+'</span></div>'
+      : '<div class="ls-counter tallying" aria-hidden="true">Tallying your leaks…</div>';
     card.className='ls-card ls-fade';
     card.innerHTML =
       '<div class="ls-progress"><div class="ls-progress-fill" style="width:'+pct+'%"></div></div>'+
