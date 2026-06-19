@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Your Revenue Leak Score | Autobotics</title>
-<meta name="description" content="Your Revenue Leak Score breakdown — where your home-service business is leaking money, your #1 leak, and the first fix for it.">
+<meta name="description" content="Your Revenue Leak Score breakdown — where your home-service business is leaking money, your #1 leak ranked, and the first fix for each weak spot.">
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <!-- Google Analytics -->
@@ -16,41 +16,42 @@
 <link rel="stylesheet" href="/styles.css">
 <style>
 /* ---- Results — page-scoped, on top of /styles.css brand tokens ---- */
-.lr-hero{background:var(--charcoal);color:var(--white);position:relative;overflow:hidden;padding:128px 0 64px;text-align:center}
+.lr-hero{background:var(--charcoal);color:var(--white);position:relative;overflow:hidden;padding:128px 0 56px;text-align:center}
 .lr-hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:680px;max-width:100%;height:90%;background:radial-gradient(ellipse at 50% 10%,rgba(13,148,136,0.16) 0%,transparent 62%);pointer-events:none}
 .lr-hero .container{position:relative;z-index:1}
 .lr-eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;color:var(--amber);display:block;margin-bottom:18px}
-.lr-headline{font-size:1.12rem;color:rgba(255,255,255,.82);max-width:560px;margin:0 auto 6px;line-height:1.6}
-.lr-bignum{font-family:var(--mono);font-weight:700;font-size:clamp(2.8rem,9vw,4.6rem);letter-spacing:-2px;line-height:1.02;margin:6px 0 2px}
-.lr-bigctx{font-family:var(--mono);font-size:.8rem;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:22px}
-.lr-badges{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.lr-headline{font-size:1.12rem;color:rgba(255,255,255,.82);max-width:560px;margin:0 auto 6px;line-height:1.55}
+.lr-bignum{font-family:var(--mono);font-weight:700;font-size:clamp(2.8rem,9vw,4.6rem);letter-spacing:-2px;line-height:1.02;margin:8px 0 2px;color:var(--amber)}
+.lr-bigctx{font-family:var(--mono);font-size:.8rem;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:14px}
+.lr-method{font-size:.82rem;color:rgba(255,255,255,.5);line-height:1.6;max-width:540px;margin:0 auto 22px}
+.lr-badges{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
 .lr-badge{display:inline-block;font-family:var(--mono);font-size:.72rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:#fff;padding:6px 14px;border-radius:100px}
 .lr-scorepill{font-family:var(--mono);font-size:.82rem;color:rgba(255,255,255,.75)}
 
-/* ---- Shareable scorecard (charcoal-on-cream, screenshot-ready) ---- */
-.lr-scorecard{background:var(--cream);color:var(--charcoal);border-radius:var(--radius-lg);box-shadow:0 14px 44px rgba(0,0,0,.4);max-width:440px;margin:30px auto 0;padding:26px 26px 24px;text-align:left;border:1px solid rgba(0,0,0,.06)}
-.lr-sc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-.lr-sc-mark svg{height:22px;width:auto}
-.lr-sc-tag{font-family:var(--mono);font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;color:var(--teal)}
-.lr-sc-label{font-family:var(--mono);font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
-.lr-sc-trade{font-size:1.02rem;font-weight:700;margin-bottom:14px}
-.lr-sc-num{font-family:var(--mono);font-weight:700;font-size:2.6rem;letter-spacing:-1.5px;line-height:1;color:var(--amber)}
-.lr-sc-numctx{font-family:var(--mono);font-size:.72rem;letter-spacing:.5px;text-transform:uppercase;color:var(--medium);margin:6px 0 16px}
-.lr-sc-row{display:flex;justify-content:space-between;gap:12px;border-top:1px solid var(--border);padding-top:12px;font-size:.9rem}
-.lr-sc-row .k{color:var(--medium)}
-.lr-sc-row .v{font-weight:700;font-family:var(--mono)}
-.lr-sc-foot{font-family:var(--mono);font-size:.62rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:16px}
-
-.lr-share{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
-.lr-sharetext{max-width:460px;margin:14px auto 0;font-size:.86rem;color:rgba(255,255,255,.6);line-height:1.6;font-style:italic}
-
-/* ---- Body ---- */
-.lr-section{padding:64px 0}
+/* ---- Sections ---- */
+.lr-section{padding:60px 0}
 .lr-section.alt{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .lr-h{font-size:clamp(1.5rem,3vw,2rem);margin-bottom:8px}
 .lr-lead{color:var(--medium);font-size:1.04rem;line-height:1.7;max-width:var(--max-prose);margin-bottom:32px}
 
-/* bar chart */
+/* ---- The gate (email unlocks the per-leak $, the ranking, and the fixes — spec §7/§9) ---- */
+.lr-gatewrap{position:relative;max-width:760px;margin:0 auto}
+.lr-locked-preview{filter:blur(7px);opacity:.5;pointer-events:none;user-select:none}
+.lr-gate{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:32px 30px;max-width:520px;margin:-220px auto 0;position:relative;z-index:2;text-align:center}
+.lr-gate .lock{width:30px;height:30px;color:var(--amber);margin:0 auto 12px;display:block}
+.lr-gate h2{font-size:1.4rem;line-height:1.2;margin-bottom:10px}
+.lr-gate p{color:var(--medium);font-size:.98rem;line-height:1.6;margin-bottom:18px}
+.lr-gate p strong{color:var(--charcoal)}
+.lr-field{width:100%;font-family:var(--font);font-size:1.02rem;color:var(--charcoal);background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:15px 16px;transition:border-color .18s,box-shadow .18s}
+.lr-field:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-glow)}
+.lr-field.err{border-color:#DC2626;box-shadow:0 0 0 3px rgba(220,38,38,.12)}
+.lr-error{color:#DC2626;font-size:.85rem;margin-top:8px;min-height:1em;text-align:left}
+.lr-micro{font-size:.8rem;color:var(--muted);line-height:1.6;margin-top:14px}
+.lr-hp{position:absolute!important;left:-9999px!important;top:-9999px!important;width:1px;height:1px;opacity:0}
+.lr-spinner{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:lrSpin .7s linear infinite;vertical-align:-2px;margin-right:8px}
+@keyframes lrSpin{to{transform:rotate(360deg)}}
+
+/* ---- bar chart ---- */
 .lr-bars{display:flex;flex-direction:column;gap:20px;max-width:760px}
 .lr-bar-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:7px}
 .lr-bar-name{font-weight:700;font-size:1rem}
@@ -58,41 +59,58 @@
 .lr-track{height:12px;background:var(--cream);border:1px solid var(--border);border-radius:100px;overflow:hidden}
 .lr-fill{height:100%;border-radius:100px;transition:width 1s cubic-bezier(.22,1,.36,1)}
 .lr-bar-exp{font-size:.9rem;color:var(--medium);line-height:1.55;margin-top:8px}
-
-/* top leaks / plan */
-.lr-plan{display:grid;gap:16px;max-width:760px}
-.lr-plan-card{background:var(--cream);border:1px solid var(--border);border-left:4px solid var(--amber);border-radius:var(--radius-md);padding:22px 24px}
-.lr-plan-rank{font-family:var(--mono);font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber);font-weight:700;margin-bottom:6px}
-.lr-plan-card h3{font-size:1.12rem;margin-bottom:6px}
-.lr-plan-amt{font-family:var(--mono);font-weight:700;color:var(--charcoal);font-size:.92rem;margin-bottom:10px}
-.lr-plan-move{color:var(--medium);font-size:.96rem;line-height:1.65}
-
-.lr-method{font-size:.82rem;color:var(--muted);line-height:1.65;max-width:var(--max-prose);margin-top:30px}
+.lr-method-note{font-size:.82rem;color:var(--muted);line-height:1.65;max-width:var(--max-prose);margin-top:30px}
 .lr-tip{background:var(--teal-subtle);border:1px solid rgba(13,148,136,.2);border-radius:var(--radius-md);padding:18px 22px;color:var(--charcoal);font-size:.96rem;line-height:1.65;max-width:760px;margin-top:24px}
 
-/* bridges */
+/* ---- ranked fix plan (the promise: #1 ranked + the first fix for each weak leak) ---- */
+.lr-plan{display:grid;gap:16px;max-width:760px}
+.lr-plan-card{background:var(--cream);border:1px solid var(--border);border-left:4px solid var(--amber);border-radius:var(--radius-md);padding:22px 24px}
+.lr-plan-card.top{background:#fff;border:1.5px solid var(--amber);box-shadow:var(--shadow-md)}
+.lr-plan-rank{font-family:var(--mono);font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber);font-weight:700;margin-bottom:6px}
+.lr-plan-card h3{font-size:1.14rem;margin-bottom:4px}
+.lr-plan-amt{font-family:var(--mono);font-weight:700;color:var(--charcoal);font-size:.92rem;margin-bottom:12px}
+.lr-plan-move{color:var(--charcoal);font-size:.98rem;line-height:1.65;margin-bottom:12px}
+.lr-plan-tool{font-size:.9rem;color:var(--medium);line-height:1.55}
+.lr-plan-tool b{color:var(--charcoal);font-weight:600}
+.lr-plan-learn{display:inline-block;margin-top:12px;font-weight:600;font-size:.92rem}
+
+/* ---- shareable scorecard (charcoal-on-cream, screenshot-ready, spec §8) ---- */
+.lr-scorecard{background:var(--cream);color:var(--charcoal);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);max-width:440px;margin:0 auto;padding:26px 26px 24px;text-align:left;border:1px solid rgba(0,0,0,.06)}
+.lr-sc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.lr-sc-mark svg{height:22px;width:auto}
+.lr-sc-tag{font-family:var(--mono);font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;color:var(--teal)}
+.lr-sc-label{font-family:var(--mono);font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.lr-sc-num{font-family:var(--mono);font-weight:700;font-size:2.6rem;letter-spacing:-1.5px;line-height:1;color:var(--amber)}
+.lr-sc-numctx{font-family:var(--mono);font-size:.72rem;letter-spacing:.5px;text-transform:uppercase;color:var(--medium);margin:6px 0 16px}
+.lr-sc-row{display:flex;justify-content:space-between;gap:12px;border-top:1px solid var(--border);padding-top:10px;margin-top:8px;font-size:.88rem}
+.lr-sc-row .k{color:var(--medium)}
+.lr-sc-row .v{font-weight:700;font-family:var(--mono)}
+.lr-sc-foot{font-family:var(--mono);font-size:.62rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:16px}
+.lr-share{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.lr-sharetext{max-width:460px;margin:14px auto 0;font-size:.86rem;color:var(--medium);line-height:1.6;text-align:center}
+
+/* ---- bridges ---- */
 .lr-bridge-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;max-width:900px}
-.lr-bridge{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:28px 26px;display:flex;flex-direction:column}
-.lr-bridge .eyebrow{margin-bottom:12px}
-.lr-bridge h3{font-size:1.18rem;margin-bottom:8px}
-.lr-bridge p{color:var(--medium);font-size:.95rem;line-height:1.6;margin-bottom:20px;flex:1}
+.lr-bridge{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:26px 24px;display:flex;flex-direction:column}
+.lr-bridge .eyebrow{margin-bottom:12px;display:block;font-family:var(--mono);font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);font-weight:600}
+.lr-bridge h3{font-size:1.14rem;margin-bottom:8px}
+.lr-bridge p{color:var(--medium);font-size:.94rem;line-height:1.6;margin-bottom:18px;flex:1}
 .lr-confirm{background:var(--teal-subtle);border:1px solid rgba(13,148,136,.25);border-radius:var(--radius-md);padding:20px 24px;max-width:900px;margin-bottom:24px;display:flex;align-items:flex-start;gap:14px}
 .lr-confirm svg{flex:0 0 auto;width:22px;height:22px;color:var(--teal);margin-top:1px}
 .lr-confirm h3{font-size:1.05rem;margin-bottom:4px}
 .lr-confirm p{color:var(--medium);font-size:.93rem;line-height:1.6}
-.lr-field{width:100%;font-family:var(--font);font-size:1rem;color:var(--charcoal);background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:13px 15px;margin-bottom:10px}
-.lr-field:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-glow)}
 .lr-ok{color:var(--teal);font-weight:600;font-size:.95rem;display:flex;align-items:center;gap:8px}
 .lr-ok svg{width:18px;height:18px}
-.lr-hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;opacity:0}
-
+.lr-wl-field{width:100%;font-family:var(--font);font-size:1rem;color:var(--charcoal);background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:13px 15px;margin-bottom:10px}
+.lr-wl-field:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-glow)}
 .lr-retake{text-align:center;padding:8px 0 0}
 .lr-retake a{font-weight:600}
 
-@media (max-width:760px){ .lr-bridge-grid{grid-template-columns:1fr} }
+@media (max-width:760px){ .lr-bridge-grid{grid-template-columns:1fr} .lr-gate{margin-top:-180px} }
 @media (max-width:600px){
-  .lr-hero{padding:108px 0 48px}
-  .lr-section{padding:48px 0}
+  .lr-hero{padding:108px 0 44px}
+  .lr-section{padding:44px 0}
+  .lr-gate{padding:26px 20px}
 }
 @media(prefers-reduced-motion:reduce){.lr-fill{transition:none}}
 </style>
@@ -156,151 +174,309 @@
   var MARK = '<svg viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Autobotics"><rect x="2" y="2" width="44" height="44" rx="10" stroke="#0D9488" stroke-width="2.5" fill="none"/><path d="M15 34L24 12L33 34" stroke="#1C2024" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2" stroke-linecap="round"/><text x="60" y="34" font-family="\'Plus Jakarta Sans\',sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5"><tspan fill="#1C2024">auto</tspan><tspan fill="#0D9488">botics</tspan></text></svg>';
   var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
   var MAIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>';
+  var LOCK = '<svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
 
   var parsed = LS.parseState(location.search);
   if(!parsed.valid){ return renderInvalid(); }
   var r = LS.fromState(parsed);
   var leaking = r.totalLeak > 0;
-  track('leakscore_results_view', { trade: r.trade.id, top_leak: r.topStageId || 'none' });
 
-  renderResults();
+  // Already unlocked this browser? (refresh / return visit) — skip the gate.
+  var unlocked = false;
+  try{ unlocked = localStorage.getItem('ls_unlocked')==='1'; }catch(e){}
 
-  function renderInvalid(){
-    main.innerHTML =
-      '<section class="lr-hero"><div class="container">'+
-      '<span class="lr-eyebrow">Revenue Leak Score</span>'+
-      '<h1 style="color:#fff">Get your Revenue Leak Score.</h1>'+
-      '<p class="lr-headline">Answer 12 quick questions and see exactly where your home-service business is leaking money — and the first fix for it.</p>'+
-      '<div style="margin-top:24px"><a href="/leak-score" class="btn btn-primary">Take the Leak Score →</a></div>'+
-      '</div></section>';
-  }
+  track('leakscore_results_view', { trade: r.trade.id, top_leak: r.topStageId || 'none', leak: r.totalLeak });
 
-  function renderResults(){
-    main.innerHTML = heroHTML() + breakdownHTML() + planHTML() + bridgesHTML();
-    wireShare();
-    wireWaitlist();
-    // animate bars in after paint
-    requestAnimationFrame(function(){ requestAnimationFrame(function(){
-      Array.prototype.forEach.call(document.querySelectorAll('.lr-fill'), function(el){ el.style.width = el.getAttribute('data-w'); });
-    });});
-  }
+  renderHero();
+  if(unlocked) revealUnlocked(); else renderGate();
 
-  function heroHTML(){
-    var headline = r.headline;
-    var num = leaking
-      ? '<div class="lr-bignum" style="color:'+headline.color+'">'+LS.money(r.totalLeak)+'</div><div class="lr-bigctx">/ year in revenue opportunity</div>'
-      : '<div class="lr-bignum" style="color:#0D9488">'+r.totalScore+'/60</div><div class="lr-bigctx">you’re ahead of 95% of operators we’ve seen</div>';
-    var sharetext = LS.shareText(r);
-    return ''+
-    '<section class="lr-hero"><div class="container">'+
-      '<h1 class="lr-eyebrow" style="font-size:.72rem">Your Revenue Leak Score</h1>'+
-      '<p class="lr-headline">'+esc(headline.text)+'</p>'+
-      num+
+  // -------------------------------------------------------------- HERO (free) --
+  function renderHero(){
+    var head = r.headline;
+    var numBlock = head.mode==='leak'
+      ? '<p class="lr-headline">'+esc(head.lead)+'</p>'+
+        '<div class="lr-bignum">'+esc(head.figure)+'</div>'+
+        '<div class="lr-bigctx">'+esc(head.tail)+'</div>'
+      : '<p class="lr-headline">'+esc(head.lead)+'</p>'+
+        '<div class="lr-bignum">'+r.totalScore+'/60</div>'+
+        '<div class="lr-bigctx">'+esc(head.tail)+'</div>';
+    var hero = document.createElement('section');
+    hero.className='lr-hero';
+    hero.innerHTML='<div class="container">'+
+      '<span class="lr-eyebrow">Your Revenue Leak Score</span>'+
+      numBlock+
+      '<p class="lr-method">'+esc(r.methodology)+'</p>'+
       '<div class="lr-badges">'+
         '<span class="lr-badge" style="background:'+r.badge.color+'">'+esc(r.badge.label)+'</span>'+
         '<span class="lr-scorepill">Operator score '+r.totalScore+'/60</span>'+
       '</div>'+
-      // shareable scorecard
-      '<div class="lr-scorecard" id="scorecard">'+
-        '<div class="lr-sc-top"><span class="lr-sc-mark">'+MARK+'</span><span class="lr-sc-tag">Revenue Leak Score</span></div>'+
-        '<div class="lr-sc-label">'+esc(r.trade.label)+'</div>'+
-        (leaking
-          ? '<div class="lr-sc-num">'+LS.money(r.totalLeak)+'</div><div class="lr-sc-numctx">leaking per year</div>'
-          : '<div class="lr-sc-num">'+r.totalScore+'/60</div><div class="lr-sc-numctx">running tight</div>')+
-        '<div class="lr-sc-row"><span class="k">Operator score</span><span class="v">'+r.totalScore+'/60</span></div>'+
-        '<div class="lr-sc-row"><span class="k">#1 leak</span><span class="v">'+esc(r.topStageLabel)+'</span></div>'+
-        '<div class="lr-sc-foot">theautobotics.com/leak-score</div>'+
-      '</div>'+
-      '<div class="lr-share">'+
-        '<button class="btn btn-primary btn-sm" id="shareBtn">Share my scorecard</button>'+
-        '<button class="btn btn-ghost btn-sm" id="copyBtn" style="color:#fff;border-color:rgba(255,255,255,.3)">Copy share text</button>'+
-      '</div>'+
-      '<p class="lr-sharetext">Screenshot the card above to post it anywhere — or use the buttons for the text.</p>'+
-      '<p class="lr-sharetext" id="shareText">“'+esc(sharetext)+'”</p>'+
-    '</div></section>';
+    '</div>';
+    main.appendChild(hero);
   }
 
-  function breakdownHTML(){
+  // -------------------------------------------------- GATE (blurred teaser) ----
+  function renderGate(){
+    var sec=document.createElement('section');
+    sec.className='lr-section alt';
+    sec.id='gateSection';
+    sec.innerHTML='<div class="container">'+
+      '<div class="lr-gatewrap">'+
+        '<div class="lr-locked-preview" aria-hidden="true">'+breakdownInner(true)+'</div>'+
+        '<div class="lr-gate">'+
+          LOCK+
+          '<h2>Unlock your full breakdown</h2>'+
+          '<p>Enter your email to unlock the <strong>dollar figure on each leak</strong>, your <strong>#1 leak ranked</strong>, and the <strong>first fix for each</strong>. You’ll also get <strong>The Home Service Edge</strong> — one plain-English fix a week. Unsubscribe anytime.</p>'+
+          '<form id="gate" novalidate>'+
+            '<label for="email" class="sr-only">Email address</label>'+
+            '<input class="lr-field" type="email" id="email" name="email" inputmode="email" autocomplete="email" placeholder="you@yourbusiness.com" aria-describedby="err" required>'+
+            '<input type="text" class="lr-hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">'+
+            '<div class="lr-error" id="err" role="alert"></div>'+
+            '<button class="btn btn-primary" id="gatebtn" type="submit" style="width:100%">Unlock my breakdown →</button>'+
+          '</form>'+
+          '<p class="lr-micro">Free. Double opt-in — we’ll send one email to confirm, and we keep your quiz answers to personalize what you get. See our <a href="/privacy">privacy page</a>.</p>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+    main.appendChild(sec);
+    document.getElementById('gate').addEventListener('submit', function(e){ e.preventDefault(); submitGate(); });
+  }
+
+  function submitGate(){
+    var emailEl=document.getElementById('email');
+    var errEl=document.getElementById('err');
+    var btn=document.getElementById('gatebtn');
+    var hp=document.querySelector('#gate [name=website]');
+    var email=(emailEl.value||'').trim();
+
+    if(hp && hp.value){ doUnlock(); return; }           // bot — reveal, never subscribe
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      emailEl.classList.add('err'); emailEl.setAttribute('aria-invalid','true');
+      errEl.textContent='Please enter a valid email address.'; emailEl.focus(); return;
+    }
+    errEl.textContent=''; emailEl.classList.remove('err');
+    btn.disabled=true; btn.innerHTML='<span class="lr-spinner"></span>Unlocking…';
+    track('leakscore_gate_submit', { trade: r.trade.id });
+    try{ localStorage.setItem('ls_email', email); }catch(e){}
+
+    // Fire the one write path (Beehiiv subscribe + best-effort Airtable). We DON'T
+    // wait on it to reveal — the unlock is never blocked by the backend (spec §11).
+    sendSubmission(email);
+    doUnlock();
+  }
+
+  function doUnlock(){
+    try{ localStorage.setItem('ls_unlocked','1'); }catch(e){}
+    var g=document.getElementById('gateSection'); if(g) g.parentNode.removeChild(g);
+    revealUnlocked();
+    var u=document.getElementById('unlocked'); if(u){ u.scrollIntoView({behavior:'smooth', block:'start'}); }
+  }
+
+  // ----------------------------------------------------- UNLOCKED (full plan) --
+  function revealUnlocked(){
+    var wrap=document.createElement('div');
+    wrap.id='unlocked';
+    wrap.innerHTML = breakdownSection() + planSection() + scorecardSection() + bridgesSection();
+    main.appendChild(wrap);
+    wireShare(); wireWaitlist();
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      Array.prototype.forEach.call(document.querySelectorAll('#unlocked .lr-fill'), function(el){ el.style.width = el.getAttribute('data-w'); });
+    });});
+  }
+
+  // breakdown bars — all 8 stages, each with its dollar figure + colour (promise #1)
+  function breakdownInner(isPreview){
+    var max = Math.max.apply(null, r.perStage.map(function(s){return s.leak;})) || 1;
+    return r.perStage.slice().sort(function(a,b){return b.leak-a.leak;}).map(function(s){
+      var w = Math.max(2, Math.round((s.leak/max)*100));
+      var amt = s.leak>0 ? LS.money(s.leak) : '$0';
+      var widthAttr = isPreview ? ('width:'+w+'%') : ('width:0');
+      return '<div class="lr-bar">'+
+        '<div class="lr-bar-head"><span class="lr-bar-name">'+esc(s.label)+'</span>'+
+          '<span class="lr-bar-amt" style="color:'+s.color+'">'+amt+'</span></div>'+
+        '<div class="lr-track"><div class="lr-fill" data-w="'+w+'%" style="'+widthAttr+';background:'+s.color+'"></div></div>'+
+        (isPreview ? '' : '<p class="lr-bar-exp">'+esc(s.explanation)+'</p>')+
+      '</div>';
+    }).join('');
+  }
+  function breakdownSection(){
     if(!leaking){
       return '<section class="lr-section"><div class="container">'+
         '<h2 class="lr-h">Every stage scored at the top.</h2>'+
-        '<p class="lr-lead">That’s rare — most operators have 2–3 stages that need work. Keep the systems you’ve built, and use the weekly newsletter to stay ahead as new tools land.</p>'+
-        tipHTML()+'</div></section>';
+        '<p class="lr-lead">That’s rare — most operators have two or three stages leaking. Keep the systems you’ve built, and use the weekly newsletter to stay ahead as new tools land.</p>'+
+        '<div class="lr-bars">'+breakdownInner(false)+'</div>'+
+        '<div class="lr-tip">'+esc(r.industryTip)+'</div>'+
+        '</div></section>';
     }
-    var max = Math.max.apply(null, r.perStage.map(function(s){return s.leak;})) || 1;
-    var rows = r.perStage.slice().sort(function(a,b){return b.leak-a.leak;}).map(function(s){
-      var w = Math.max(2, Math.round((s.leak/max)*100));
-      return '<div class="lr-bar">'+
-        '<div class="lr-bar-head"><span class="lr-bar-name">'+esc(s.label)+'</span>'+
-          '<span class="lr-bar-amt" style="color:'+s.color+'">'+(s.leak>0?LS.money(s.leak):'$0')+'</span></div>'+
-        '<div class="lr-track"><div class="lr-fill" data-w="'+w+'%" style="width:0;background:'+s.color+'"></div></div>'+
-        '<p class="lr-bar-exp">'+esc(s.explanation)+'</p>'+
-      '</div>';
-    }).join('');
     return '<section class="lr-section"><div class="container">'+
       '<h2 class="lr-h">Where the money’s going.</h2>'+
-      '<p class="lr-lead">Your estimated annual leak, broken down by the 8 stages of your operation. The biggest bars are where one fix returns the most.</p>'+
-      '<div class="lr-bars">'+rows+'</div>'+
-      '<p class="lr-method">These figures are directional — built from home-services benchmarks (ServiceTitan, Housecall Pro, and industry research) applied to your specific answers. They point you at your biggest opportunities, not exact predictions. Every number traces back to what you told us.</p>'+
-      tipHTML()+
+      '<p class="lr-lead">Your estimated annual leak, broken down across the 8 stages of your operation. The biggest bars are where one fix returns the most.</p>'+
+      '<div class="lr-bars">'+breakdownInner(false)+'</div>'+
+      '<p class="lr-method-note">These figures are directional — home-services benchmarks applied to your specific answers. They point you at your biggest opportunities, not exact predictions. Every number traces back to what you told us.</p>'+
+      '<div class="lr-tip">'+esc(r.industryTip)+'</div>'+
     '</div></section>';
   }
-  function tipHTML(){ return '<div class="lr-tip">'+esc(r.industryTip)+'</div>'; }
 
-  function planHTML(){
-    var leaks = r.realLeaks.length ? r.realLeaks : [];
-    if(!leaks.length) return '';
-    var cards = leaks.map(function(l, i){
-      var fix = LS.FIX_FIRST_MOVE[l.stageId];
-      return '<div class="lr-plan-card">'+
-        '<div class="lr-plan-rank">Leak #'+(i+1)+' · '+esc(LS.stageLabel(l.stageId))+'</div>'+
+  // ranked fixes — #1 first and emphasised, then every other weak leak (promise #2 + #3)
+  function planSection(){
+    var weak = r.weakStages;
+    if(!weak.length) return '';
+    var cards = weak.map(function(s, i){
+      var fix = LS.FIX[s.id];
+      var learn = LS.learnUrl(s.id); // null unless its /learn cluster is live (never a 404)
+      var tool = '<div class="lr-plan-tool"><b>Tool:</b> '+esc(fix.tool)+(fix.freeAlt?(' &nbsp;·&nbsp; <b>Free option:</b> '+esc(fix.freeAlt)):'')+'</div>';
+      var learnLink = learn ? '<a class="lr-plan-learn" href="'+learn+'" data-go="learn:'+s.id+'">See the full play in Learn →</a>' : '';
+      return '<div class="lr-plan-card'+(i===0?' top':'')+'">'+
+        '<div class="lr-plan-rank">Leak #'+(i+1)+' · '+esc(s.label)+(i===0?' — your biggest':'')+'</div>'+
         '<h3>'+esc(fix.headline)+'</h3>'+
-        '<div class="lr-plan-amt">'+LS.money(l.leak)+'/yr at stake</div>'+
+        '<div class="lr-plan-amt">'+LS.money(s.leak)+'/yr at stake</div>'+
         '<p class="lr-plan-move">'+esc(fix.move)+'</p>'+
+        tool + learnLink +
       '</div>';
     }).join('');
     return '<section class="lr-section alt"><div class="container">'+
-      '<h2 class="lr-h">Your first moves.</h2>'+
-      '<p class="lr-lead">Start at the top. Each of these is something you can do this week — no new software required to begin.</p>'+
+      '<h2 class="lr-h">Your first fix for each leak.</h2>'+
+      '<p class="lr-lead">Start at the top — your #1 leak is where one move returns the most. Each of these is something you can do this week, no new software required to begin.</p>'+
       '<div class="lr-plan">'+cards+'</div>'+
     '</div></section>';
   }
 
-  function bridgesHTML(){
-    var frUrl = LS.fieldReportUrl(r.trade.id);
-    var frLabel = (r.trade.id==='other') ? 'Field Reports' : (r.trade.label.split(' ')[0]+' Field Report');
+  // shareable scorecard + share buttons (spec §8)
+  function scorecardSection(){
+    var sharetext = LS.shareText(r);
     return '<section class="lr-section"><div class="container">'+
-      '<h2 class="lr-h">Keep plugging leaks.</h2>'+
-      '<p class="lr-lead">You’ve got your number and your first move. Here’s where to go next.</p>'+
+      '<h2 class="lr-h" style="text-align:center">Share your scorecard.</h2>'+
+      '<p class="lr-lead" style="margin:0 auto 28px;text-align:center">Screenshot the card, or use the buttons to share the text. (Know an operator who needs this?)</p>'+
+      '<div class="lr-scorecard" id="scorecard">'+
+        '<div class="lr-sc-top"><span class="lr-sc-mark">'+MARK+'</span><span class="lr-sc-tag">Revenue Leak Score</span></div>'+
+        '<div class="lr-sc-label">'+esc(r.trade.label)+'</div>'+
+        (leaking
+          ? '<div class="lr-sc-num">'+LS.money(r.totalLeak)+'</div><div class="lr-sc-numctx">leaking per year (est.)</div>'
+          : '<div class="lr-sc-num">'+r.totalScore+'/60</div><div class="lr-sc-numctx">running tight</div>')+
+        '<div class="lr-sc-row"><span class="k">Operator score</span><span class="v">'+r.totalScore+'/60 · '+esc(r.badge.label)+'</span></div>'+
+        '<div class="lr-sc-row"><span class="k">#1 leak</span><span class="v">'+esc(r.topStageLabel)+'</span></div>'+
+        (r.realLeaks[1] ? '<div class="lr-sc-row"><span class="k">#2 leak</span><span class="v">'+esc(LS.stageLabel(r.realLeaks[1].stageId))+'</span></div>' : '')+
+        '<div class="lr-sc-foot">theautobotics.com/leak-score</div>'+
+      '</div>'+
+      '<div class="lr-share">'+
+        '<button class="btn btn-primary btn-sm" id="shareBtn">Share my scorecard</button>'+
+        '<button class="btn btn-ghost btn-sm" id="copyBtn">Copy share text</button>'+
+      '</div>'+
+      '<p class="lr-sharetext" id="shareText">“'+esc(sharetext)+'”</p>'+
+    '</div></section>';
+  }
 
-      // newsletter / double opt-in confirm
-      '<div class="lr-confirm">'+MAIL+'<div><h3>Confirm your spot on the list</h3>'+
-        '<p>Your Leak Score signed you up for <strong>The Home Service Edge</strong> — one AI fix a week, plain English. <strong>Check your inbox and click confirm</strong> to start getting them (it’s a double opt-in, so nothing sends until you do).</p></div></div>'+
+  // bridges — conditional matrix (spec §7 / bug-fix §12.2)
+  function bridgesSection(){
+    var cards = [];
 
-      '<div class="lr-bridge-grid">'+
-        // field report bridge
+    // (a) the /learn cluster for the #1 leak — only if it's a CORE leak AND its cluster
+    //     is live on-site (learnUrl != null). Non-core #1 → inline fix only, no /learn.
+    if(r.topStageId){
+      var topStage = LS.STAGES.filter(function(s){return s.id===r.topStageId;})[0];
+      var learn = LS.learnUrl(r.topStageId);
+      if(topStage && topStage.core && learn){
+        cards.push(
+          '<div class="lr-bridge">'+
+            '<span class="eyebrow">Go deeper on your #1 leak</span>'+
+            '<h3>The full '+esc(r.topStageLabel)+' playbook</h3>'+
+            '<p>Scripts, tools and the step-by-step for fixing '+esc(r.topStageLabel.toLowerCase())+' — the leak costing you the most.</p>'+
+            '<a href="'+learn+'" class="btn btn-primary btn-sm" style="align-self:flex-start" data-go="learn_bridge">Open the playbook →</a>'+
+          '</div>');
+      }
+    }
+
+    // (b) the trade's Field Report — only for the 5 anchored trades (others skip it).
+    if(LS.hasFieldReport(r.trade.id)){
+      var frUrl = LS.fieldReportUrl(r.trade.id);
+      var frLabel = r.trade.label.split(' ')[0] + ' Field Report';
+      cards.push(
         '<div class="lr-bridge">'+
           '<span class="eyebrow">Diagnose your trade</span>'+
           '<h3>Read the '+esc(frLabel)+'</h3>'+
-          '<p>See exactly how '+(r.trade.id==='other'?'operators in your trade':'the '+esc(r.trade.label.toLowerCase()))+' lose money at each stage — with real numbers, reviewed by Eric.</p>'+
+          '<p>See exactly how '+esc(r.trade.label.toLowerCase())+' operators lose money at each stage — real numbers, reviewed by Eric.</p>'+
           '<a href="'+frUrl+'" class="btn btn-primary btn-sm" style="align-self:flex-start" data-go="field_report">Open the report →</a>'+
-        '</div>'+
-        // community waitlist bridge
-        '<div class="lr-bridge" id="waitlistCard">'+
-          '<span class="eyebrow">Get the room</span>'+
-          '<h3>Join the community waitlist</h3>'+
-          '<p>A free operator community is opening soon — courses, prompt libraries, and copy-paste systems. Waitlist members get in first.</p>'+
-          '<div id="waitlistAction"></div>'+
-        '</div>'+
-      '</div>'+
+        '</div>');
+    }
+
+    // (c) community waitlist — always.
+    cards.push(
+      '<div class="lr-bridge" id="waitlistCard">'+
+        '<span class="eyebrow">Get the room</span>'+
+        '<h3>Join the community waitlist</h3>'+
+        '<p>A free operator community is opening soon — courses, prompt libraries, and copy-paste systems. Waitlist members get in first.</p>'+
+        '<div id="waitlistAction"></div>'+
+      '</div>');
+
+    // newsletter double-opt-in confirm (always — the gate IS the subscription).
+    var confirm = '<div class="lr-confirm">'+MAIL+'<div><h3>One more step — confirm your spot</h3>'+
+      '<p>Your Leak Score signed you up for <strong>The Home Service Edge</strong>. <strong>Check your inbox and click confirm</strong> to start getting one plain-English fix a week (double opt-in — nothing sends until you do).</p></div></div>';
+
+    return '<section class="lr-section alt"><div class="container">'+
+      '<h2 class="lr-h">Keep plugging leaks.</h2>'+
+      '<p class="lr-lead">You’ve got your number, your ranking, and your first moves. Here’s where to go next.</p>'+
+      confirm +
+      '<div class="lr-bridge-grid">'+cards.join('')+'</div>'+
       '<p class="lr-retake" style="margin-top:30px"><a href="/leak-score">↻ Retake the Leak Score</a></p>'+
     '</div></section>';
   }
 
-  // ---- share ----
+  // ----------------------------------------------------------- the write path --
+  function sendSubmission(email){
+    var b = {};
+    try{ b = JSON.parse(sessionStorage.getItem('ls_behaviour')||'{}') || {}; }catch(e){}
+    var utm = b.utm || {};
+    var answers = {};
+    LS.AUDIT_QUESTIONS.forEach(function(q){
+      var idx = r.answers[q.id]; var opt = q.options[idx];
+      answers[q.id] = { label: opt ? opt.label : '', score: opt ? opt.score : null };
+    });
+    var stageLeaks = {}, stageScores = {};
+    LS.STAGES.forEach(function(s){ stageLeaks[s.id]=r.stageLeaks[s.id]; stageScores[s.id]=r.stageScores[s.id]; });
+
+    var payload = {
+      email: email, website: '', source: 'quiz', consent_newsletter: true,
+      // Beehiiv segmentation
+      trade: r.trade.id,
+      leak: r.topStageId ? LS.leakSlug(r.topStageId) : 'none',
+      tags: r.tags,
+      // profile
+      weight_preset: r.preset,
+      revenue_band: r.revenue.band,
+      team_size: r.team ? r.team.label : '',
+      jobs_per_week: r.jobs ? r.jobs.label : '',
+      // answers + scoring (the full first-party record, spec §11)
+      answers: answers,
+      stage_scores: stageScores, total_score: r.totalScore, badge: r.badge.label,
+      stage_leaks: stageLeaks, total_leak: r.totalLeak,
+      leak_rank_1: r.topLeaks[0] ? LS.stageLabel(r.topLeaks[0].stageId) : '',
+      leak_rank_2: r.topLeaks[1] ? LS.stageLabel(r.topLeaks[1].stageId) : '',
+      leak_rank_3: r.topLeaks[2] ? LS.stageLabel(r.topLeaks[2].stageId) : '',
+      // behaviour + attribution
+      completed: true,
+      last_question_reached: b.last_question_reached || 12,
+      time_to_complete_sec: b.time_to_complete_sec || null,
+      device: b.device || '',
+      referring_site: b.referrer || '',
+      utm_source: utm.utm_source || 'leak-score-quiz',
+      utm_medium: utm.utm_medium || 'quiz',
+      utm_campaign: utm.utm_campaign || 'revenue-leak-score',
+      utm_content: utm.utm_content || '',
+      utm_term: utm.utm_term || ''
+    };
+
+    var ctrl = ('AbortController' in window) ? new AbortController() : null;
+    var timer = setTimeout(function(){ if(ctrl) ctrl.abort(); }, 9000);
+    fetch('/api/subscribe', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload), signal: ctrl ? ctrl.signal : undefined
+    }).then(function(res){ clearTimeout(timer); })
+      .catch(function(){ clearTimeout(timer); }); // never surfaced — unlock already happened
+  }
+
+  // ------------------------------------------------------------------ share ----
   function wireShare(){
     var sharetext = LS.shareText(r);
-    var url = location.origin + '/leak-score';
+    var url = LS.SHARE_URL; // ALWAYS the canonical URL + UTM, never the preview origin (§12.1)
     var shareBtn = document.getElementById('shareBtn');
     var copyBtn = document.getElementById('copyBtn');
     if(shareBtn) shareBtn.onclick=function(){
@@ -308,28 +484,37 @@
       if(navigator.share){ navigator.share({ title:'My Revenue Leak Score', text:sharetext, url:url }).catch(function(){}); }
       else { copyToClip(sharetext+' '+url, shareBtn); }
     };
-    if(copyBtn) copyBtn.onclick=function(){ track('leakscore_copy_share'); copyToClip(sharetext, copyBtn); };
+    if(copyBtn) copyBtn.onclick=function(){ track('leakscore_copy_share'); copyToClip(sharetext+' '+url, copyBtn); };
   }
   function copyToClip(text, btn){
     var label = btn ? btn.textContent : '';
     function ok(){ if(btn){ btn.textContent='Copied ✓'; setTimeout(function(){ btn.textContent=label; }, 1800); } }
-    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(ok, ok); }
-    else { var t=document.createElement('textarea'); t.value=text; document.body.appendChild(t); t.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(t); ok(); }
+    // iOS Safari: navigator.clipboard works in the secure context; fall back to execCommand.
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(ok, function(){ legacyCopy(text); ok(); }); }
+    else { legacyCopy(text); ok(); }
+  }
+  function legacyCopy(text){
+    var t=document.createElement('textarea'); t.value=text;
+    t.setAttribute('readonly',''); t.style.position='absolute'; t.style.left='-9999px';
+    document.body.appendChild(t);
+    var sel=document.getSelection(), range=document.createRange(); range.selectNodeContents(t);
+    sel.removeAllRanges(); sel.addRange(range); t.setSelectionRange(0, 999999);
+    try{ document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(t);
   }
 
-  // ---- community waitlist (adds community-waitlist tag) ----
+  // ------------------------------------------------- community waitlist tag ----
   function wireWaitlist(){
     var slot = document.getElementById('waitlistAction');
     if(!slot) return;
-    var stored = '';
-    try{ stored = localStorage.getItem('ls_email') || ''; }catch(e){}
+    var stored=''; try{ stored = localStorage.getItem('ls_email') || ''; }catch(e){}
     if(stored){
       slot.innerHTML = '<button class="btn btn-primary btn-sm" id="wlBtn" style="align-self:flex-start">Add me to the waitlist →</button>';
       document.getElementById('wlBtn').onclick=function(){ joinWaitlist(stored, slot); };
     } else {
       slot.innerHTML =
         '<label for="wlEmail" class="sr-only">Email address</label>'+
-        '<input class="lr-field" type="email" id="wlEmail" inputmode="email" autocomplete="email" placeholder="you@yourbusiness.com">'+
+        '<input class="lr-wl-field" type="email" id="wlEmail" inputmode="email" autocomplete="email" placeholder="you@yourbusiness.com">'+
         '<input type="text" class="lr-hp" id="wlHp" tabindex="-1" autocomplete="off" aria-hidden="true">'+
         '<button class="btn btn-primary btn-sm" id="wlBtn">Join the waitlist →</button>';
       document.getElementById('wlBtn').onclick=function(){
@@ -356,6 +541,16 @@
     slot.innerHTML = '<button class="btn btn-primary btn-sm" id="wlBtn">Try again →</button>'+
       '<p style="color:var(--muted);font-size:.82rem;margin-top:8px">That didn’t go through — give it another tap.</p>';
     document.getElementById('wlBtn').onclick=function(){ joinWaitlist(email, slot); };
+  }
+
+  function renderInvalid(){
+    main.innerHTML =
+      '<section class="lr-hero"><div class="container">'+
+      '<span class="lr-eyebrow">Revenue Leak Score</span>'+
+      '<h1 style="color:#fff">Get your Revenue Leak Score.</h1>'+
+      '<p class="lr-headline">Answer a few quick questions and see exactly where your home-service business is leaking money — and the first fix for each.</p>'+
+      '<div style="margin-top:24px"><a href="/leak-score" class="btn btn-primary">Take the Leak Score →</a></div>'+
+      '</div></section>';
   }
 })();
 </script>
