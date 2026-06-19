@@ -258,3 +258,76 @@ p{line-height:1.7}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
   .reveal{opacity:1;transform:none}
 }
+
+/* ==========================================================================
+   /learn — hub index, cluster hubs, and articles (Strategy 2.0)
+   ========================================================================== */
+/* Learn index — cluster directory grid */
+.learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}
+.learn-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:30px 26px;display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:border-color .25s,box-shadow .25s,transform .25s}
+.learn-card:hover{border-color:var(--teal);box-shadow:var(--shadow-md);transform:translateY(-3px)}
+.learn-card .eyebrow{margin-bottom:14px}
+.learn-card h3{font-size:1.15rem;margin-bottom:10px;color:var(--charcoal)}
+.learn-card p{font-size:.92rem;color:var(--medium);line-height:1.7;margin-bottom:20px;flex:1}
+.learn-card .learn-go{font-size:.9rem;font-weight:700;color:var(--teal);display:inline-flex;align-items:center;gap:6px;transition:gap .2s;margin-top:auto}
+.learn-card:hover .learn-go{gap:10px}
+
+/* Cluster hub — guides + secondary links */
+.guides{max-width:var(--max-prose);margin:8px 0 0}
+.guides h2{font-size:1.4rem;margin:0 0 20px}
+.guide-list{list-style:none;margin:0 0 18px;padding:0}
+.guide-item{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:22px 24px;margin-bottom:14px;transition:border-color .25s,box-shadow .25s}
+.guide-item:hover{border-color:var(--teal);box-shadow:var(--shadow-sm)}
+.guide-item a{font-weight:700;color:var(--teal);font-size:1.02rem;text-decoration:none;line-height:1.4;display:inline-block}
+.guide-item a:hover{text-decoration:underline}
+.guide-item p{color:var(--medium);font-size:.92rem;line-height:1.7;margin-top:8px}
+.guide-scope{list-style:none;margin:0 0 18px;padding:0}
+.guide-scope li{position:relative;padding:10px 0 10px 26px;color:var(--medium);font-size:1rem;line-height:1.6;border-bottom:1px solid var(--border)}
+.guide-scope li:last-child{border-bottom:none}
+.guide-scope li::before{content:"";position:absolute;left:2px;top:18px;width:7px;height:7px;border-radius:50%;background:var(--teal)}
+.guides-note{color:var(--medium);font-size:1.02rem;line-height:1.8;margin-bottom:8px;max-width:var(--max-prose)}
+.guides-note strong{color:var(--charcoal)}
+
+/* Secondary hub links (quiz + siblings + field reports) */
+.hub-links{border-top:1px solid var(--border);margin-top:44px;padding-top:36px;max-width:var(--max-prose)}
+.hub-links .eyebrow{margin-bottom:18px}
+.hub-links-row{display:flex;flex-wrap:wrap;gap:12px}
+.hub-link{display:inline-flex;align-items:center;gap:6px;background:var(--white);border:1px solid var(--border);border-radius:100px;padding:10px 18px;font-size:.88rem;font-weight:600;color:var(--charcoal);text-decoration:none;transition:border-color .2s,color .2s}
+.hub-link:hover{border-color:var(--teal);color:var(--teal)}
+
+/* Article — dark hero crumb + light prose body */
+.crumb{font-family:var(--mono);font-size:.72rem;letter-spacing:1px;color:rgba(255,255,255,.5);margin-bottom:18px}
+.crumb a{color:rgba(255,255,255,.7);text-decoration:none}
+.crumb a:hover{color:#fff}
+.crumb span{margin:0 8px;opacity:.5}
+.article-tag{display:inline-flex;align-items:center;font-family:var(--mono);font-size:.72rem;font-weight:600;color:#5EEAD4;background:rgba(13,148,136,.25);border:1px solid rgba(13,148,136,.4);padding:5px 12px;border-radius:100px;margin-bottom:18px}
+.page-hero .article-byline{font-size:.88rem;color:rgba(255,255,255,.5);font-style:italic;margin-top:14px}
+.article-prose{max-width:var(--max-prose)}
+.article-prose .article-lead{font-size:1.18rem;color:var(--charcoal);font-weight:500;line-height:1.75;margin-bottom:22px}
+.article-prose h2{font-size:1.5rem;margin:42px 0 16px}
+.article-prose h3{font-size:1.15rem;margin:28px 0 10px}
+.article-prose p{color:var(--medium);font-size:1.06rem;line-height:1.85;margin-bottom:18px}
+.article-prose strong{color:var(--charcoal)}
+.article-prose ul{margin:0 0 20px;padding:0;list-style:none}
+.article-prose ul li{position:relative;padding:7px 0 7px 26px;color:var(--medium);font-size:1.06rem;line-height:1.7}
+.article-prose ul li::before{content:"";position:absolute;left:2px;top:16px;width:7px;height:7px;border-radius:50%;background:var(--teal)}
+.article-prose blockquote{border-left:4px solid var(--amber);padding:6px 0 6px 24px;margin:26px 0;font-size:1.15rem;font-weight:600;font-style:italic;color:var(--charcoal);line-height:1.6}
+.article-prose blockquote.paste{font-style:normal;font-weight:500;font-size:1.04rem;color:var(--charcoal)}
+.article-prose a{color:var(--teal);text-decoration:underline;text-decoration-color:rgba(13,148,136,.35)}
+.article-prose a:hover{text-decoration-color:var(--teal)}
+.faq-q{font-weight:700;color:var(--charcoal);font-size:1.06rem;margin:22px 0 6px}
+
+/* Keep-learning */
+.keep-learning{border-top:1px solid var(--border);margin-top:8px;padding-top:32px;max-width:var(--max-prose)}
+.keep-learning .eyebrow{margin-bottom:16px}
+.keep-learning ul{list-style:none;margin:0;padding:0}
+.keep-learning li{padding:8px 0}
+.keep-learning a{color:var(--teal);font-weight:600;text-decoration:none}
+.keep-learning a:hover{text-decoration:underline}
+
+@media (max-width:900px){
+  .learn-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:600px){
+  .learn-grid{grid-template-columns:1fr}
+}

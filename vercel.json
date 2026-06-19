@@ -24,6 +24,10 @@
     { "source": "/leak-score", "destination": "/leak-score.html" },
     { "source": "/leak-score/results", "destination": "/leak-score-results.html" },
     { "source": "/field-reports", "destination": "/field-reports.html" },
-    { "source": "/field-reports/:slug", "destination": "/field-reports/:slug.html" }
+    { "source": "/field-reports/:slug", "destination": "/field-reports/:slug.html" },
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/learn", "destination": "/learn.html" },
+    { "source": "/learn/:cluster/:topic", "destination": "/learn/:cluster/:topic.html" },
+    { "source": "/learn/:cluster", "destination": "/learn/:cluster.html" }
   ]
 }

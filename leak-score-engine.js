@@ -40,13 +40,13 @@
   // Off for launch (don't surface a CTA to content we're not linking yet); flip to
   // true to re-enable the card for the 5 anchored trades — one-liner. The bridge
   // markup + FIELD_REPORT_TRADES stay intact regardless.
-  var FIELD_REPORTS_LIVE = false;
+  var FIELD_REPORTS_LIVE = true;
 
   // ---- /learn clusters that are actually LIVE on-site. Empty for now — no /learn
   //      routes exist yet, so every /learn link is omitted (never ship a 404, spec §6).
   //      Flip a slug to true here the day its cluster publishes; the link enables itself. ----
   var LEARN_LIVE = {
-    // 'answering-calls/missed-call-text-back': true,
+    'answering-calls/missed-call-text-back': true,
     // 'quoting/quote-follow-up': true,
     // 'reviews/review-requests': true,
     // 'scheduling/online-booking': true,
