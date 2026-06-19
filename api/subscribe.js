@@ -173,13 +173,18 @@ module.exports = async function handler(req, res) {
   var rawTags = Array.isArray(body.tags) ? body.tags.slice(0, 50) : [];
   var tags = sanitizeTags(derived.concat(rawTags));
 
+  // Only a COMPLETED-QUIZ submission writes the Leak Score Submissions row (one row per
+  // quiz). The community-waitlist click (source 'quiz-results') is captured purely by its
+  // Beehiiv 'community-waitlist' tag — no Airtable write on that path.
+  var isSubmission = body.source === 'quiz';
+
   var apiKey = process.env.BEEHIIV_API_KEY;
 
   // No Beehiiv key yet — return 200 so the (already-unlocked) front end is never
   // blocked, but still attempt the best-effort Airtable record and log for ops.
   if (!apiKey) {
     console.warn('[subscribe] BEEHIIV_API_KEY not set — not subscribed:', email, tags.join(','));
-    var aOnly = await writeAirtable(body, tags);
+    var aOnly = isSubmission ? await writeAirtable(body, tags) : { written: false };
     return res.status(200).json({ success: false, configured: false, airtable: aOnly.written });
   }
 
@@ -223,10 +228,13 @@ module.exports = async function handler(req, res) {
     beehiivResult = { success: false, error: 'exception' };
   }
 
-  // Best-effort data write — awaited so it runs, but it can NEVER change the
-  // outcome the front end / Beehiiv saw. A failure here is logged only.
+  // Best-effort data write — ONLY for a completed-quiz submission, awaited so it runs but
+  // never able to change the outcome the front end / Beehiiv saw. The waitlist path skips
+  // it (the Beehiiv community-waitlist tag is the capture). A failure here is logged only.
   var airtable = { written: false };
-  try { airtable = await writeAirtable(body, tags); } catch (e) { console.error('[subscribe] airtable wrapper error', e && e.message); }
+  if (isSubmission) {
+    try { airtable = await writeAirtable(body, tags); } catch (e) { console.error('[subscribe] airtable wrapper error', e && e.message); }
+  }
 
   var code = beehiivResult.success ? 200 : 502;
   return res.status(code).json(Object.assign({}, beehiivResult, { airtable: airtable.written }));

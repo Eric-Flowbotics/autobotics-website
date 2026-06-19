@@ -550,7 +550,9 @@
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ email:email, website:'', source:'quiz-results', tags:['community-waitlist'], trade:r.trade.id })
     }).then(function(res){
-      return res.json().then(function(j){ return res.ok && (!j || j.success!==false || j.airtable===true); }, function(){ return res.ok; });
+      // success = the community-waitlist tag was added to the Beehiiv subscriber
+      // (this path writes no Airtable row — the tag IS the capture).
+      return res.json().then(function(j){ return res.ok && !!j && j.tagged===true; }, function(){ return res.ok; });
     }).then(function(ok){ ok ? done(slot) : wlFail(slot, email); })
       .catch(function(){ wlFail(slot, email); });
   }
