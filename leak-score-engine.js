@@ -36,6 +36,12 @@
   // Field Reports exist only for these 5 anchored trades (spec §7). Others skip the card.
   var FIELD_REPORT_TRADES = ['cleaning', 'landscaping', 'hvac', 'plumbing', 'handyman'];
 
+  // Master switch for the results-page "Read the [Trade] Field Report" bridge.
+  // Off for launch (don't surface a CTA to content we're not linking yet); flip to
+  // true to re-enable the card for the 5 anchored trades — one-liner. The bridge
+  // markup + FIELD_REPORT_TRADES stay intact regardless.
+  var FIELD_REPORTS_LIVE = false;
+
   // ---- /learn clusters that are actually LIVE on-site. Empty for now — no /learn
   //      routes exist yet, so every /learn link is omitted (never ship a 404, spec §6).
   //      Flip a slug to true here the day its cluster publishes; the link enables itself. ----
@@ -547,7 +553,7 @@
   }
 
   function fieldReportUrl(tradeId) {
-    return FIELD_REPORT_TRADES.indexOf(tradeId) !== -1 ? '/field-reports/' + tradeId : null;
+    return (FIELD_REPORTS_LIVE && FIELD_REPORT_TRADES.indexOf(tradeId) !== -1) ? '/field-reports/' + tradeId : null;
   }
   function hasFieldReport(tradeId) {
     return FIELD_REPORT_TRADES.indexOf(tradeId) !== -1;

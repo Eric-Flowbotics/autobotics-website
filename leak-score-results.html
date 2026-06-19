@@ -234,7 +234,7 @@
             '<div class="lr-error" id="err" role="alert"></div>'+
             '<button class="btn btn-primary" id="gatebtn" type="submit" style="width:100%">Unlock my breakdown →</button>'+
           '</form>'+
-          '<p class="lr-micro">Free. Double opt-in — we’ll send one email to confirm, and we keep your quiz answers to personalize what you get. See our <a href="/privacy">privacy page</a>.</p>'+
+          '<p class="lr-micro">Free. We’ll send one email to confirm — nothing sends until you click it — and we keep your quiz answers to personalize what you get. See our <a href="/privacy">privacy page</a>.</p>'+
         '</div>'+
       '</div>'+
     '</div>';
@@ -401,9 +401,11 @@
       }
     }
 
-    // (b) the trade's Field Report — only for the 5 anchored trades (others skip it).
-    if(LS.hasFieldReport(r.trade.id)){
-      var frUrl = LS.fieldReportUrl(r.trade.id);
+    // (b) the trade's Field Report — only when live (FIELD_REPORTS_LIVE) AND the trade
+    //     is anchored. Suppressed for launch like /learn: fieldReportUrl returns null
+    //     while off, so the card simply isn't rendered (never a dead link).
+    var frUrl = LS.fieldReportUrl(r.trade.id);
+    if(frUrl){
       var frLabel = r.trade.label.split(' ')[0] + ' Field Report';
       cards.push(
         '<div class="lr-bridge">'+
@@ -423,9 +425,9 @@
         '<div id="waitlistAction"></div>'+
       '</div>');
 
-    // newsletter double-opt-in confirm (always — the gate IS the subscription).
+    // newsletter confirm card (always — the gate IS the subscription).
     var confirm = '<div class="lr-confirm">'+MAIL+'<div><h3>One more step — confirm your spot</h3>'+
-      '<p>Your Leak Score signed you up for <strong>The Home Service Edge</strong>. <strong>Check your inbox and click confirm</strong> to start getting one plain-English fix a week (double opt-in — nothing sends until you do).</p></div></div>';
+      '<p>Your Leak Score signed you up for <strong>The Home Service Edge</strong>. <strong>Check your inbox and click confirm</strong> to start getting one plain-English fix a week (nothing sends until you click).</p></div></div>';
 
     return '<section class="lr-section alt"><div class="container">'+
       '<h2 class="lr-h">Keep plugging leaks.</h2>'+
@@ -548,7 +550,7 @@
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ email:email, website:'', source:'quiz-results', tags:['community-waitlist'], trade:r.trade.id })
     }).then(function(res){
-      return res.json().then(function(j){ return res.ok && (!j || j.success!==false); }, function(){ return res.ok; });
+      return res.json().then(function(j){ return res.ok && (!j || j.success!==false || j.airtable===true); }, function(){ return res.ok; });
     }).then(function(ok){ ok ? done(slot) : wlFail(slot, email); })
       .catch(function(){ wlFail(slot, email); });
   }
