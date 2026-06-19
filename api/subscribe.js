@@ -25,6 +25,7 @@ var AIRTABLE_API = 'https://api.airtable.com/v0';
 var PUBLICATION_ID = process.env.BEEHIIV_PUBLICATION_ID || 'pub_03c86483-4f76-4b5f-bbf5-78e094b3c599';
 var AIRTABLE_BASE = process.env.AIRTABLE_BASE_ID || 'appyyjGuoyHBGQGW6';
 var AIRTABLE_TABLE = process.env.AIRTABLE_TABLE || 'Leak Score Submissions';
+var WAITLIST_TABLE = process.env.AIRTABLE_WAITLIST_TABLE || 'Community Waitlist';
 
 var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -148,6 +149,46 @@ async function writeAirtable(body, tags) {
   return { written: false, reason: 'write_failed' };
 }
 
+// ---- Best-effort UPSERT (by Email) into the Community Waitlist table — its own table,
+//      NOT the completions log. Created is set on first insert and preserved on repeat
+//      clicks (a repeat is a PATCH that doesn't touch Created). One retry; never throws. ----
+async function writeWaitlist(body) {
+  var key = process.env.AIRTABLE_API_KEY;
+  if (!key) { console.warn('[subscribe] AIRTABLE_API_KEY not set — skipping waitlist write.'); return { written: false, reason: 'no_key' }; }
+  var email = str(body.email).toLowerCase();
+  if (!email) return { written: false, reason: 'no_email' };
+
+  var base = AIRTABLE_API + '/' + AIRTABLE_BASE + '/' + encodeURIComponent(WAITLIST_TABLE);
+  var headers = { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' };
+  var tradeLabel = TRADE_LABELS[body.trade] || str(body.trade);
+
+  try {
+    // Find an existing row by Email (the upsert key) so a repeat click updates, not duplicates.
+    var formula = "LOWER({Email})='" + email.replace(/'/g, "\\'") + "'";
+    var lookup = await fetch(base + '?maxRecords=1&filterByFormula=' + encodeURIComponent(formula), { headers: headers });
+    var existingId = null;
+    if (lookup.ok) { var lj = await lookup.json().catch(function () { return null; }); existingId = lj && lj.records && lj.records[0] && lj.records[0].id; }
+
+    var fields = { Email: email, Source: str(body.source) || 'quiz-results' };
+    if (tradeLabel) fields.Trade = tradeLabel;
+    var method, url;
+    if (existingId) { method = 'PATCH'; url = base + '/' + existingId; }          // update — keep the original Created
+    else { fields.Created = new Date().toISOString(); method = 'POST'; url = base; } // new — stamp Created
+
+    var payload = { fields: fields, typecast: true };
+    for (var attempt = 1; attempt <= 2; attempt++) {
+      var res = await fetch(url, { method: method, headers: headers, body: JSON.stringify(payload) });
+      if (res.ok) return { written: true, status: res.status, action: existingId ? 'updated' : 'created' };
+      var txt = ''; try { txt = await res.text(); } catch (e) {}
+      console.error('[subscribe] Waitlist ' + method + ' failed (attempt ' + attempt + ') status=' + res.status + ' ' + txt.slice(0, 300));
+      if (res.status < 500 && res.status !== 429) break;
+    }
+  } catch (err) {
+    console.error('[subscribe] Waitlist write error:', err && err.message);
+  }
+  return { written: false, reason: 'write_failed' };
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -173,10 +214,11 @@ module.exports = async function handler(req, res) {
   var rawTags = Array.isArray(body.tags) ? body.tags.slice(0, 50) : [];
   var tags = sanitizeTags(derived.concat(rawTags));
 
-  // Only a COMPLETED-QUIZ submission writes the Leak Score Submissions row (one row per
-  // quiz). The community-waitlist click (source 'quiz-results') is captured purely by its
-  // Beehiiv 'community-waitlist' tag — no Airtable write on that path.
+  // The single write path branches by event: a COMPLETED-QUIZ submission (source 'quiz')
+  // writes the full record to Leak Score Submissions (one row per quiz); the community-
+  // waitlist click (source 'quiz-results') upserts its own Community Waitlist row.
   var isSubmission = body.source === 'quiz';
+  var isWaitlist = body.source === 'quiz-results';
 
   var apiKey = process.env.BEEHIIV_API_KEY;
 
@@ -185,7 +227,8 @@ module.exports = async function handler(req, res) {
   if (!apiKey) {
     console.warn('[subscribe] BEEHIIV_API_KEY not set — not subscribed:', email, tags.join(','));
     var aOnly = isSubmission ? await writeAirtable(body, tags) : { written: false };
-    return res.status(200).json({ success: false, configured: false, airtable: aOnly.written });
+    var wOnly = isWaitlist ? await writeWaitlist(body) : { written: false };
+    return res.status(200).json({ success: false, configured: false, airtable: aOnly.written, waitlist: wOnly.written });
   }
 
   var beehiivResult = { success: false };
@@ -228,14 +271,17 @@ module.exports = async function handler(req, res) {
     beehiivResult = { success: false, error: 'exception' };
   }
 
-  // Best-effort data write — ONLY for a completed-quiz submission, awaited so it runs but
-  // never able to change the outcome the front end / Beehiiv saw. The waitlist path skips
-  // it (the Beehiiv community-waitlist tag is the capture). A failure here is logged only.
-  var airtable = { written: false };
+  // Best-effort data writes — awaited so they run, but never able to change the outcome
+  // the front end / Beehiiv saw. A completed quiz writes the full Leak Score Submissions
+  // row; the waitlist click upserts the Community Waitlist row. Failures are logged only.
+  var airtable = { written: false }, waitlistRes = { written: false };
   if (isSubmission) {
     try { airtable = await writeAirtable(body, tags); } catch (e) { console.error('[subscribe] airtable wrapper error', e && e.message); }
   }
+  if (isWaitlist) {
+    try { waitlistRes = await writeWaitlist(body); } catch (e) { console.error('[subscribe] waitlist wrapper error', e && e.message); }
+  }
 
   var code = beehiivResult.success ? 200 : 502;
-  return res.status(code).json(Object.assign({}, beehiivResult, { airtable: airtable.written }));
+  return res.status(code).json(Object.assign({}, beehiivResult, { airtable: airtable.written, waitlist: waitlistRes.written }));
 };
