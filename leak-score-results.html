@@ -36,17 +36,18 @@
 
 /* ---- The gate (email unlocks the per-leak $, the ranking, and the fixes — spec §7/§9) ---- */
 .lr-gatewrap{position:relative;max-width:760px;margin:0 auto}
+#gateSection{padding-top:24px}
 .lr-locked-preview{filter:blur(7px);opacity:.5;pointer-events:none;user-select:none;max-height:150px;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 58%,transparent);mask-image:linear-gradient(180deg,#000 58%,transparent)}
-.lr-gate{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:28px 26px;max-width:520px;margin:-80px auto 0;position:relative;z-index:2;text-align:center}
-.lr-gate .lock{width:30px;height:30px;color:var(--amber);margin:0 auto 12px;display:block}
-.lr-gate h2{font-size:1.4rem;line-height:1.2;margin-bottom:10px}
-.lr-gate p{color:var(--medium);font-size:.98rem;line-height:1.6;margin-bottom:18px}
+.lr-gate{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:26px 26px;max-width:520px;margin:-96px auto 0;position:relative;z-index:2;text-align:center}
+.lr-gate .lock{width:28px;height:28px;color:var(--amber);margin:0 auto 10px;display:block}
+.lr-gate h2{font-size:1.4rem;line-height:1.2;margin-bottom:8px}
+.lr-gate p{color:var(--medium);font-size:.98rem;line-height:1.55;margin-bottom:14px}
 .lr-gate p strong{color:var(--charcoal)}
 .lr-field{width:100%;font-family:var(--font);font-size:1.02rem;color:var(--charcoal);background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:15px 16px;transition:border-color .18s,box-shadow .18s}
 .lr-field:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-glow)}
 .lr-field.err{border-color:#DC2626;box-shadow:0 0 0 3px rgba(220,38,38,.12)}
 .lr-error{color:#DC2626;font-size:.85rem;margin-top:8px;min-height:1em;text-align:left}
-.lr-micro{font-size:.8rem;color:var(--muted);line-height:1.6;margin-top:14px}
+.lr-micro{font-size:.8rem;color:var(--muted);line-height:1.55;margin-top:10px}
 .lr-hp{position:absolute!important;left:-9999px!important;top:-9999px!important;width:1px;height:1px;opacity:0}
 .lr-spinner{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:lrSpin .7s linear infinite;vertical-align:-2px;margin-right:8px}
 @keyframes lrSpin{to{transform:rotate(360deg)}}
@@ -107,7 +108,7 @@
 .lr-retake{text-align:center;padding:8px 0 0}
 .lr-retake a{font-weight:600}
 
-@media (max-width:760px){ .lr-bridge-grid{grid-template-columns:1fr} .lr-gate{margin-top:-70px} }
+@media (max-width:760px){ .lr-bridge-grid{grid-template-columns:1fr} .lr-gate{margin-top:-92px} }
 @media (max-width:600px){
   .lr-hero{padding:80px 0 22px}
   .lr-section{padding:44px 0}
@@ -242,6 +243,30 @@
     '</div>';
     main.appendChild(sec);
     document.getElementById('gate').addEventListener('submit', function(e){ e.preventDefault(); submitGate(); });
+    ensureGateInView();
+  }
+
+  // On load (gated view only), if the gate card's bottom sits below the fold, scroll the
+  // MINIMUM needed to bring its bottom (incl. the reassurance line) into view with a little
+  // breathing room — capped so the headline $ number still peeks at the top. Reduced-motion safe.
+  function ensureGateInView(){
+    function run(){
+      var gate=document.querySelector('.lr-gate'); if(!gate) return;
+      var overflow=gate.getBoundingClientRect().bottom - window.innerHeight + 28;
+      if(overflow<=12) return;                       // already fully in view → don't move
+      var target=window.pageYOffset + overflow;
+      var bignum=document.querySelector('.lr-bignum');
+      if(bignum){                                    // never scroll the $ number fully off — keep it peeking
+        var cap=window.pageYOffset + bignum.getBoundingClientRect().bottom - 8;
+        if(target>cap) target=cap;
+      }
+      if(target>1){
+        var reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: target, behavior: reduce ? 'auto' : 'smooth' });
+      }
+    }
+    if(document.fonts && document.fonts.ready){ document.fonts.ready.then(function(){ requestAnimationFrame(run); }); }
+    else { requestAnimationFrame(run); }
   }
 
   function submitGate(){

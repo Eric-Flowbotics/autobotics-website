@@ -543,8 +543,8 @@
   }
 
   function methodologyLine(trade) {
-    return 'This is an estimate based on industry benchmarks for ' + trade.label.toLowerCase() +
-      ' businesses at your revenue level — missed leads, unconverted quotes, slow payments, lost repeat business, and unrealized referrals. It points you at your biggest opportunities, not an exact prediction.';
+    return 'An estimate from industry benchmarks for ' + trade.label.toLowerCase() +
+      ' businesses at your revenue level — your biggest opportunities, not an exact prediction.';
   }
 
   function stageLabel(stageId) {
