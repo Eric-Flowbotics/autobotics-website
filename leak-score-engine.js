@@ -247,7 +247,7 @@
       'Same day — automatically or before I leave': 'Same-day invoicing, before you leave the job. Cash comes in while the work is fresh.'
     },
     q9: {
-      'Wait and hope they pay eventually': 'You said you wait and hope late payers come through. Money you already earned quietly slips away.',
+      'Wait and hope they pay eventually': 'You said you wait and hope late payers come through. That leaves money you’ve already earned sitting uncollected.',
       'Send a manual reminder after a while': 'You said you send a manual reminder eventually. Better than waiting, but inconsistent follow-up still lets some go unpaid.',
       'Automatic reminders go out, or they’re on autopay': 'Automatic reminders or autopay. You’re collecting what you’re owed without chasing it.'
     },
@@ -258,7 +258,7 @@
       'Over 50': '50+ Google reviews. You’re in the tier that wins the local 3-pack.'
     },
     q11: {
-      'Never — once the job’s done, that’s it': 'You said you don’t follow up after a job. Winning a new customer costs 5–7× more than keeping one (CustomerFlows) — that repeat work is walking away.',
+      'Never — once the job’s done, that’s it': 'You said you don’t follow up after a job. Winning a new customer costs 5–7× more than keeping one (CustomerFlows) — so that repeat business is the cheapest work you’ll ever win.',
       'Occasionally, if I think of it': 'You said you follow up occasionally. Sporadic contact wins back some past customers; a steady rhythm wins back far more.',
       'Regularly — seasonal reminders, check-ins, rebooking offers': 'Regular check-ins and rebooking offers. You’re holding onto the customers you already earned.'
     },

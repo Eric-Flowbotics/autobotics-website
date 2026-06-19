@@ -84,7 +84,9 @@ async function writeAirtable(body, tags) {
   function set(name, val) { if (val !== '' && val !== null && val !== undefined) fields[name] = val; }
 
   set('Email', str(body.email).toLowerCase());
-  set('Consent Newsletter', body.consent_newsletter !== false);
+  // Only mark consent when the newsletter gate was actually accepted — the
+  // community-waitlist path posts no consent flag and must not read as opted-in.
+  set('Consent Newsletter', body.consent_newsletter === true);
   set('Source', str(body.source) || 'quiz');
   set('Trade', TRADE_LABELS[body.trade] || str(body.trade));
   set('Weight Preset', str(body.weight_preset));

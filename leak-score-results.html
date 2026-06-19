@@ -36,7 +36,7 @@
 
 /* ---- The gate (email unlocks the per-leak $, the ranking, and the fixes — spec §7/§9) ---- */
 .lr-gatewrap{position:relative;max-width:760px;margin:0 auto}
-.lr-locked-preview{filter:blur(7px);opacity:.5;pointer-events:none;user-select:none}
+.lr-locked-preview{filter:blur(7px);opacity:.5;pointer-events:none;user-select:none;max-height:320px;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 58%,transparent);mask-image:linear-gradient(180deg,#000 58%,transparent)}
 .lr-gate{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:32px 30px;max-width:520px;margin:-220px auto 0;position:relative;z-index:2;text-align:center}
 .lr-gate .lock{width:30px;height:30px;color:var(--amber);margin:0 auto 12px;display:block}
 .lr-gate h2{font-size:1.4rem;line-height:1.2;margin-bottom:10px}
@@ -56,6 +56,7 @@
 .lr-bar-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:7px}
 .lr-bar-name{font-weight:700;font-size:1rem}
 .lr-bar-amt{font-family:var(--mono);font-weight:700;font-size:1rem;letter-spacing:-.5px}
+.lr-bar-rank{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--amber);letter-spacing:.5px}
 .lr-track{height:12px;background:var(--cream);border:1px solid var(--border);border-radius:100px;overflow:hidden}
 .lr-fill{height:100%;border-radius:100px;transition:width 1s cubic-bezier(.22,1,.36,1)}
 .lr-bar-exp{font-size:.9rem;color:var(--medium);line-height:1.55;margin-top:8px}
@@ -221,7 +222,7 @@
     sec.id='gateSection';
     sec.innerHTML='<div class="container">'+
       '<div class="lr-gatewrap">'+
-        '<div class="lr-locked-preview" aria-hidden="true">'+breakdownInner(true)+'</div>'+
+        '<div class="lr-locked-preview" aria-hidden="true"><div class="lr-bars">'+breakdownInner(true)+'</div></div>'+
         '<div class="lr-gate">'+
           LOCK+
           '<h2>Unlock your full breakdown</h2>'+
@@ -268,7 +269,13 @@
     try{ localStorage.setItem('ls_unlocked','1'); }catch(e){}
     var g=document.getElementById('gateSection'); if(g) g.parentNode.removeChild(g);
     revealUnlocked();
-    var u=document.getElementById('unlocked'); if(u){ u.scrollIntoView({behavior:'smooth', block:'start'}); }
+    var u=document.getElementById('unlocked');
+    if(u){
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      u.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block:'start' });
+      // move focus into the revealed plan so keyboard / screen-reader users land there
+      var h=u.querySelector('h2'); if(h){ h.setAttribute('tabindex','-1'); try{ h.focus({preventScroll:true}); }catch(_){ h.focus(); } }
+    }
   }
 
   // ----------------------------------------------------- UNLOCKED (full plan) --
@@ -285,13 +292,16 @@
 
   // breakdown bars — all 8 stages, each with its dollar figure + colour (promise #1)
   function breakdownInner(isPreview){
-    var max = Math.max.apply(null, r.perStage.map(function(s){return s.leak;})) || 1;
-    return r.perStage.slice().sort(function(a,b){return b.leak-a.leak;}).map(function(s){
+    var sorted = r.perStage.slice().sort(function(a,b){return b.leak-a.leak;});
+    var max = Math.max.apply(null, sorted.map(function(s){return s.leak;})) || 1;
+    return sorted.map(function(s, idx){
       var w = Math.max(2, Math.round((s.leak/max)*100));
       var amt = s.leak>0 ? LS.money(s.leak) : '$0';
       var widthAttr = isPreview ? ('width:'+w+'%') : ('width:0');
+      // explicit #1/#2/#3 on the three biggest real leaks (promise: #1 ranked + #2/#3)
+      var rank = (!isPreview && s.leak>0 && idx<3) ? '<span class="lr-bar-rank">#'+(idx+1)+'</span> ' : '';
       return '<div class="lr-bar">'+
-        '<div class="lr-bar-head"><span class="lr-bar-name">'+esc(s.label)+'</span>'+
+        '<div class="lr-bar-head"><span class="lr-bar-name">'+rank+esc(s.label)+'</span>'+
           '<span class="lr-bar-amt" style="color:'+s.color+'">'+amt+'</span></div>'+
         '<div class="lr-track"><div class="lr-fill" data-w="'+w+'%" style="'+widthAttr+';background:'+s.color+'"></div></div>'+
         (isPreview ? '' : '<p class="lr-bar-exp">'+esc(s.explanation)+'</p>')+
@@ -318,9 +328,14 @@
 
   // ranked fixes — #1 first and emphasised, then every other weak leak (promise #2 + #3)
   function planSection(){
-    var weak = r.weakStages;
-    if(!weak.length) return '';
-    var cards = weak.map(function(s, i){
+    // A fix for every WEAK stage, PLUS the #1 leak even when it isn't "weak"
+    // (spec §7: the #1 leak's fix is always shown + expanded). Ranked by leak desc,
+    // so the highest-dollar leak is card #1. Never empty when anything leaks.
+    var fixStages = r.perStage.filter(function(s){
+      return s.leak > 0 && (s.weak || s.id === r.topStageId);
+    }).sort(function(a,b){ return b.leak - a.leak; });
+    if(!fixStages.length) return '';
+    var cards = fixStages.map(function(s, i){
       var fix = LS.FIX[s.id];
       var learn = LS.learnUrl(s.id); // null unless its /learn cluster is live (never a 404)
       var tool = '<div class="lr-plan-tool"><b>Tool:</b> '+esc(fix.tool)+(fix.freeAlt?(' &nbsp;·&nbsp; <b>Free option:</b> '+esc(fix.freeAlt)):'')+'</div>';
@@ -355,6 +370,7 @@
         '<div class="lr-sc-row"><span class="k">Operator score</span><span class="v">'+r.totalScore+'/60 · '+esc(r.badge.label)+'</span></div>'+
         '<div class="lr-sc-row"><span class="k">#1 leak</span><span class="v">'+esc(r.topStageLabel)+'</span></div>'+
         (r.realLeaks[1] ? '<div class="lr-sc-row"><span class="k">#2 leak</span><span class="v">'+esc(LS.stageLabel(r.realLeaks[1].stageId))+'</span></div>' : '')+
+        (r.realLeaks[2] ? '<div class="lr-sc-row"><span class="k">#3 leak</span><span class="v">'+esc(LS.stageLabel(r.realLeaks[2].stageId))+'</span></div>' : '')+
         '<div class="lr-sc-foot">theautobotics.com/leak-score</div>'+
       '</div>'+
       '<div class="lr-share">'+
@@ -448,9 +464,9 @@
       answers: answers,
       stage_scores: stageScores, total_score: r.totalScore, badge: r.badge.label,
       stage_leaks: stageLeaks, total_leak: r.totalLeak,
-      leak_rank_1: r.topLeaks[0] ? LS.stageLabel(r.topLeaks[0].stageId) : '',
-      leak_rank_2: r.topLeaks[1] ? LS.stageLabel(r.topLeaks[1].stageId) : '',
-      leak_rank_3: r.topLeaks[2] ? LS.stageLabel(r.topLeaks[2].stageId) : '',
+      leak_rank_1: r.realLeaks[0] ? LS.stageLabel(r.realLeaks[0].stageId) : '',
+      leak_rank_2: r.realLeaks[1] ? LS.stageLabel(r.realLeaks[1].stageId) : '',
+      leak_rank_3: r.realLeaks[2] ? LS.stageLabel(r.realLeaks[2].stageId) : '',
       // behaviour + attribution
       completed: true,
       last_question_reached: b.last_question_reached || 12,

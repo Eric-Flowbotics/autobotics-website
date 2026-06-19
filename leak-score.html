@@ -47,7 +47,7 @@
 
 /* ---- Trade grid ---- */
 .ls-trade-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.ls-tile{display:flex;flex-direction:column;align-items:flex-start;gap:8px;background:var(--cream);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:16px 14px;font-family:var(--font);font-size:.92rem;font-weight:600;color:var(--charcoal);text-align:left;cursor:pointer;transition:border-color .18s,background .18s,transform .12s}
+.ls-tile{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-height:44px;background:var(--cream);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:16px 14px;font-family:var(--font);font-size:.92rem;font-weight:600;color:var(--charcoal);text-align:left;cursor:pointer;transition:border-color .18s,background .18s,transform .12s}
 .ls-tile .ico{font-size:1.5rem;line-height:1}
 .ls-tile:hover{border-color:var(--teal);background:var(--white)}
 .ls-tile:active{transform:scale(.98)}
@@ -203,6 +203,9 @@
   function moneyFound(){
     return Object.keys(state.committed).reduce(function(a,k){ return a + (state.committed[k]||0); }, 0);
   }
+  // The counter shows the SAME nearest-$100 rounding the results headline uses
+  // (engine totalLeak), so the final climb reconciles exactly to the result (§5/§13).
+  function moneyShown(){ return Math.round(moneyFound()/100)*100; }
 
   function announce(msg){ var s=document.getElementById('ls-status'); if(s) s.textContent=msg; }
 
@@ -217,7 +220,7 @@
     var h=card.querySelector('h1,h2');
     if(h){ h.setAttribute('tabindex','-1'); try{ h.focus({preventScroll:true}); }catch(_){ h.focus(); } }
     if(state.screen==='audit'){
-      var lk=moneyFound();
+      var lk=moneyShown();
       announce('Question '+(state.qIndex+1)+' of 12'+(lk>0?'. Money found so far '+LS.money(lk):''));
     }
   }
@@ -292,7 +295,7 @@
     var q = LS.AUDIT_QUESTIONS[state.qIndex];
     var n = state.qIndex+1, total = 12;
     var pct = Math.round((state.qIndex/total)*100);
-    var lk = moneyFound();
+    var lk = moneyShown();
     var counter = '<div class="ls-counter" aria-hidden="true">Money found so far<span class="amt" id="moneyAmt">'+LS.money(lk)+'</span></div>';
     card.className='ls-card ls-fade';
     card.innerHTML =
@@ -311,12 +314,12 @@
     each('[data-opt]', function(b){
       b.onclick=function(){
         var i=parseInt(b.getAttribute('data-opt'),10);
-        var prevMoney=moneyFound();
+        var prevShown=moneyShown();
         state.answers[q.id]=i;
         recomputeCommitted();
         var stage=stageOf(q.id);
         var nowComplete=stage.questionIds.every(function(x){ return state.answers[x]!=null; });
-        var delta=moneyFound()-prevMoney;
+        var delta=moneyShown()-prevShown;   // change in the rounded, displayed total
         if(nowComplete && !state.flashed[stage.id]){
           state.flashed[stage.id]=true;
           if(delta>0) showFlash(delta, stage.label);
@@ -324,7 +327,7 @@
         b.classList.add('selected');
         // tick the visible number up immediately (progress bar moves on the re-render)
         var amtEl=document.getElementById('moneyAmt');
-        if(amtEl){ amtEl.textContent=LS.money(moneyFound()); if(delta>0){ amtEl.classList.add('bump'); } }
+        if(amtEl){ amtEl.textContent=LS.money(moneyShown()); if(delta>0){ amtEl.classList.add('bump'); } }
         setTimeout(advance, 210);
       };
     });
