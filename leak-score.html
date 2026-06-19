@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revenue Leak Score — find your #1 money leak in 3 minutes | Autobotics</title>
+<meta name="description" content="A free 3-minute self-audit for home service operators. Score your business across 8 stages and see exactly where money is leaking — missed calls, dead quotes, late invoices — and the first fix for each.">
+<link rel="canonical" href="https://theautobotics.com/leak-score">
+<!-- Open Graph -->
+<meta property="og:title" content="Revenue Leak Score — find your #1 money leak in 3 minutes">
+<meta property="og:description" content="Missed calls, dead quotes, invoices at 10pm. Score your home-service business in 3 minutes and see exactly where the money's going — free.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://theautobotics.com/leak-score">
+<meta property="og:image" content="https://theautobotics.com/images/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EG6CSRBKY6"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-EG6CSRBKY6');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<style>
+/* ---- Revenue Leak Score quiz — page-scoped, on top of /styles.css brand tokens ---- */
+.ls-stage{min-height:100vh;background:var(--charcoal);color:var(--white);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:104px 20px 64px}
+.ls-stage::before{content:'';position:absolute;top:0;left:0;width:70%;height:80%;background:radial-gradient(ellipse at 30% 15%,rgba(13,148,136,0.14) 0%,transparent 60%);pointer-events:none}
+.ls-card{position:relative;z-index:1;background:var(--white);color:var(--charcoal);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:0 12px 40px rgba(0,0,0,.35);width:100%;max-width:620px;padding:40px}
+.ls-eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;color:var(--amber);display:block;margin-bottom:16px}
+.ls-card h1{font-size:clamp(1.9rem,4.4vw,2.5rem);line-height:1.12;margin-bottom:16px}
+.ls-card .ls-sub{color:var(--medium);font-size:1.06rem;line-height:1.7;margin-bottom:24px}
+.ls-meta{font-family:var(--mono);font-size:.74rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:18px}
+.ls-feature{display:flex;align-items:flex-start;gap:10px;color:var(--medium);font-size:.96rem;margin:10px 0}
+.ls-feature svg{flex:0 0 auto;width:18px;height:18px;color:var(--teal);margin-top:2px}
+
+/* Buttons reuse .btn/.btn-primary from styles.css; full-width helper */
+.ls-btn-block{width:100%;margin-top:8px}
+
+/* ---- Setup steps + progress ---- */
+.ls-steps{display:flex;gap:7px;margin-bottom:26px}
+.ls-step-dot{height:5px;flex:1;border-radius:100px;background:var(--border);transition:background .3s}
+.ls-step-dot.done{background:var(--teal)}
+.ls-step-dot.active{background:var(--teal)}
+.ls-q-label{font-family:var(--mono);font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:10px}
+.ls-card h2{font-size:clamp(1.3rem,3vw,1.65rem);line-height:1.25;margin-bottom:10px}
+.ls-subtext{color:var(--medium);font-size:.95rem;line-height:1.6;margin-bottom:22px}
+
+/* ---- Trade grid ---- */
+.ls-trade-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.ls-tile{background:var(--cream);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:18px 16px;font-family:var(--font);font-size:.98rem;font-weight:600;color:var(--charcoal);text-align:left;cursor:pointer;transition:border-color .18s,background .18s,transform .12s}
+.ls-tile:hover{border-color:var(--teal);background:var(--white)}
+.ls-tile:active{transform:scale(.98)}
+
+/* ---- Answer options ---- */
+.ls-options{display:flex;flex-direction:column;gap:10px}
+.ls-option{display:flex;align-items:center;gap:13px;width:100%;background:var(--cream);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:16px 18px;font-family:var(--font);font-size:1rem;line-height:1.4;font-weight:500;color:var(--charcoal);text-align:left;cursor:pointer;transition:border-color .18s,background .18s,transform .12s}
+.ls-option:hover{border-color:var(--teal);background:var(--white)}
+.ls-option:active{transform:scale(.99)}
+.ls-option.selected{border-color:var(--teal);background:var(--teal-subtle)}
+.ls-radio{flex:0 0 auto;width:20px;height:20px;border-radius:50%;border:2px solid var(--border-strong,#D4CFC6);transition:border-color .18s}
+.ls-option:hover .ls-radio,.ls-option.selected .ls-radio{border-color:var(--teal)}
+.ls-option.selected .ls-radio{background:radial-gradient(circle,var(--teal) 0 44%,transparent 48%)}
+
+/* ---- Audit header: progress + live counter ---- */
+.ls-auditbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:20px}
+.ls-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:var(--font);font-size:.85rem;font-weight:600;color:var(--medium);padding:6px 2px;transition:color .18s}
+.ls-back:hover{color:var(--teal)}
+.ls-back[hidden]{display:none}
+.ls-counter{font-family:var(--mono);font-size:.78rem;font-weight:600;text-align:right;line-height:1.3;color:var(--medium)}
+.ls-counter .amt{font-size:1.05rem;color:var(--amber);display:block;letter-spacing:-.5px}
+.ls-counter.critical .amt{color:var(--red,#DC2626);animation:lsPulse 1.6s ease-in-out infinite}
+@keyframes lsPulse{0%,100%{opacity:1}50%{opacity:.55}}
+.ls-progress{height:6px;background:var(--border);border-radius:100px;overflow:hidden;margin-bottom:6px}
+.ls-progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),#14b8a6);border-radius:100px;transition:width .35s cubic-bezier(.22,1,.36,1)}
+.ls-progress-meta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.68rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:22px}
+
+/* ---- Email gate ---- */
+.ls-gate-score{font-family:var(--mono);font-weight:700;color:var(--teal);font-size:1rem;margin-bottom:8px}
+.ls-gate-lockrow{display:flex;align-items:center;gap:10px;background:var(--cream);border:1px dashed var(--border-strong,#D4CFC6);border-radius:var(--radius-md);padding:14px 16px;margin:18px 0 6px;color:var(--medium);font-size:.92rem}
+.ls-gate-lockrow svg{flex:0 0 auto;width:18px;height:18px;color:var(--amber)}
+.ls-field{width:100%;font-family:var(--font);font-size:1.02rem;color:var(--charcoal);background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:15px 16px;transition:border-color .18s,box-shadow .18s}
+.ls-field:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-glow)}
+.ls-field.err{border-color:var(--red,#DC2626);box-shadow:0 0 0 3px rgba(220,38,38,.12)}
+.ls-error{color:var(--red,#DC2626);font-size:.85rem;margin-top:8px;min-height:1em}
+.ls-micro{font-size:.8rem;color:var(--muted);line-height:1.6;margin-top:16px;text-align:center}
+.ls-hp{position:absolute!important;left:-9999px!important;top:-9999px!important;width:1px;height:1px;opacity:0}
+.ls-spinner{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:lsSpin .7s linear infinite;vertical-align:-2px;margin-right:8px}
+@keyframes lsSpin{to{transform:rotate(360deg)}}
+
+.ls-fade{animation:lsFade .45s cubic-bezier(.22,1,.36,1) both}
+@keyframes lsFade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+@media (max-width:600px){
+  .ls-stage{padding:92px 14px 48px}
+  .ls-card{padding:26px 20px;border-radius:var(--radius-md)}
+  .ls-trade-grid{grid-template-columns:1fr}
+  .ls-option{padding:15px 15px;font-size:.96rem}
+  .ls-card h1{font-size:1.7rem}
+}
+@media(prefers-reduced-motion:reduce){.ls-fade,.ls-counter.critical .amt{animation:none}}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo" aria-label="Autobotics home">
+      <svg viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Autobotics logo">
+        <rect x="2" y="2" width="44" height="44" rx="10" stroke="#0D9488" stroke-width="2.5" fill="none"/>
+        <path d="M15 34L24 12L33 34" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2" stroke-linecap="round"/>
+        <text x="60" y="34" font-family="'Plus Jakarta Sans',sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5">
+          <tspan fill="#FFFFFF">auto</tspan><tspan fill="#0D9488">botics</tspan>
+        </text>
+      </svg>
+    </a>
+    <div class="nav-links">
+      <a href="/about" class="desktop-only">About</a>
+      <a href="/field-reports" class="desktop-only">Field Reports</a>
+    </div>
+  </div>
+</nav>
+
+<main class="ls-stage">
+  <div class="ls-card" id="card" role="region" aria-label="Revenue Leak Score quiz">
+    <!-- rendered by JS -->
+  </div>
+  <p id="ls-status" class="sr-only" role="status" aria-live="polite"></p>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <a href="/" class="footer-logo" aria-label="Autobotics home">
+        <svg viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Autobotics logo">
+          <rect x="2" y="2" width="44" height="44" rx="10" stroke="#0D9488" stroke-width="2.5" fill="none"/>
+          <path d="M15 34L24 12L33 34" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2" stroke-linecap="round"/>
+          <text x="60" y="34" font-family="'Plus Jakarta Sans',sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5">
+            <tspan fill="#FFFFFF">auto</tspan><tspan fill="#0D9488">botics</tspan>
+          </text>
+        </svg>
+      </a>
+      <div class="footer-links">
+        <a href="/about">About</a>
+        <a href="/field-reports">Field Reports</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy</a>
+      </div>
+      <p class="footer-meta">© 2026 Autobotics · 1712 6th Ave, Ste 100 PMB 1124, Tacoma, WA 98405</p>
+    </div>
+  </div>
+</footer>
+
+<script src="/leak-score-engine.js"></script>
+<script>
+(function(){
+  var LS = window.LeakScore;
+  var card = document.getElementById('card');
+
+  // ---- forward UTMs from this page's URL into the subscribe payload ----
+  var pageParams = new URLSearchParams(location.search);
+  function utm(){
+    var o={}; ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach(function(k){
+      var v=pageParams.get(k); if(v) o[k]=v;
+    }); return o;
+  }
+
+  var state = {
+    screen: 'welcome',      // welcome | setup | audit | gate
+    setupStep: 0,           // 0 = trade, 1 = revenue
+    trade: null,            // trade id
+    revenueIndex: null,     // 0..4
+    qIndex: 0,              // 0..11
+    maxReached: 0,          // furthest question index reached (for revisit nav)
+    answers: {},            // { q1: optionIndex, ... }
+    submitting: false
+  };
+
+  var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  var LOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+  var BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>';
+
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function track(name, params){ if(window.gtag) gtag('event', name, params||{}); }
+
+  function runningTotal(){
+    if(state.trade==null || state.revenueIndex==null) return 0;
+    var profile = { businessType: state.trade, revenue: LS.REVENUE_OPTIONS[state.revenueIndex].value };
+    return LS.calculateResults(state.answers, profile).totalLeak;
+  }
+
+  function announce(msg){ var s=document.getElementById('ls-status'); if(s) s.textContent=msg; }
+  function render(){
+    if(state.screen==='welcome') renderWelcome();
+    else if(state.screen==='setup') renderSetup();
+    else if(state.screen==='audit') renderAudit();
+    else if(state.screen==='gate') renderGate();
+    afterRender();
+  }
+  // After each step: move focus into the new content and announce progress to AT,
+  // so keyboard/screen-reader users aren't dropped to <body> on every advance.
+  function afterRender(){
+    if(state.screen==='gate'){ var e=document.getElementById('email'); if(e) e.focus(); return; }
+    if(state.screen==='welcome') return;
+    var h=card.querySelector('h1,h2');
+    if(h){ h.setAttribute('tabindex','-1'); try{ h.focus({preventScroll:true}); }catch(_){ h.focus(); } }
+    if(state.screen==='audit'){
+      var lk=runningTotal();
+      announce('Question '+(state.qIndex+1)+' of 12'+(lk>0?'. Estimated leak so far '+LS.money(lk)+' per year':''));
+    }
+  }
+
+  function renderWelcome(){
+    card.className='ls-card ls-fade';
+    card.innerHTML =
+      '<span class="ls-eyebrow">Revenue Leak Score</span>'+
+      '<h1>Find your #1 money leak in 3 minutes.</h1>'+
+      '<p class="ls-sub">Missed calls, dead quotes, invoices that go out late — the money isn’t missing, it’s leaking. Answer 12 quick questions and see exactly where yours is going, across 8 stages of your business.</p>'+
+      '<div>'+
+        feature('A real dollar estimate of what’s leaking each year')+
+        feature('Your #1 leak, ranked — plus the first fix for it')+
+        feature('A shareable scorecard, built for your trade')+
+      '</div>'+
+      '<button class="btn btn-primary ls-btn-block" id="start">Start my Leak Score →</button>'+
+      '<p class="ls-meta">~3 min · works on your phone · free</p>';
+    document.getElementById('start').onclick=function(){ track('leakscore_start'); state.screen='setup'; state.setupStep=0; render(); };
+  }
+  function feature(t){ return '<div class="ls-feature">'+CHECK+'<span>'+t+'</span></div>'; }
+
+  function renderSetup(){
+    card.className='ls-card ls-fade';
+    var dots = '<div class="ls-steps">'+
+      stepDot(0)+stepDot(1)+'</div>';
+    var backBtn = '<button class="ls-back" id="back">'+BACK+' Back</button>';
+    if(state.setupStep===0){
+      card.innerHTML = dots +
+        '<div class="ls-auditbar" style="margin-bottom:14px">'+backBtn+'<div></div></div>'+
+        '<div class="ls-q-label">About you · 1 of 2</div>'+
+        '<h2>What kind of work do you do?</h2>'+
+        '<p class="ls-subtext">This sets the benchmarks we score you against.</p>'+
+        '<div class="ls-trade-grid">'+
+          LS.BUSINESS_TYPES.map(function(t){ var s=state.trade===t.id?' selected':''; return '<button class="ls-tile'+s+'" data-trade="'+t.id+'" aria-pressed="'+(s?'true':'false')+'">'+esc(t.label)+'</button>'; }).join('')+
+        '</div>';
+      document.getElementById('back').onclick=function(){ state.screen='welcome'; render(); };
+      Array.prototype.forEach.call(card.querySelectorAll('[data-trade]'), function(b){
+        b.onclick=function(){ state.trade=b.getAttribute('data-trade'); state.setupStep=1; render(); };
+      });
+    } else {
+      card.innerHTML = dots +
+        '<div class="ls-auditbar" style="margin-bottom:14px">'+backBtn+'<div></div></div>'+
+        '<div class="ls-q-label">About you · 2 of 2</div>'+
+        '<h2>Roughly what does the business bring in a year?</h2>'+
+        '<p class="ls-subtext">A ballpark is fine. It anchors the dollar math — we never store this against your name.</p>'+
+        '<div class="ls-options">'+
+          LS.REVENUE_OPTIONS.map(function(r,i){ var s=state.revenueIndex===i?' selected':''; return '<button class="ls-option'+s+'" data-rev="'+i+'" aria-pressed="'+(s?'true':'false')+'"><span class="ls-radio"></span><span>'+esc(r.label)+'</span></button>'; }).join('')+
+        '</div>';
+      document.getElementById('back').onclick=function(){ state.setupStep=0; render(); };
+      Array.prototype.forEach.call(card.querySelectorAll('[data-rev]'), function(b){
+        b.onclick=function(){ state.revenueIndex=parseInt(b.getAttribute('data-rev'),10); state.screen='audit'; state.qIndex=0; render(); };
+      });
+    }
+  }
+  function stepDot(i){
+    var cls='ls-step-dot';
+    if(state.screen==='audit'||state.screen==='gate') cls+=' done';
+    else if(i<state.setupStep) cls+=' done';
+    else if(i===state.setupStep) cls+=' active';
+    return '<div class="'+cls+'"></div>';
+  }
+
+  function renderAudit(){
+    var q = LS.AUDIT_QUESTIONS[state.qIndex];
+    var n = state.qIndex+1, total = 12;
+    var pct = Math.round((state.qIndex/total)*100);
+    var leak = runningTotal();
+    var critical = leak >= 20000;
+    var counter = leak > 0
+      ? '<div class="ls-counter'+(critical?' critical':'')+'" aria-hidden="true">Revenue at risk<span class="amt">'+LS.money(leak)+'/yr</span></div>'
+      : '<div></div>';
+    card.className='ls-card ls-fade';
+    card.innerHTML =
+      '<div class="ls-progress"><div class="ls-progress-fill" style="width:'+pct+'%"></div></div>'+
+      '<div class="ls-progress-meta"><span>Question '+n+' of '+total+'</span><span>'+pct+'%</span></div>'+
+      '<div class="ls-auditbar"><button class="ls-back" id="back">'+BACK+' Back</button>'+counter+'</div>'+
+      '<h2>'+esc(q.question)+'</h2>'+
+      '<p class="ls-subtext">'+esc(q.subtext)+'</p>'+
+      '<div class="ls-options">'+
+        q.options.map(function(o,i){
+          var sel = state.answers[q.id]===i ? ' selected':'';
+          return '<button class="ls-option'+sel+'" data-opt="'+i+'" aria-pressed="'+(sel?'true':'false')+'"><span class="ls-radio"></span><span>'+esc(o.label)+'</span></button>';
+        }).join('')+
+      '</div>';
+    document.getElementById('back').onclick=goBack;
+    Array.prototype.forEach.call(card.querySelectorAll('[data-opt]'), function(b){
+      b.onclick=function(){
+        state.answers[q.id]=parseInt(b.getAttribute('data-opt'),10);
+        b.classList.add('selected');
+        setTimeout(advance, 180);
+      };
+    });
+  }
+
+  function goBack(){
+    if(state.qIndex===0){ state.screen='setup'; state.setupStep=1; render(); }
+    else { state.qIndex--; render(); }
+  }
+  function allAnswered(){
+    for(var i=1;i<=12;i++){ if(state.answers['q'+i]==null) return false; }
+    return true;
+  }
+  function firstUnanswered(){
+    for(var i=0;i<12;i++){ if(state.answers['q'+(i+1)]==null) return i; }
+    return 11;
+  }
+  function advance(){
+    state.maxReached = Math.max(state.maxReached, state.qIndex);
+    // Revisit: the operator went Back and changed an earlier answer. Don't crawl
+    // forward one question per tap — drop them back where they were.
+    if(state.qIndex < state.maxReached){
+      if(allAnswered()){ track('leakscore_complete'); state.screen='gate'; render(); return; }
+      state.qIndex = firstUnanswered();
+      render();
+      return;
+    }
+    if(state.qIndex < 11){ state.qIndex++; render(); }
+    else { track('leakscore_complete'); state.screen='gate'; render(); }
+  }
+
+  function currentResult(){
+    var digits='';
+    for(var i=0;i<12;i++){ digits += (state.answers['q'+(i+1)]!=null ? state.answers['q'+(i+1)] : 0); }
+    return { st:{trade:state.trade, revenueIndex:state.revenueIndex, answerDigits:digits},
+             result: LS.fromState({trade:state.trade, revenueIndex:state.revenueIndex, answerDigits:digits}) };
+  }
+
+  function renderGate(){
+    var cr = currentResult();
+    var r = cr.result;
+    var weak = 8 - r.strongCount;
+    card.className='ls-card ls-fade';
+    card.innerHTML =
+      '<div class="ls-auditbar" style="margin-bottom:14px"><button class="ls-back" id="gateback">'+BACK+' Back</button><div></div></div>'+
+      '<span class="ls-eyebrow">Your Leak Score is ready</span>'+
+      '<h2>We found '+(weak>0?('leaks in <strong>'+weak+'</strong> of your 8 stages.'):'a tight operation.')+'</h2>'+
+      '<div class="ls-gate-score">Operator score: '+r.totalScore+'/60 · '+esc(r.badge.label)+'</div>'+
+      '<p class="ls-subtext" style="margin-top:14px">Enter your email and we’ll unlock your full breakdown — the dollar figure on each leak, your #1 leak ranked, the first fix for it, and a scorecard you can save.</p>'+
+      '<div class="ls-gate-lockrow">'+LOCK+'<span>Your full breakdown + first-fix plan is one tap away.</span></div>'+
+      '<form id="gate" novalidate>'+
+        '<label for="email" class="sr-only">Email address</label>'+
+        '<input class="ls-field" type="email" id="email" name="email" inputmode="email" autocomplete="email" placeholder="you@yourbusiness.com" aria-describedby="err" required>'+
+        '<input type="text" class="ls-hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">'+
+        '<div class="ls-error" id="err" role="alert"></div>'+
+        '<button class="btn btn-primary ls-btn-block" id="gatebtn" type="submit">Show me my full breakdown →</button>'+
+      '</form>'+
+      '<p class="ls-micro">Free. You’ll get The Home Service Edge — one AI fix a week, plain English. Double opt-in: check your inbox to confirm. Unsubscribe anytime.</p>';
+    document.getElementById('gateback').onclick=function(){ state.screen='audit'; state.qIndex=11; render(); };
+    document.getElementById('gate').addEventListener('submit', function(e){ e.preventDefault(); submitGate(cr); });
+  }
+
+  function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+  function submitGate(cr){
+    if(state.submitting) return;
+    var emailEl=document.getElementById('email');
+    var errEl=document.getElementById('err');
+    var btn=document.getElementById('gatebtn');
+    var hp=document.querySelector('#gate [name=website]');
+    var email=(emailEl.value||'').trim();
+    var resultsUrl='/leak-score/results'+LS.encodeState(cr.st);
+
+    // Bot honeypot — silently proceed without subscribing.
+    if(hp && hp.value){ location.assign(resultsUrl); return; }
+    if(!validEmail(email)){ emailEl.classList.add('err'); emailEl.setAttribute('aria-invalid','true'); errEl.textContent='Please enter a valid email address.'; emailEl.focus(); return; }
+    emailEl.classList.remove('err'); emailEl.setAttribute('aria-invalid','false'); errEl.textContent='';
+
+    state.submitting=true;
+    btn.disabled=true; btn.innerHTML='<span class="ls-spinner"></span>Crunching your numbers…';
+    track('leakscore_gate_submit', { trade: cr.st.trade });
+
+    // Remember who they are for the results page (community-waitlist bridge).
+    try{ localStorage.setItem('ls_email', email); }catch(e){}
+
+    var payload = Object.assign({
+      email: email,
+      website: '',
+      source: 'quiz',
+      trade: cr.result.trade.id,
+      leak: cr.result.topStageId ? LS.leakSlug(cr.result.topStageId) : 'none',
+      tags: cr.result.tags,
+      score: cr.result.totalScore,
+      total_leak: cr.result.totalLeak,
+      referring_site: document.referrer || ''
+    }, utm());
+
+    // Fire-and-proceed: never trap the operator behind a backend hiccup.
+    var done=false;
+    function proceed(){ if(done) return; done=true; location.assign(resultsUrl); }
+    var ctrl = ('AbortController' in window) ? new AbortController() : null;
+    var timer = setTimeout(proceed, 6000);
+
+    fetch('/api/subscribe', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload),
+      signal: ctrl ? ctrl.signal : undefined
+    }).then(function(res){ return res.json().catch(function(){return {};}); })
+      .then(function(){ clearTimeout(timer); proceed(); })
+      .catch(function(){ clearTimeout(timer); proceed(); });
+  }
+
+  // Fixed nav: transparent over the dark stage, solid charcoal once scrolled.
+  var nav=document.getElementById('nav');
+  window.addEventListener('scroll',function(){ nav.classList.toggle('scrolled', window.scrollY>40); },{passive:true});
+
+  render();
+})();
+</script>
+</body>
+</html>

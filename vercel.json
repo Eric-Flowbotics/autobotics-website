@@ -3,10 +3,12 @@
   "outputDirectory": ".",
   "redirects": [
     { "source": "/blueprint", "destination": "/", "statusCode": 301 },
-    { "source": "/toolkit", "destination": "/", "statusCode": 301 },
-    { "source": "/toolkit/app", "destination": "/", "statusCode": 301 },
-    { "source": "/toolkit-app", "destination": "/", "statusCode": 301 },
-    { "source": "/toolkit-success", "destination": "/", "statusCode": 301 },
+    { "source": "/toolkit", "destination": "/leak-score", "statusCode": 301 },
+    { "source": "/toolkit-app", "destination": "/leak-score", "statusCode": 301 },
+    { "source": "/toolkit-success", "destination": "/leak-score", "statusCode": 301 },
+    { "source": "/toolkit/app", "destination": "/leak-score", "statusCode": 301 },
+    { "source": "/toolkit/success", "destination": "/leak-score", "statusCode": 301 },
+    { "source": "/toolkit/:path*", "destination": "/leak-score", "statusCode": 301 },
     { "source": "/checkout", "destination": "/", "statusCode": 301 },
     { "source": "/cancel", "destination": "/", "statusCode": 301 },
     { "source": "/success", "destination": "/", "statusCode": 301 },
@@ -19,6 +21,8 @@
     { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/thank-you", "destination": "/thank-you.html" },
     { "source": "/message-received", "destination": "/message-received.html" },
+    { "source": "/leak-score", "destination": "/leak-score.html" },
+    { "source": "/leak-score/results", "destination": "/leak-score-results.html" },
     { "source": "/field-reports", "destination": "/field-reports.html" },
     { "source": "/field-reports/:slug", "destination": "/field-reports/:slug.html" }
   ]
