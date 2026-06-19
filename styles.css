@@ -331,3 +331,14 @@ p{line-height:1.7}
 @media (max-width:600px){
   .learn-grid{grid-template-columns:1fr}
 }
+
+/* ---------- Hero quiz-primary card (flip cluster) ---------- */
+.hero-quiz-lead{color:var(--charcoal);font-size:1.02rem;line-height:1.6;margin:2px 0 18px;font-weight:500}
+.hero-quiz-btn{width:100%;justify-content:center;font-size:1rem;padding:16px 30px}
+.hero-quiz-meta{font-size:.8rem;color:var(--muted);text-align:center;margin-top:12px}
+.hero-fallback{margin-top:20px;padding-top:18px;border-top:1px solid var(--border)}
+.hero-fallback-label{display:block;font-size:.82rem;color:var(--medium);text-align:center;margin-bottom:10px;font-weight:600}
+
+/* ---------- Field-report stage → /learn cross-link (diagnosis → treatment) ---------- */
+.stage-learn{display:inline-block;margin-top:10px;font-family:var(--mono);font-size:.74rem;font-weight:700;letter-spacing:.3px;color:var(--teal);text-decoration:none}
+.stage-learn:hover{text-decoration:underline}
