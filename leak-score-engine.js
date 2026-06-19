@@ -182,7 +182,7 @@
       ] },
     { id: 'q11', stage: 'retention',
       question: 'How often do past customers hear from you after a job is done?',
-      subtext: 'Winning a new customer costs 5–7× more than keeping one (CustomerFlows). Most operators never follow up.',
+      subtext: 'Keeping a past customer is far cheaper than winning a new one — and most operators never follow up.',
       options: [
         { label: 'Never — once the job’s done, that’s it', score: 1, leakMultiplier: 0.30 },
         { label: 'Occasionally, if I think of it', score: 2, leakMultiplier: 0.18 },
@@ -190,7 +190,7 @@
       ] },
     { id: 'q12', stage: 'retention',
       question: 'Do you have any kind of referral system?',
-      subtext: 'Referred and repeat customers convert 2–4× better than cold leads (CustomerFlows).',
+      subtext: 'Referred and repeat customers are your warmest, cheapest work — and you’re leaving it to chance.',
       options: [
         { label: 'No — I just hope people recommend me', score: 1, leakMultiplier: 0.15 },
         { label: 'I mention it sometimes, but nothing formal', score: 3, leakMultiplier: 0.08 },
@@ -203,7 +203,7 @@
   // "reframe" has been removed and replaced with plain-language consequence.
   var ANSWER_EXPLANATIONS = {
     q1: {
-      'Nothing — they get voicemail, maybe I call back later': 'You said missed calls go to voicemail with no reliable callback. About 85% of people who don’t reach you on the first try just call the next name (BIA/Kelsey).',
+      'Nothing — they get voicemail, maybe I call back later': 'You said missed calls go to voicemail with no reliable callback. About 85% of people who don’t reach you on the first try just call the next name.',
       'They get voicemail, I try to call back within a few hours': 'You said you try to call back within a few hours. By then most callers have already reached someone else — speed of first contact is what holds the lead.',
       'I call back within an hour, pretty reliably': 'You said you call back within an hour. Solid — but a caller who doesn’t reach a person on the first try is still at risk of moving on.',
       'They get an auto text-back within minutes': 'You said leads get an auto text-back within minutes. Strong system — you’re catching almost everyone who slips past a live answer.',
@@ -221,12 +221,12 @@
       'I have a standard set of screening questions before I commit': 'Standard screening before you commit. Your time goes to the leads worth chasing.'
     },
     q4: {
-      'Whenever I get around to it — could be days': 'You said quotes can take days. 78% of customers hire the first company to respond (Lead Connect) — a slow quote is usually a lost one.',
+      'Whenever I get around to it — could be days': 'You said quotes can take days. 78% of customers hire the first company to respond — a slow quote is usually a lost one.',
       'Within a day or two usually': 'You said quotes go out in a day or two. Reasonable — but the company that responds first wins most of the time.',
       'Same day, every time': 'Same-day quotes, every time. You’re winning the speed race; any losses here are about price or fit, not response time.'
     },
     q5: {
-      'I send it and wait. If they want it, they’ll call.': 'You said you send the quote and wait. Quotes with no follow-up mostly go cold — a day-1/3/7 sequence closes 15–25% more (CustomerFlows).',
+      'I send it and wait. If they want it, they’ll call.': 'You said you send the quote and wait. Quotes with no follow-up mostly go cold — a day-1/3/7 sequence closes 15–25% more.',
       'I follow up once, maybe twice, if I remember': 'You said follow-up happens when you remember. Inconsistent nudges leave proposals on the table that a set sequence would close.',
       'I follow up a couple times but it’s not consistent': 'You said you follow up but not consistently. A fixed day-1/3/7 cadence is what turns “maybe” into booked work.',
       'I have a system — follow up at day 1, day 3, and day 7': 'A real day-1/3/7 follow-up system. You’re converting near the top of what’s possible.'
@@ -252,18 +252,18 @@
       'Automatic reminders go out, or they’re on autopay': 'Automatic reminders or autopay. You’re collecting what you’re owed without chasing it.'
     },
     q10: {
-      'Under 10 (or I’m not sure)': 'You said under 10 Google reviews. Businesses with 50+ are 266% more likely to show in Google’s local 3-pack (BrightLocal) — you’re hard to find.',
+      'Under 10 (or I’m not sure)': 'You said under 10 Google reviews. Businesses with 50+ are 266% more likely to show in Google’s local 3-pack (BrightLocal, 2026) — you’re hard to find.',
       '10–25': 'You said 10–25 reviews. A start — but you’re still well short of the 50+ tier where local visibility jumps.',
       '25–50': 'You said 25–50 reviews. Competitive — closing the gap to 50+ is where you start outranking nearby rivals.',
       'Over 50': '50+ Google reviews. You’re in the tier that wins the local 3-pack.'
     },
     q11: {
-      'Never — once the job’s done, that’s it': 'You said you don’t follow up after a job. Winning a new customer costs 5–7× more than keeping one (CustomerFlows) — so that repeat business is the cheapest work you’ll ever win.',
+      'Never — once the job’s done, that’s it': 'You said you don’t follow up after a job. Keeping a past customer is far cheaper than winning a new one — so that repeat business is the cheapest work you’ll ever win.',
       'Occasionally, if I think of it': 'You said you follow up occasionally. Sporadic contact wins back some past customers; a steady rhythm wins back far more.',
       'Regularly — seasonal reminders, check-ins, rebooking offers': 'Regular check-ins and rebooking offers. You’re holding onto the customers you already earned.'
     },
     q12: {
-      'No — I just hope people recommend me': 'You said you have no referral system. Referred and repeat customers convert 2–4× better than cold leads (CustomerFlows) — and you’re leaving it to chance.',
+      'No — I just hope people recommend me': 'You said you have no referral system. Referred and repeat customers are the warmest, cheapest leads you’ll ever get — and you’re leaving them on the table.',
       'I mention it sometimes, but nothing formal': 'You said you mention referrals sometimes. Without a simple ask-every-time system, most of those warm leads never happen.',
       'Yes — I have a referral incentive and I ask every time': 'A referral incentive, asked every time. You’re turning happy customers into your best lead source.'
     }
