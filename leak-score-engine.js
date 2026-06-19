@@ -97,7 +97,7 @@
   var AUDIT_QUESTIONS = [
     { id: 'q1', stage: 'lead_capture',
       question: 'When a customer calls and you can’t answer, what happens?',
-      subtext: 'About 85% of people who don’t reach you on the first try never call back — they call the next name (BIA/Kelsey). Most won’t even leave a voicemail.',
+      subtext: 'About 85% of people who don’t reach you on the first try never call back — they call the next name. Most won’t even leave a voicemail.',
       options: [
         { label: 'Nothing — they get voicemail, maybe I call back later', score: 1, leakMultiplier: 0.85 },
         { label: 'They get voicemail, I try to call back within a few hours', score: 2, leakMultiplier: 0.60 },
@@ -124,7 +124,7 @@
       ] },
     { id: 'q4', stage: 'quoting',
       question: 'How fast do your quotes go out after a customer asks?',
-      subtext: '78% hire the first company to respond — speed wins (Lead Connect).',
+      subtext: '78% hire the first company to respond — speed wins.',
       options: [
         { label: 'Whenever I get around to it — could be days', score: 1, leakMultiplier: 0.40 },
         { label: 'Within a day or two usually', score: 3, leakMultiplier: 0.18 },
@@ -132,7 +132,7 @@
       ] },
     { id: 'q5', stage: 'quoting',
       question: 'After you send a quote, what happens next?',
-      subtext: 'Most quotes that get no follow-up just go cold. A simple day-1 / day-3 / day-7 sequence closes 15–25% more (CustomerFlows).',
+      subtext: 'Most quotes that get no follow-up just go cold. A simple day-1 / day-3 / day-7 sequence closes 15–25% more.',
       options: [
         { label: 'I send it and wait. If they want it, they’ll call.', score: 1, leakMultiplier: 0.55 },
         { label: 'I follow up once, maybe twice, if I remember', score: 2, leakMultiplier: 0.35 },
@@ -173,7 +173,7 @@
       ] },
     { id: 'q10', stage: 'reviews',
       question: 'How many Google reviews does your business have right now?',
-      subtext: 'Businesses with 50+ reviews are 266% more likely to show up in Google’s local 3-pack than those with under 10 (BrightLocal).',
+      subtext: 'Businesses with 50+ reviews are 266% more likely to show up in Google’s local 3-pack than those with under 10 (BrightLocal, 2026).',
       options: [
         { label: 'Under 10 (or I’m not sure)', score: 1, leakMultiplier: 0.35 },
         { label: '10–25', score: 2, leakMultiplier: 0.22 },
