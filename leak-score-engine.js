@@ -37,20 +37,23 @@
   var FIELD_REPORT_TRADES = ['cleaning', 'landscaping', 'hvac', 'plumbing', 'handyman'];
 
   // Master switch for the results-page "Read the [Trade] Field Report" bridge.
-  // Off for launch (don't surface a CTA to content we're not linking yet); flip to
-  // true to re-enable the card for the 5 anchored trades — one-liner. The bridge
-  // markup + FIELD_REPORT_TRADES stay intact regardless.
+  // ON — the 5 anchored trades (FIELD_REPORT_TRADES) are live, so fieldReportUrl()
+  // resolves for them and the bridge card renders. Markup stays intact regardless.
   var FIELD_REPORTS_LIVE = true;
 
-  // ---- /learn clusters that are actually LIVE on-site. Empty for now — no /learn
-  //      routes exist yet, so every /learn link is omitted (never ship a 404, spec §6).
-  //      Flip a slug to true here the day its cluster publishes; the link enables itself. ----
+  // ---- /learn linkability for the results-page bridges. Two levels:
+  //      LEARN_LIVE = published ARTICLE slugs (deep links); LEARN_CLUSTER_LIVE =
+  //      published cluster HUBS. learnUrl() prefers a live article, else falls back
+  //      to the live cluster hub, else null (never a 404). Today: 6 hubs live, 1 article. ----
   var LEARN_LIVE = {
-    'answering-calls/missed-call-text-back': true,
-    // 'quoting/quote-follow-up': true,
-    // 'reviews/review-requests': true,
-    // 'scheduling/online-booking': true,
-    // 'invoicing/same-day-invoicing': true
+    'answering-calls/missed-call-text-back': true
+    // add article slugs as cornerstone articles publish:
+    // 'quoting/quote-follow-up', 'reviews/review-requests',
+    // 'scheduling/online-booking', 'invoicing/same-day-invoicing'
+  };
+  var LEARN_CLUSTER_LIVE = {
+    'answering-calls': true, 'quoting': true, 'reviews': true,
+    'scheduling': true, 'invoicing': true, 'ai-basics': true
   };
 
   var REVENUE_OPTIONS = [
@@ -337,12 +340,14 @@
     }
   };
 
-  // Returns the on-site /learn URL for a stage's fix, or null when its cluster
-  // isn't live yet (so the caller omits the link — never a 404).
+  // Returns the on-site /learn URL for a stage's fix: the published article if it's
+  // live, else the published cluster hub, else null (never a 404).
   function learnUrl(stageId) {
     var fix = FIX[stageId];
     if (!fix || !fix.learnSlug) return null;
-    return LEARN_LIVE[fix.learnSlug] ? '/learn/' + fix.learnSlug : null;
+    if (LEARN_LIVE[fix.learnSlug]) return '/learn/' + fix.learnSlug;
+    var cluster = fix.learnSlug.split('/')[0];
+    return LEARN_CLUSTER_LIVE[cluster] ? '/learn/' + cluster : null;
   }
 
   var INDUSTRY_TIPS = {

@@ -267,7 +267,7 @@ p{line-height:1.7}
 .learn-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:30px 26px;display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:border-color .25s,box-shadow .25s,transform .25s}
 .learn-card:hover{border-color:var(--teal);box-shadow:var(--shadow-md);transform:translateY(-3px)}
 .learn-card .eyebrow{margin-bottom:14px}
-.learn-card h3{font-size:1.15rem;margin-bottom:10px;color:var(--charcoal)}
+.learn-card h2{font-size:1.15rem;margin-bottom:10px;color:var(--charcoal);letter-spacing:-0.2px}
 .learn-card p{font-size:.92rem;color:var(--medium);line-height:1.7;margin-bottom:20px;flex:1}
 .learn-card .learn-go{font-size:.9rem;font-weight:700;color:var(--teal);display:inline-flex;align-items:center;gap:6px;transition:gap .2s;margin-top:auto}
 .learn-card:hover .learn-go{gap:10px}
