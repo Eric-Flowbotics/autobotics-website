@@ -37,10 +37,17 @@
         </text>
       </svg>
     </a>
-    <div class="nav-links">
-      <a href="/about" class="desktop-only">About</a>
+    <div class="nav-links" id="navLinks">
+      <a href="/">Home</a>
+      <a href="/learn">Learn</a>
+      <a href="/field-reports">Field Reports</a>
+      <a href="https://www.youtube.com/@EricLenhardt" target="_blank" rel="noopener noreferrer" aria-label="Watch on YouTube (opens in a new tab)">Watch</a>
+      <a href="/about">About</a>
       <a href="/#final-capture" class="btn btn-primary btn-sm">Get the newsletter</a>
     </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 
@@ -93,5 +100,6 @@ window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scr
 // Scroll reveal animations
 if('IntersectionObserver' in window){const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))}else{document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'))}
 </script>
+<script>/* mobile nav toggle */(function(){var n=document.getElementById('nav'),t=document.getElementById('navToggle'),l=document.getElementById('navLinks');if(!t||!l)return;function close(){l.classList.remove('open');t.setAttribute('aria-expanded','false');if(n)n.classList.remove('menu-open');}t.addEventListener('click',function(){var o=l.classList.toggle('open');t.setAttribute('aria-expanded',o);if(n)n.classList.toggle('menu-open',o);});l.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close);});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&l.classList.contains('open')){close();t.focus();}});})();</script>
 </body>
 </html>

@@ -80,7 +80,7 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
 .nav-links a:not(.btn):hover::after{width:100%}
 .nav-links a.active::after{width:100%}
 .nav-links .btn{padding:10px 22px;font-size:.82rem}
-.nav-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px}
+.nav-toggle{display:none;flex-direction:column;align-items:center;justify-content:center;min-width:44px;min-height:44px;box-sizing:border-box;background:none;border:none;cursor:pointer;padding:8px}
 .nav-toggle span{display:block;width:20px;height:1.5px;background:var(--charcoal);margin:5px 0;border-radius:1px}
 
 /* Breadcrumb */
@@ -176,11 +176,15 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
   .footer-links{gap:20px;flex-wrap:wrap;justify-content:center}
   .footer-links a{font-size:.9rem;padding:8px 0}
 }
-@media(max-width:640px){
+@media(max-width:900px){
   .nav-links{display:none}
-  .nav-toggle{display:block}
-  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:rgba(28,32,36,.98);backdrop-filter:blur(16px);padding:28px;gap:8px;border-bottom:1px solid var(--border-light)}
-  .nav-links.open a{padding:12px 0;min-height:44px;display:flex;align-items:center}
+  .nav-toggle{display:flex}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:rgba(250,247,242,0.98);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:24px 28px;gap:4px;border-bottom:1px solid var(--border)}
+  .nav-links.open a:not(.btn){padding:13px 0;min-height:44px;display:flex;align-items:center}
+  .nav-links.open a:not(.btn):hover{color:var(--teal)}
+  .nav-links.open .btn{width:100%;justify-content:center;margin-top:10px;min-height:48px}
+}
+@media(max-width:640px){
   .stage-header{flex-direction:column;align-items:flex-start;gap:8px}
 }
 </style>
@@ -201,8 +205,11 @@ h3{font-size:1.2rem;font-weight:700;letter-spacing:-0.2px}
       </svg>
     </a>
     <div class="nav-links" id="navLinks">
+      <a href="/">Home</a>
+      <a href="/learn">Learn</a>
+      <a href="/field-reports" class="active" aria-current="page">Field Reports</a>
+      <a href="https://www.youtube.com/@EricLenhardt" target="_blank" rel="noopener noreferrer" aria-label="Watch on YouTube (opens in a new tab)">Watch</a>
       <a href="/about">About</a>
-      <a href="/field-reports" class="active">Field Reports</a>
       <a href="/#final-capture" class="btn btn-primary">Get the newsletter</a>
     </div>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
@@ -455,6 +462,7 @@ const nav=document.getElementById('nav');
 const navToggle=document.getElementById('navToggle'),navLinks=document.getElementById('navLinks');
 navToggle.addEventListener('click',()=>{const o=navLinks.classList.toggle('open');navToggle.setAttribute('aria-expanded',o)});
 navLinks.querySelectorAll('a').forEach(l=>l.addEventListener('click',()=>{navLinks.classList.remove('open');navToggle.setAttribute('aria-expanded','false')}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&navLinks.classList.contains('open')){navLinks.classList.remove('open');navToggle.setAttribute('aria-expanded','false');navToggle.focus();}});
 if('IntersectionObserver' in window){const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))}else{document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'))}
 </script>
 </body>

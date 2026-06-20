@@ -64,6 +64,8 @@ p{line-height:1.7}
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:transparent;border-bottom:1px solid transparent;transition:background .3s,border-color .3s}
 /* Opaque when scrolled — a translucent nav lets dark cards behind it ghost through as boxes */
 .nav.scrolled{background:var(--charcoal);border-bottom:1px solid var(--border-light)}
+/* Solid bar while the mobile drawer is open, even at the top of a transparent hero */
+.nav.menu-open{background:var(--charcoal);border-bottom:1px solid var(--border-light)}
 .nav-inner{max-width:var(--max-w);margin:0 auto;height:72px;padding:0 28px;display:flex;align-items:center;justify-content:space-between}
 .nav-logo{display:flex;align-items:center;text-decoration:none}
 .nav-logo svg{height:28px;width:auto}
@@ -72,8 +74,17 @@ p{line-height:1.7}
 .nav-links a:not(.btn):hover{color:var(--white)}
 .nav-links a:not(.btn)::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1.5px;background:var(--teal);transition:width .2s}
 .nav-links a:not(.btn):hover::after{width:100%}
-.nav-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px}
+.nav-links a:not(.btn).active::after{width:100%}
+.nav-toggle{display:none;flex-direction:column;align-items:center;justify-content:center;min-width:44px;min-height:44px;box-sizing:border-box;background:none;border:none;cursor:pointer;padding:8px}
 .nav-toggle span{display:block;width:22px;height:2px;background:rgba(255,255,255,.85);margin:5px 0;border-radius:2px;transition:.2s}
+/* Mobile nav — hamburger drawer. The locked 5-item nav + CTA can't fit inline below ~900px, so collapse there. */
+@media (max-width:900px){
+  .nav-links{display:none}
+  .nav-toggle{display:flex}
+  .nav-links.open{display:flex;flex-direction:column;align-items:stretch;position:absolute;top:72px;left:0;right:0;background:rgba(28,32,36,.98);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:24px 28px;gap:2px;border-bottom:1px solid var(--border-light)}
+  .nav-links.open a:not(.btn){padding:13px 4px;min-height:44px;display:flex;align-items:center;font-size:1rem}
+  .nav-links.open .btn{width:100%;justify-content:center;padding:13px 24px;margin-top:10px;min-height:48px}
+}
 
 /* ---------- Hero — dark cinematic, full-bleed photo with Ken Burns ---------- */
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;background:var(--charcoal);color:var(--white)}
@@ -238,7 +249,6 @@ p{line-height:1.7}
   .container{padding:0 20px}
   .nav-inner{padding:0 20px}
   .nav-links{gap:14px}
-  .nav-links .desktop-only{display:none}
   .nav-links .btn{padding:9px 16px;font-size:.78rem;min-height:44px}
   .stats-grid,.cards-grid,.road-grid{grid-template-columns:1fr}
   .hero{min-height:0}
