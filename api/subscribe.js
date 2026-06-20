@@ -202,7 +202,7 @@ async function writeWaitlist(body) {
 //      already in the funnel (ebook / toolkit / blueprint …) is never downgraded or
 //      duplicated. NOTE: Contacts."Created" is a computed createdTime field — we must NOT
 //      send it (Airtable 422s on computed fields). One retry; never throws. ----
-async function writeContact(body) {
+async function writeContact(body, diagNote) {
   var key = process.env.AIRTABLE_API_KEY;
   if (!key) { console.warn('[subscribe] AIRTABLE_API_KEY not set — skipping Contacts backup.'); return { written: false, reason: 'no_key' }; }
   var email = str(body.email).toLowerCase();
@@ -238,7 +238,7 @@ async function writeContact(body) {
       Email: email,
       Source: sourceLabel,
       Status: 'Lead',
-      Notes: 'Newsletter signup via native /api/subscribe form (source: ' + (str(body.source) || 'unknown') + ').'
+      Notes: 'Newsletter signup via native /api/subscribe form (source: ' + (str(body.source) || 'unknown') + ').' + (diagNote ? ' ' + diagNote : '')
     };
     var payload = { fields: fields, typecast: true };
     for (var attempt = 1; attempt <= 2; attempt++) {
@@ -298,7 +298,7 @@ module.exports = async function handler(req, res) {
     console.error('[subscribe] BEEHIIV_API_KEY not set — cannot add to the list:', email, tags.join(','));
     var aOnly = isSubmission ? await writeAirtable(body, tags) : { written: false };
     var wOnly = isWaitlist ? await writeWaitlist(body) : { written: false };
-    var cOnly = isNewsletter ? await writeContact(body) : { written: false };  // still capture the lead
+    var cOnly = isNewsletter ? await writeContact(body, '[BEEHIIV_API_KEY not set]') : { written: false };  // still capture the lead
     return res.status(200).json({ success: false, configured: false, airtable: aOnly.written, waitlist: wOnly.written, contact: cOnly.written });
   }
 
@@ -342,10 +342,13 @@ module.exports = async function handler(req, res) {
     beehiivResult = subId
       ? { success: true, status: status || 'pending', tagged: tagged, tags: tags }
       : { success: false, error: 'subscribe_failed', status: created.status,
-          // TEMP DIAGNOSTIC (remove before merge): surface Beehiiv's own error so we can see
-          // WHY the create fails (auth / plan / validation) without server logs.
+          // TEMP DIAGNOSTIC (remove before merge): surface Beehiiv's own status + body + the
+          // exact fields we sent, so we can read the real rejection (auth/plan/field) straight
+          // from the JSON response AND the Contacts Notes — no DevTools, no guessing.
+          build: 'diag3',
           beehiiv_status: created.status,
-          beehiiv_error: created.json ? JSON.stringify(created.json).slice(0, 600) : null };
+          beehiiv_sent_keys: Object.keys(createBody).join(','),
+          beehiiv_error: created.json ? JSON.stringify(created.json).slice(0, 1500) : 'non-JSON-or-empty-body' };
     if (!subId) console.error('[subscribe] could not resolve subscription id', created.status, JSON.stringify(created.json));
   } catch (err) {
     console.error('[subscribe] Beehiiv error:', err && err.message);
@@ -363,7 +366,14 @@ module.exports = async function handler(req, res) {
     try { waitlistRes = await writeWaitlist(body); } catch (e) { console.error('[subscribe] waitlist wrapper error', e && e.message); }
   }
   if (isNewsletter) {
-    try { contactRes = await writeContact(body); } catch (e) { console.error('[subscribe] contact wrapper error', e && e.message); }
+    // Stamp Beehiiv's real failure (status + sent fields + body) into the Contacts Notes for
+    // this submit, so the exact rejection is readable straight from Airtable. TEMP — see build.
+    var diagNote = beehiivResult.success ? '' :
+      '[BEEHIIV diag3] create_status=' + beehiivResult.beehiiv_status +
+      ' err=' + beehiivResult.error +
+      ' sent=[' + (beehiivResult.beehiiv_sent_keys || '') + ']' +
+      ' body=' + (beehiivResult.beehiiv_error || 'n/a');
+    try { contactRes = await writeContact(body, diagNote); } catch (e) { console.error('[subscribe] contact wrapper error', e && e.message); }
   }
 
   // Beehiiv is the source of truth. If it failed, return 502 with success:false so the front
@@ -373,5 +383,5 @@ module.exports = async function handler(req, res) {
       'source=' + (str(body.source) || 'unknown'), 'email=' + email, 'detail=' + JSON.stringify(beehiivResult));
   }
   var code = beehiivResult.success ? 200 : 502;
-  return res.status(code).json(Object.assign({}, beehiivResult, { airtable: airtable.written, waitlist: waitlistRes.written, contact: contactRes.written }));
+  return res.status(code).json(Object.assign({}, beehiivResult, { build: 'diag3', airtable: airtable.written, waitlist: waitlistRes.written, contact: contactRes.written }));
 };
