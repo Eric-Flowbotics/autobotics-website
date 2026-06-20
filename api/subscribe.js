@@ -315,8 +315,12 @@ module.exports = async function handler(req, res) {
       utm_medium: body.utm_medium || (isNewsletter ? 'website' : 'quiz'),
       utm_campaign: body.utm_campaign || (isNewsletter ? 'newsletter' : 'revenue-leak-score')
     };
-    if (body.utm_term) createBody.utm_term = body.utm_term;
-    if (body.utm_content) createBody.utm_content = body.utm_content;
+    // Beehiiv's create-subscription endpoint accepts only utm_source / utm_medium /
+    // utm_campaign (+ referring_site). Forwarding utm_content or utm_term makes Beehiiv
+    // REJECT the create (→ no subscription id → our 502). That is exactly why the native
+    // newsletter form failed while the quiz worked: the form is the first caller to send a
+    // NON-EMPTY utm_content, whereas the quiz sends '' (which these guards dropped). We still
+    // keep utm_content/term in the Airtable record below — just never on the Beehiiv call.
     if (body.referring_site) createBody.referring_site = String(body.referring_site).slice(0, 255);
 
     var created = await beehiiv('/publications/' + PUBLICATION_ID + '/subscriptions', 'POST', apiKey, createBody);
