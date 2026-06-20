@@ -1,9 +1,14 @@
 /* ==========================================================================
-   /api/subscribe — the ONE write path for the Revenue Leak Score quiz.
+   /api/subscribe — the ONE shared write path for the site's email capture:
+     • the Revenue Leak Score quiz   (source 'quiz' / 'quiz-results')
+     • the native newsletter form    (source 'homepage' / 'about')
 
-   Native fetch() from /leak-score/results  →  this serverless function  →
-     1) Beehiiv  (PRIMARY — the gate unlocks on this; double opt-in + tags)
-     2) Airtable (BEST-EFFORT — full first-party record; one retry + log)
+   Native fetch() from those pages  →  this serverless function  →
+     1) Beehiiv  (PRIMARY — the list/gate; double opt-in + tags; success gates here)
+     2) Airtable (BEST-EFFORT backup — first-party record; one retry + log):
+          quiz           → Leak Score Submissions
+          quiz-results   → Community Waitlist
+          homepage/about → Contacts  (insert-if-absent Lead; never downgrades a row)
 
    Both API keys live ONLY here, as Vercel env vars — never in the browser:
      BEEHIIV_API_KEY            (already set)
@@ -11,6 +16,7 @@
      BEEHIIV_PUBLICATION_ID     (optional override)
      AIRTABLE_BASE_ID           (optional; defaults to the Autobotics base)
      AIRTABLE_TABLE             (optional; defaults to "Leak Score Submissions")
+     AIRTABLE_CONTACTS_TABLE    (optional; defaults to "Contacts" — native newsletter backup)
 
    FAILURE RULE (spec §11): the Airtable write must NEVER block or fail the
    Beehiiv subscribe. A data-write hiccup never costs us the lead. The Airtable
@@ -26,6 +32,7 @@ var PUBLICATION_ID = process.env.BEEHIIV_PUBLICATION_ID || 'pub_03c86483-4f76-4b
 var AIRTABLE_BASE = process.env.AIRTABLE_BASE_ID || 'appyyjGuoyHBGQGW6';
 var AIRTABLE_TABLE = process.env.AIRTABLE_TABLE || 'Leak Score Submissions';
 var WAITLIST_TABLE = process.env.AIRTABLE_WAITLIST_TABLE || 'Community Waitlist';
+var CONTACTS_TABLE = process.env.AIRTABLE_CONTACTS_TABLE || 'Contacts';
 
 var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -189,6 +196,64 @@ async function writeWaitlist(body) {
   return { written: false, reason: 'write_failed' };
 }
 
+// ---- Best-effort backup for the NATIVE newsletter form (source 'homepage'/'about').
+//      Beehiiv is the source of truth; this only guarantees the lead is still captured in
+//      Airtable's Contacts table if Beehiiv ever fails. INSERT-IF-ABSENT by Email: a person
+//      already in the funnel (ebook / toolkit / blueprint …) is never downgraded or
+//      duplicated. NOTE: Contacts."Created" is a computed createdTime field — we must NOT
+//      send it (Airtable 422s on computed fields). One retry; never throws. ----
+async function writeContact(body) {
+  var key = process.env.AIRTABLE_API_KEY;
+  if (!key) { console.warn('[subscribe] AIRTABLE_API_KEY not set — skipping Contacts backup.'); return { written: false, reason: 'no_key' }; }
+  var email = str(body.email).toLowerCase();
+  if (!email) return { written: false, reason: 'no_email' };
+
+  var base = AIRTABLE_API + '/' + AIRTABLE_BASE + '/' + encodeURIComponent(CONTACTS_TABLE);
+  var headers = { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' };
+  var SOURCE_LABEL = { homepage: 'Homepage', about: 'About' };
+  var sourceLabel = SOURCE_LABEL[body.source] || 'website';
+
+  try {
+    // Look up by Email (case-insensitive). Use a DOUBLE-quoted formula literal: Airtable
+    // formulas don't honor backslash escaping, so the common apostrophe-in-local-part
+    // address ("o'neil@…") only matches with a double-quote delimiter; defensively drop any
+    // double-quote so the literal itself can't break.
+    var formula = 'LOWER({Email})="' + email.replace(/"/g, '') + '"';
+    var lookup = await fetch(base + '?maxRecords=1&filterByFormula=' + encodeURIComponent(formula), { headers: headers });
+
+    // Only INSERT when the lookup DEFINITIVELY succeeded and returned no match. On any
+    // inconclusive read (non-2xx, parse failure) we skip the insert rather than risk a
+    // duplicate row — the lead is already safe in Beehiiv (the source of truth).
+    if (!lookup.ok) {
+      var lt = ''; try { lt = await lookup.text(); } catch (e) {}
+      console.error('[subscribe] Contacts lookup failed status=' + lookup.status + ' ' + lt.slice(0, 200) + ' — skipping insert to avoid a duplicate.');
+      return { written: false, reason: 'lookup_failed' };
+    }
+    var lj = await lookup.json().catch(function () { return null; });
+    if (!lj) { console.error('[subscribe] Contacts lookup parse failed — skipping insert.'); return { written: false, reason: 'lookup_parse_failed' }; }
+    if (lj.records && lj.records[0]) return { written: true, status: lookup.status, action: 'exists' }; // already captured — leave the funnel row untouched
+
+    // Confirmed-absent → insert a top-of-funnel Lead row. typecast lets a new 'About' Source pass.
+    var fields = {
+      Email: email,
+      Source: sourceLabel,
+      Status: 'Lead',
+      Notes: 'Newsletter signup via native /api/subscribe form (source: ' + (str(body.source) || 'unknown') + ').'
+    };
+    var payload = { fields: fields, typecast: true };
+    for (var attempt = 1; attempt <= 2; attempt++) {
+      var res = await fetch(base, { method: 'POST', headers: headers, body: JSON.stringify(payload) });
+      if (res.ok) return { written: true, status: res.status, action: 'created' };
+      var txt = ''; try { txt = await res.text(); } catch (e) {}
+      console.error('[subscribe] Contacts insert failed (attempt ' + attempt + ') status=' + res.status + ' ' + txt.slice(0, 300));
+      if (res.status < 500 && res.status !== 429) break; // 4xx (bad field) won't fix on retry
+    }
+  } catch (err) {
+    console.error('[subscribe] Contacts write error:', err && err.message);
+  }
+  return { written: false, reason: 'write_failed' };
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -205,30 +270,36 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ success: false, error: 'A valid email is required.' });
   }
 
+  // The single write path branches by event:
+  //   quiz           → full record to Leak Score Submissions (one row per quiz)
+  //   quiz-results   → upsert the Community Waitlist row
+  //   homepage/about → native newsletter form: Beehiiv 'newsletter' tag + Contacts backup
+  var isSubmission = body.source === 'quiz';
+  var isWaitlist = body.source === 'quiz-results';
+  var isNewsletter = body.source === 'homepage' || body.source === 'about';
+
   // Build the tag set — trust the client's tags but also rebuild from the
   // structured fields so a tampered/empty array still segments correctly.
   var derived = [];
   if (body.source === 'quiz' || body.trade || body.leak) derived.push('quiz');
   if (body.trade) derived.push('trade:' + String(body.trade).toLowerCase());
   if (body.leak && body.leak !== 'none') derived.push('leak:' + String(body.leak).toLowerCase());
+  if (isNewsletter) derived.push('newsletter');   // native form is always a newsletter subscribe
   var rawTags = Array.isArray(body.tags) ? body.tags.slice(0, 50) : [];
   var tags = sanitizeTags(derived.concat(rawTags));
 
-  // The single write path branches by event: a COMPLETED-QUIZ submission (source 'quiz')
-  // writes the full record to Leak Score Submissions (one row per quiz); the community-
-  // waitlist click (source 'quiz-results') upserts its own Community Waitlist row.
-  var isSubmission = body.source === 'quiz';
-  var isWaitlist = body.source === 'quiz-results';
-
   var apiKey = process.env.BEEHIIV_API_KEY;
 
-  // No Beehiiv key yet — return 200 so the (already-unlocked) front end is never
-  // blocked, but still attempt the best-effort Airtable record and log for ops.
+  // No Beehiiv key — keep the original 200 envelope (so the quiz's client-side unlock and the
+  // waitlist's `j.waitlist` success check are unchanged), but success:false so the native
+  // newsletter form still shows its error state (it reads res.ok && j.success). Log loudly and
+  // still attempt the best-effort Airtable backups so the lead is captured.
   if (!apiKey) {
-    console.warn('[subscribe] BEEHIIV_API_KEY not set — not subscribed:', email, tags.join(','));
+    console.error('[subscribe] BEEHIIV_API_KEY not set — cannot add to the list:', email, tags.join(','));
     var aOnly = isSubmission ? await writeAirtable(body, tags) : { written: false };
     var wOnly = isWaitlist ? await writeWaitlist(body) : { written: false };
-    return res.status(200).json({ success: false, configured: false, airtable: aOnly.written, waitlist: wOnly.written });
+    var cOnly = isNewsletter ? await writeContact(body) : { written: false };  // still capture the lead
+    return res.status(200).json({ success: false, configured: false, airtable: aOnly.written, waitlist: wOnly.written, contact: cOnly.written });
   }
 
   var beehiivResult = { success: false };
@@ -238,9 +309,11 @@ module.exports = async function handler(req, res) {
       reactivate_existing: true,
       send_welcome_email: false,        // welcome handled in Beehiiv (repointed to /leak-score)
       double_opt_override: 'on',        // double opt-in preserved
-      utm_source: body.utm_source || 'leak-score-quiz',
-      utm_medium: body.utm_medium || 'quiz',
-      utm_campaign: body.utm_campaign || 'revenue-leak-score'
+      // Source-aware defaults so a native subscribe is never mislabeled as the quiz if the
+      // form ever omits utm (the homepage/about forms do send these explicitly).
+      utm_source: body.utm_source || (isNewsletter ? (body.source || 'newsletter') : 'leak-score-quiz'),
+      utm_medium: body.utm_medium || (isNewsletter ? 'website' : 'quiz'),
+      utm_campaign: body.utm_campaign || (isNewsletter ? 'newsletter' : 'revenue-leak-score')
     };
     if (body.utm_term) createBody.utm_term = body.utm_term;
     if (body.utm_content) createBody.utm_content = body.utm_content;
@@ -274,14 +347,23 @@ module.exports = async function handler(req, res) {
   // Best-effort data writes — awaited so they run, but never able to change the outcome
   // the front end / Beehiiv saw. A completed quiz writes the full Leak Score Submissions
   // row; the waitlist click upserts the Community Waitlist row. Failures are logged only.
-  var airtable = { written: false }, waitlistRes = { written: false };
+  var airtable = { written: false }, waitlistRes = { written: false }, contactRes = { written: false };
   if (isSubmission) {
     try { airtable = await writeAirtable(body, tags); } catch (e) { console.error('[subscribe] airtable wrapper error', e && e.message); }
   }
   if (isWaitlist) {
     try { waitlistRes = await writeWaitlist(body); } catch (e) { console.error('[subscribe] waitlist wrapper error', e && e.message); }
   }
+  if (isNewsletter) {
+    try { contactRes = await writeContact(body); } catch (e) { console.error('[subscribe] contact wrapper error', e && e.message); }
+  }
 
+  // Beehiiv is the source of truth. If it failed, return 502 with success:false so the front
+  // end shows its error state — NEVER a false "success" — and log it loudly for ops.
+  if (!beehiivResult.success) {
+    console.error('[subscribe] Beehiiv subscribe FAILED — returning 502 (no false success).',
+      'source=' + (str(body.source) || 'unknown'), 'email=' + email, 'detail=' + JSON.stringify(beehiivResult));
+  }
   var code = beehiivResult.success ? 200 : 502;
-  return res.status(code).json(Object.assign({}, beehiivResult, { airtable: airtable.written, waitlist: waitlistRes.written }));
+  return res.status(code).json(Object.assign({}, beehiivResult, { airtable: airtable.written, waitlist: waitlistRes.written, contact: contactRes.written }));
 };
