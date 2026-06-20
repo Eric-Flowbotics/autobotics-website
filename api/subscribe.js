@@ -341,7 +341,11 @@ module.exports = async function handler(req, res) {
     }
     beehiivResult = subId
       ? { success: true, status: status || 'pending', tagged: tagged, tags: tags }
-      : { success: false, error: 'subscribe_failed', status: created.status };
+      : { success: false, error: 'subscribe_failed', status: created.status,
+          // TEMP DIAGNOSTIC (remove before merge): surface Beehiiv's own error so we can see
+          // WHY the create fails (auth / plan / validation) without server logs.
+          beehiiv_status: created.status,
+          beehiiv_error: created.json ? JSON.stringify(created.json).slice(0, 600) : null };
     if (!subId) console.error('[subscribe] could not resolve subscription id', created.status, JSON.stringify(created.json));
   } catch (err) {
     console.error('[subscribe] Beehiiv error:', err && err.message);
