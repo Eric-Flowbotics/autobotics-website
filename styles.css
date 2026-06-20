@@ -92,7 +92,7 @@ p{line-height:1.7}
 .hero-image img{width:100%;height:100%;object-fit:cover;animation:kenBurns 8s ease-in-out infinite alternate}
 .hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,rgba(28,32,36,.82) 0%,rgba(28,32,36,.65) 45%,rgba(28,32,36,.85) 100%)}
 .hero .container{position:relative;z-index:2;width:100%}
-.hero-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:56px;align-items:center;padding:150px 0 110px}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;padding:150px 0 110px}
 .hero-text{max-width:640px;text-shadow:0 2px 12px rgba(0,0,0,.4)}
 .hero-text>*:nth-child(1){animation:heroFadeUp .8s cubic-bezier(.22,1,.36,1) both}
 .hero-text>*:nth-child(2){animation:heroFadeUp .8s cubic-bezier(.22,1,.36,1) .12s both}
@@ -342,12 +342,43 @@ p{line-height:1.7}
   .learn-grid{grid-template-columns:1fr}
 }
 
-/* ---------- Hero quiz-primary card (flip cluster) ---------- */
-.hero-quiz-lead{color:var(--charcoal);font-size:1.02rem;line-height:1.6;margin:2px 0 18px;font-weight:500}
+/* ---------- Hero capture card — compact, quiz-first, progressive email reveal ---------- */
+/* Capped + right-hugging so the card sits beside the photo and never covers the operator */
+.capture--hero{max-width:400px;margin-left:auto;width:100%;padding:22px 20px 18px}
+.capture-h{color:var(--charcoal);font-size:1.5rem;font-weight:800;letter-spacing:-.5px;line-height:1.15;margin:2px 0 8px}
+.capture-sub{color:var(--medium);font-size:.98rem;line-height:1.55;margin-bottom:18px}
 .hero-quiz-btn{width:100%;justify-content:center;font-size:1rem;padding:16px 30px}
 .hero-quiz-meta{font-size:.8rem;color:var(--muted);text-align:center;margin-top:12px}
-.hero-fallback{margin-top:20px;padding-top:18px;border-top:1px solid var(--border)}
-.hero-fallback-label{display:block;font-size:.82rem;color:var(--medium);text-align:center;margin-bottom:10px;font-weight:600}
+/* The email "secondary door" — quiet by default, opens the form on interaction */
+.nl-reveal{display:block;margin:14px auto 0;min-height:40px;background:none;border:none;padding:8px 6px;font-family:var(--font);font-size:.84rem;font-weight:600;color:var(--teal);cursor:pointer;text-decoration:underline;text-decoration-color:rgba(13,148,136,.35);text-underline-offset:2px}
+.nl-reveal:hover{color:var(--teal-hover);text-decoration-color:var(--teal-hover)}
+.nl-collapse{margin-top:14px;padding-top:16px;border-top:1px solid var(--border)}
+.nl-line{font-size:.86rem;color:var(--medium);font-weight:600;line-height:1.5;margin-bottom:12px;text-align:center}
+
+/* ---------- Native newsletter form (hero card + final CTA) — replaces the Beehiiv iframe ---------- */
+.nl-form{display:flex;flex-direction:column;gap:10px}
+.nl-form .btn{width:100%;justify-content:center}
+.nl-field{width:100%;font-family:var(--font);font-size:1rem;color:var(--charcoal);background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 15px;transition:border-color .2s,box-shadow .2s}
+.nl-field:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-glow)}
+.nl-field:disabled{opacity:.55}
+.nl-status{font-size:.82rem;line-height:1.5;margin:2px 0 0;text-align:center}
+.nl-status:empty{margin:0}
+.nl-status.is-ok{color:var(--teal-hover);font-weight:600}
+.nl-status.is-error{color:var(--charcoal);font-weight:600}
+
+/* ---------- Learn Library callout — the live, free surface (kept out of the roadmap) ---------- */
+.learn-cta{display:flex;align-items:center;gap:32px;background:var(--teal-subtle);border:1px solid rgba(13,148,136,0.2);border-radius:var(--radius-lg);padding:36px 40px}
+.learn-cta-text{flex:1}
+.learn-cta-text h2{margin:12px 0 10px;font-size:clamp(1.4rem,2.6vw,1.9rem)}
+.learn-cta-text p{color:var(--medium);font-size:1.02rem;line-height:1.7;max-width:560px}
+.learn-cta-btn{flex-shrink:0;white-space:nowrap}
+@media (max-width:900px){
+  .capture--hero{max-width:440px;margin:0 auto}
+}
+@media (max-width:700px){
+  .learn-cta{flex-direction:column;align-items:flex-start;gap:20px;padding:28px 24px}
+  .learn-cta-btn{width:100%;justify-content:center}
+}
 
 /* ---------- Field-report stage → /learn cross-link (diagnosis → treatment) ---------- */
 .stage-learn{display:inline-block;margin-top:10px;font-family:var(--mono);font-size:.74rem;font-weight:700;letter-spacing:.3px;color:var(--teal);text-decoration:none}

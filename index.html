@@ -66,16 +66,23 @@
         <p class="hero-trades">For cleaners, landscapers, HVAC techs, plumbers, and handymen.</p>
       </div>
       <!-- SLOT: hero-capture -->
-      <div class="capture" id="hero-capture">
+      <div class="capture capture--hero" id="hero-capture">
         <span class="capture-eyebrow">Revenue Leak Score · Free · 3 min</span>
-        <p class="hero-quiz-lead">See exactly where your business is leaking money — across all 8 stages — and the first fix for each.</p>
-        <a href="/leak-score" class="btn btn-primary hero-quiz-btn">Find your #1 money leak →</a>
+        <p class="capture-h">What's your #1 money leak?</p>
+        <p class="capture-sub">See exactly where your business is leaking money — and the first fix for it.</p>
+        <a href="/leak-score" class="btn btn-primary hero-quiz-btn">Find my #1 leak →</a>
         <p class="hero-quiz-meta">Works on your phone · free · no card needed.</p>
-        <div class="hero-fallback">
-          <span class="hero-fallback-label">Prefer one fix a week by email?</span>
-          <div class="capture-embed">
-            <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="17c265de-441e-48e5-a5c8-0a0e4b63b4e1"></script>
-          </div>
+        <!-- Secondary door: the email option is hidden until the operator opens it -->
+        <button type="button" class="nl-reveal" id="nlReveal" aria-expanded="false" aria-controls="heroNl">Prefer email? →</button>
+        <div class="nl-collapse" id="heroNl" hidden>
+          <p class="nl-line">Prefer it in your inbox? Get one fix a week, free.</p>
+          <form class="nl-form" data-nl data-source-content="hero-card" novalidate>
+            <label for="heroNlEmail" class="sr-only">Email address</label>
+            <input class="nl-field" type="email" id="heroNlEmail" name="email" inputmode="email" autocomplete="email" placeholder="you@yourbusiness.com" required>
+            <input type="text" class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <button type="submit" class="btn btn-primary btn-sm nl-submit">Get the fix →</button>
+            <p class="nl-status" role="status" aria-live="polite"></p>
+          </form>
         </div>
       </div>
     </div>
@@ -149,6 +156,19 @@
   </div>
 </section>
 
+<!-- BREATHER — the "long day" empathy band, leading into the founder block -->
+<section class="breather" aria-label="Breather">
+  <div class="breather-image" aria-hidden="true">
+    <img src="/images/breather-web.jpg" alt="" width="1200" height="669">
+  </div>
+  <div class="breather-overlay" aria-hidden="true"></div>
+  <div class="container">
+    <div class="breather-content reveal">
+      <div class="breather-stat">The end of a long day shouldn't be the start of a longer night.</div>
+    </div>
+  </div>
+</section>
+
 <!-- WHO'S WRITING THIS -->
 <section class="section leak">
   <div class="container">
@@ -160,23 +180,9 @@
       <div class="bio-body reveal rd1">
         <span class="eyebrow">Who's Writing This</span>
         <h2 style="margin:14px 0 22px">I'm Eric.</h2>
-        <p>The Army first — I joined at 17, went to Iraq twice, and was out just before my 21st birthday. The sixteen years since: building products at Electronic Arts (EA Sports) and T-Mobile, co-founding Potentia Labs — which won a Department of Veterans Affairs Industry Innovation Competition — and a day job that's now all-in on AI.</p>
-        <p>Here's what I see in this industry: you're an expert at the work, and nobody is teaching AI in your language — it's experts talking to other experts about everything except your business. So that's the job I've taken: I go deep on this technology and teach it in plain English — what to use, how to set it up, and what it's worth in dollars and hours.</p>
-        <p><a href="/about" style="font-weight:600">More about me and what I'm building →</a></p>
+        <p>I build AI for a living, and I help home-service businesses use it to stop leaking money — plain language, no hype. Sixteen years building products, including at Electronic Arts (EA Sports) and T-Mobile, taught me what actually works and what's just noise. Now I go deep on this stuff so I can show you the moves that matter: what to use, how to set it up, and what it's worth in dollars and hours.</p>
+        <p><a href="/about" style="font-weight:600">More about me →</a></p>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- BREATHER — full-bleed photo break -->
-<section class="breather" aria-label="Breather">
-  <div class="breather-image" aria-hidden="true">
-    <img src="/images/breather-web.jpg" alt="" width="1200" height="669">
-  </div>
-  <div class="breather-overlay" aria-hidden="true"></div>
-  <div class="container">
-    <div class="breather-content reveal">
-      <div class="breather-stat">The end of a long day shouldn't be the start of a longer night.</div>
     </div>
   </div>
 </section>
@@ -191,47 +197,34 @@
     </div>
     <div class="road-grid">
       <div class="road-card reveal rd1">
-        <!-- SLOT: road-card-1-chip --><span class="chip chip-live">Live</span>
-        <h3>The Home Service Edge</h3>
-        <p>One AI fix a week, in plain English.</p>
-        <a href="#final-capture" class="btn btn-primary btn-sm">Subscribe</a>
+        <h3>The Operator Community</h3>
+        <p>Free courses, prompt libraries, and copy-paste AI systems for home-service businesses — everything in one place.</p>
+        <a href="#final-capture" class="btn btn-ghost btn-sm">Get notified</a>
       </div>
       <div class="road-card reveal rd2">
-        <span class="chip chip-live">Live</span>
-        <h3>The Learn Library</h3>
-        <p>Plain-English guides to fix the business side, one job at a time — free, no signup.</p>
-        <a href="/learn" class="btn btn-ghost btn-sm">Browse the guides</a>
-      </div>
-      <div class="road-card reveal rd3">
-        <!-- SLOT: road-card-2-chip --><span class="chip chip-soon">First Videos Coming</span>
-        <h3>YouTube — Eric Lenhardt</h3>
-        <p>Real operator problems, solved on screen — and Autobotics itself, built on AI in the open.</p>
-        <a href="#final-capture" class="btn btn-ghost btn-sm">Get notified</a>
-      </div>
-      <div class="road-card reveal rd3">
-        <!-- SLOT: road-card-3-chip --><span class="chip chip-soon">Opens Soon</span>
-        <h3>The Operator Community</h3>
-        <p>Free courses, prompt libraries, and copy-paste AI systems for home service businesses — everything in one place.</p>
-        <a href="#final-capture" class="btn btn-ghost btn-sm">Get notified</a>
-      </div>
-      <div class="road-card reveal rd4">
-        <!-- SLOT: road-card-4-chip --><span class="chip chip-soon">Coming</span>
-        <h3>Live Workshop</h3>
-        <p>A working session, not a webinar. Founding seats go to the list first.</p>
-        <a href="#final-capture" class="btn btn-ghost btn-sm">Get notified</a>
-      </div>
-      <div class="road-card reveal rd5">
-        <!-- SLOT: road-card-5-chip --><span class="chip chip-soon">Coming</span>
         <h3>The Operator Playbook</h3>
         <p>The complete written system, shaped by what real operators ask for.</p>
         <a href="#final-capture" class="btn btn-ghost btn-sm">Get notified</a>
       </div>
-      <div class="road-card reveal rd2">
-        <span class="chip chip-soon">Coming</span>
+      <div class="road-card reveal rd3">
         <h3>Done-For-You Setup</h3>
         <p>Rather have it built for you than do it yourself? That path is coming, and the list hears about it first.</p>
         <a href="#final-capture" class="btn btn-ghost btn-sm">Get notified</a>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEARN LIBRARY — the live, free surface (relocated out of the roadmap; it ships today) -->
+<section class="section">
+  <div class="container">
+    <div class="learn-cta reveal">
+      <div class="learn-cta-text">
+        <span class="eyebrow">Free Now · The Learn Library</span>
+        <h2>Plain-English guides, free — no signup.</h2>
+        <p>Fix the business side one job at a time — answering calls, quoting, scheduling, invoicing, reviews. Free to read, nothing to join.</p>
+      </div>
+      <a href="/learn" class="btn btn-ghost learn-cta-btn">Browse the guides →</a>
     </div>
   </div>
 </section>
@@ -245,16 +238,24 @@
     </div>
     <div class="qa">
       <div class="qa-item reveal rd1">
-        <h3>Why is this free?</h3>
-        <p>Because trust is earned in public. Paid things come later — the free stuff is the real work, never bait.</p>
+        <h3>Is this actually free?</h3>
+        <p>Yes. The newsletter, the Learn Library, and the Revenue Leak Score all cost nothing — no card, no catch. I'd rather earn your trust in public than sell you something you're not sure about yet. Paid options come later, and the free stuff stays genuinely useful — never bait.</p>
       </div>
       <div class="qa-item reveal rd2">
-        <h3>I'm not tech-savvy.</h3>
-        <p>You don't need a tech background. You need plain English and working examples — that's what I do. Every fix comes as steps you can follow and prompts you can copy. If you've ever learned a new piece of equipment, you can learn this.</p>
+        <h3>I'm not a tech person.</h3>
+        <p>You don't need to be. If you can learn a new piece of equipment, you can do this. Every fix comes as plain-English steps and prompts you copy and paste — no code, no jargon. I handle the technical part so you don't have to.</p>
       </div>
       <div class="qa-item reveal rd3">
-        <h3>Is this just AI hype?</h3>
-        <p>Most of it is. I'll never tell you about a result I haven't produced or verified.</p>
+        <h3>Will this work for my trade?</h3>
+        <p>If you take calls, send quotes, book jobs, and chase invoices, yes. Cleaners, landscapers, HVAC, plumbers, handymen — the leaks are the same shape across home services, and so are the fixes. Where a trade needs its own example, I give it one.</p>
+      </div>
+      <div class="qa-item reveal rd4">
+        <h3>Isn't this just more AI hype?</h3>
+        <p>Most of what's out there is. I won't point you at a tool or a tactic I haven't used or verified myself, and I'll never quote you a result I can't stand behind. If something isn't worth your time, I'll say so.</p>
+      </div>
+      <div class="qa-item reveal rd5">
+        <h3>How much time does this take?</h3>
+        <p>The newsletter is one email a week, about five minutes. The Leak Score is three minutes on your phone. Each fix is built to set up once and then run in the background — the point is to give you your evenings back, not hand you another project.</p>
       </div>
     </div>
   </div>
@@ -265,12 +266,16 @@
   <div class="final-glow" aria-hidden="true"></div>
   <div class="container">
     <h2 class="reveal">Stop leaking. Start here.</h2>
-    <!-- SLOT: final-cta -->
+    <!-- SLOT: final-cta — native form → /api/subscribe (the ONE shared capture path) -->
     <div class="capture reveal rd1" id="final-capture">
       <span class="capture-eyebrow">The Home Service Edge · Free · Weekly</span>
-      <div class="capture-embed">
-        <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="17c265de-441e-48e5-a5c8-0a0e4b63b4e1"></script>
-      </div>
+      <form class="nl-form nl-form--final" data-nl data-source-content="final-cta" novalidate>
+        <label for="finalNlEmail" class="sr-only">Email address</label>
+        <input class="nl-field" type="email" id="finalNlEmail" name="email" inputmode="email" autocomplete="email" placeholder="you@yourbusiness.com" required>
+        <input type="text" class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" class="btn btn-primary nl-submit">Get one fix a week →</button>
+        <p class="nl-status" role="status" aria-live="polite"></p>
+      </form>
       <p class="capture-micro">One email a week, five minutes, unsubscribe anytime.</p>
     </div>
   </div>
@@ -316,14 +321,61 @@ window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scr
 // Scroll reveal animations
 if('IntersectionObserver' in window){const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))}else{document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'))}
 
-// Fade out each capture card's loading skeleton once its Beehiiv iframe loads
-document.querySelectorAll('.capture-embed').forEach(embed=>{
-  const reveal=()=>embed.classList.add('embed-loaded');
-  const arm=f=>{f.addEventListener('load',reveal,{once:true});setTimeout(reveal,8000)};
-  const existing=embed.querySelector('iframe');
-  if(existing){arm(existing);return}
-  new MutationObserver((muts,obs)=>{const f=embed.querySelector('iframe');if(f){obs.disconnect();arm(f)}}).observe(embed,{childList:true,subtree:true});
-});
+// Hero capture: reveal the email "secondary door" only on interaction (click/tap/keyboard).
+(function(){
+  var trigger=document.getElementById('nlReveal'),panel=document.getElementById('heroNl');
+  if(!trigger||!panel)return;
+  trigger.addEventListener('click',function(){
+    panel.hidden=false;
+    trigger.setAttribute('aria-expanded','true');
+    trigger.style.display='none';
+    var f=panel.querySelector('input[type=email]');
+    if(f)f.focus();
+  });
+})();
+
+// Native newsletter capture → the ONE shared /api/subscribe path (Beehiiv + best-effort Airtable).
+// Replaces the lazy Beehiiv iframe so the form paints instantly, no third-party flash. JS-required,
+// same as the Leak Score gate; the primary CTA (the quiz link) works without JS.
+(function(){
+  var EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  document.querySelectorAll('form[data-nl]').forEach(function(form){
+    var field=form.querySelector('input[type=email]');
+    var status=form.querySelector('.nl-status');
+    var btn=form.querySelector('button[type=submit]');
+    var hp=form.querySelector('input[name=website]');
+    var content=form.getAttribute('data-source-content')||'homepage';
+    var done=false;
+    function say(msg,kind){ if(!status)return; status.textContent=msg; status.className='nl-status'+(kind?' is-'+kind:''); }
+    function fail(){ if(btn){ btn.disabled=false; btn.textContent=btn.dataset.label||'Subscribe'; } say('That didn’t go through — give it another tap.','error'); }
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      if(done)return;
+      if(hp&&hp.value)return;                       // honeypot: bots fill this; humans never do
+      var email=(field&&field.value||'').trim();
+      if(!EMAIL_RE.test(email)){ say('Enter a valid email and I’ll send the first fix.','error'); if(field)field.focus(); return; }
+      if(btn){ btn.disabled=true; btn.dataset.label=btn.textContent; btn.textContent='Sending…'; }
+      say('','');
+      var payload={ email:email, website:'', source:'homepage', tags:['newsletter'],
+        utm_source:'homepage', utm_medium:'website', utm_campaign:'home-service-edge', utm_content:content };
+      var ctrl=('AbortController' in window)?new AbortController():null;
+      var timer=setTimeout(function(){ if(ctrl)ctrl.abort(); },9000);
+      fetch('/api/subscribe',{ method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload), signal:ctrl?ctrl.signal:undefined })
+        .then(function(res){ clearTimeout(timer); return res.json().then(function(j){ return {ok:res.ok,j:j||{}}; },function(){ return {ok:res.ok,j:{}}; }); })
+        .then(function(r){
+          if(r.ok&&r.j.success){
+            done=true;
+            if(field)field.disabled=true;
+            if(btn)btn.style.display='none';
+            say('Almost there — check your inbox to confirm, and your first fix is on the way.','ok');
+            if(typeof gtag==='function')gtag('event','newsletter_subscribe',{placement:content});
+          } else { fail(); }
+        })
+        .catch(function(){ clearTimeout(timer); fail(); });
+    });
+  });
+})();
 
 // Smooth-scroll anchor links via JS to prevent scroll bounce-back
 document.querySelectorAll('a[href^="#"]').forEach(link=>{
@@ -358,8 +410,6 @@ if(mobileCta){
 }
 </script>
 
-<!-- Beehiiv attribution / UTM forwarder -->
-<script type="text/javascript" async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
 <script>/* mobile nav toggle */(function(){var n=document.getElementById('nav'),t=document.getElementById('navToggle'),l=document.getElementById('navLinks');if(!t||!l)return;function close(){l.classList.remove('open');t.setAttribute('aria-expanded','false');if(n)n.classList.remove('menu-open');}t.addEventListener('click',function(){var o=l.classList.toggle('open');t.setAttribute('aria-expanded',o);if(n)n.classList.toggle('menu-open',o);});l.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close);});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&l.classList.contains('open')){close();t.focus();}});})();</script>
 </body>
 </html>
