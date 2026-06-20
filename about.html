@@ -53,7 +53,7 @@
 <header class="page-hero">
   <div class="container">
     <span class="eyebrow">About</span>
-    <h1 style="margin-top:16px">I'm Eric. I translate AI for people who do real work.</h1>
+    <h1 style="margin-top:16px">I'm Eric. I help home-service businesses stop leaking money.</h1>
   </div>
 </header>
 
@@ -72,12 +72,16 @@
 
         <p class="reveal">If that's the kind of help you're after, start with The Home Service Edge: one real fix for your business, every week, free. We'll take it from there.</p>
 
-        <!-- SLOT: about-cta -->
+        <!-- SLOT: about-cta — native form → /api/subscribe (source:'about'); mirrors the homepage final-cta -->
         <div class="capture reveal" style="max-width:540px;margin:48px 0 0">
           <span class="capture-eyebrow">The Home Service Edge · Free · Weekly</span>
-          <div class="capture-embed">
-            <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="17c265de-441e-48e5-a5c8-0a0e4b63b4e1"></script>
-          </div>
+          <form class="nl-form nl-form--final" data-nl data-source-content="about" novalidate>
+            <label for="aboutNlEmail" class="sr-only">Email address</label>
+            <input class="nl-field" type="email" id="aboutNlEmail" name="email" inputmode="email" autocomplete="email" placeholder="you@yourbusiness.com" required>
+            <input type="text" class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <button type="submit" class="btn btn-primary nl-submit">Get one fix a week →</button>
+            <p class="nl-status" role="status" aria-live="polite"></p>
+          </form>
           <p class="capture-micro">One email a week, five minutes, unsubscribe anytime.</p>
         </div>
       </div>
@@ -120,18 +124,50 @@ window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scr
 // Scroll reveal animations
 if('IntersectionObserver' in window){const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))}else{document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'))}
 
-// Fade out each capture card's loading skeleton once its Beehiiv iframe loads
-document.querySelectorAll('.capture-embed').forEach(embed=>{
-  const reveal=()=>embed.classList.add('embed-loaded');
-  const arm=f=>{f.addEventListener('load',reveal,{once:true});setTimeout(reveal,8000)};
-  const existing=embed.querySelector('iframe');
-  if(existing){arm(existing);return}
-  new MutationObserver((muts,obs)=>{const f=embed.querySelector('iframe');if(f){obs.disconnect();arm(f)}}).observe(embed,{childList:true,subtree:true});
-});
+// Native newsletter capture → the ONE shared /api/subscribe path (Beehiiv + best-effort Airtable).
+// Replaces the lazy Beehiiv iframe so the form paints instantly, no third-party flash. JS-required;
+// mirrors the homepage form — source/utm_content = "about" so we can tell where signups come from.
+(function(){
+  var EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  document.querySelectorAll('form[data-nl]').forEach(function(form){
+    var field=form.querySelector('input[type=email]');
+    var status=form.querySelector('.nl-status');
+    var btn=form.querySelector('button[type=submit]');
+    var hp=form.querySelector('input[name=website]');
+    var content=form.getAttribute('data-source-content')||'about';
+    var done=false;
+    function say(msg,kind){ if(!status)return; status.textContent=msg; status.className='nl-status'+(kind?' is-'+kind:''); }
+    function fail(){ if(btn){ btn.disabled=false; btn.textContent=btn.dataset.label||'Subscribe'; } say('That didn’t go through — give it another tap.','error'); }
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      if(done)return;
+      if(hp&&hp.value)return;                       // honeypot: bots fill this; humans never do
+      var email=(field&&field.value||'').trim();
+      if(!EMAIL_RE.test(email)){ say('Enter a valid email and I’ll send the first fix.','error'); if(field)field.focus(); return; }
+      if(btn){ btn.disabled=true; btn.dataset.label=btn.textContent; btn.textContent='Sending…'; }
+      say('','');
+      var payload={ email:email, website:'', source:'about', tags:['newsletter'],
+        utm_source:'homepage', utm_medium:'website', utm_campaign:'home-service-edge', utm_content:content };
+      var ctrl=('AbortController' in window)?new AbortController():null;
+      var timer=setTimeout(function(){ if(ctrl)ctrl.abort(); },9000);
+      fetch('/api/subscribe',{ method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload), signal:ctrl?ctrl.signal:undefined })
+        .then(function(res){ clearTimeout(timer); return res.json().then(function(j){ return {ok:res.ok,j:j||{}}; },function(){ return {ok:res.ok,j:{}}; }); })
+        .then(function(r){
+          if(r.ok&&r.j.success){
+            done=true;
+            if(field)field.disabled=true;
+            if(btn)btn.style.display='none';
+            say('Almost there — check your inbox to confirm, and your first fix is on the way.','ok');
+            if(typeof gtag==='function')gtag('event','newsletter_subscribe',{placement:content});
+          } else { fail(); }
+        })
+        .catch(function(){ clearTimeout(timer); fail(); });
+    });
+  });
+})();
 </script>
 
-<!-- Beehiiv attribution / UTM forwarder -->
-<script type="text/javascript" async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
 <script>/* mobile nav toggle */(function(){var n=document.getElementById('nav'),t=document.getElementById('navToggle'),l=document.getElementById('navLinks');if(!t||!l)return;function close(){l.classList.remove('open');t.setAttribute('aria-expanded','false');if(n)n.classList.remove('menu-open');}t.addEventListener('click',function(){var o=l.classList.toggle('open');t.setAttribute('aria-expanded',o);if(n)n.classList.toggle('menu-open',o);});l.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close);});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&l.classList.contains('open')){close();t.focus();}});})();</script>
 </body>
 </html>
