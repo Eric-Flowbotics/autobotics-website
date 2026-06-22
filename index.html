@@ -385,7 +385,11 @@ if('IntersectionObserver' in window){const obs=new IntersectionObserver(entries=
             if(panel){                               // on-brand success state (final-cta + /about)
               form.classList.add('is-success');      // teal field border + check icon (CSS)
               say('','');                            // clear any prior error line
-              panel.hidden=false;                    // reveal panel; aria-live announces it
+              panel.hidden=false;                    // reveal the panel
+              // Reliable SR announcement: a live region revealed with pre-existing text can stay
+              // silent (Chrome+NVDA/VoiceOver), so re-insert its text to register a change.
+              var txt=panel.querySelector('.nl-success-text');
+              if(txt){ var saved=txt.innerHTML; txt.innerHTML=''; setTimeout(function(){ txt.innerHTML=saved; },60); }
             } else {                                 // compact forms (hero) keep the plain line
               say('Almost there — check your inbox to confirm, and your first fix is on the way.','ok');
             }
