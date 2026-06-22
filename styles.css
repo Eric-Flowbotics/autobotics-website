@@ -106,7 +106,7 @@ p{line-height:1.7}
 
 /* ---------- Capture block — one white variant everywhere ---------- */
 .capture{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px 20px 20px;box-shadow:var(--shadow-md)}
-.capture-eyebrow{font-family:var(--mono);font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--amber);display:block;margin-bottom:18px;text-align:center}
+.capture-eyebrow{font-family:var(--mono);font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--amber);display:block;margin-bottom:18px;text-align:center;white-space:nowrap}
 /* The Beehiiv iframe reserves 207px but the form sits at a fixed 80px offset, 47px tall.
    Clip the container to a 90px window centered on the form (rows 58–148 of the iframe). */
 .capture-embed{display:block;width:100%;height:90px;overflow:hidden;border-radius:var(--radius-sm);position:relative}
@@ -358,13 +358,29 @@ p{line-height:1.7}
 /* ---------- Native newsletter form (hero card + final CTA) — replaces the Beehiiv iframe ---------- */
 .nl-form{display:flex;flex-direction:column;gap:10px}
 .nl-form .btn{width:100%;justify-content:center}
-.nl-field{width:100%;font-family:var(--font);font-size:1rem;color:var(--charcoal);background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 15px;transition:border-color .2s,box-shadow .2s}
+.nl-field{width:100%;font-family:var(--font);font-size:1rem;color:var(--charcoal);background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 15px;min-height:48px;transition:border-color .2s,box-shadow .2s}
 .nl-field:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-glow)}
 .nl-field:disabled{opacity:.55}
 .nl-status{font-size:.82rem;line-height:1.5;margin:2px 0 0;text-align:center}
 .nl-status:empty{margin:0}
 .nl-status.is-ok{color:var(--teal-hover);font-weight:600}
 .nl-status.is-error{color:var(--charcoal);font-weight:600}
+/* Newsletter SUCCESS state — on-brand Workshop Teal; final-cta + /about only (.is-success added by JS) */
+.nl-field-wrap{position:relative;display:block}
+.nl-field-check{position:absolute;right:13px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--teal);opacity:0;transition:opacity .2s;pointer-events:none}
+.nl-form--final.is-success .nl-field{border:2px solid var(--teal);padding-right:42px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nl-form--final.is-success .nl-field:disabled{opacity:1}
+.nl-form--final.is-success .nl-field-check{opacity:1}
+.nl-success{display:flex;align-items:flex-start;gap:11px;background:#E1F5EE;border-radius:var(--radius-sm);padding:14px 16px;text-align:left}
+.nl-success[hidden]{display:none}
+.nl-success-icon{flex-shrink:0;width:22px;height:22px;color:var(--teal);margin-top:1px}
+.nl-success-text{min-width:0;display:flex;flex-direction:column;gap:3px}
+.nl-success-title{font-weight:700;font-size:.95rem;line-height:1.3;color:#085041}
+.nl-success-line{font-size:.86rem;line-height:1.45;color:#0F6E56}
+@media (max-width:400px){
+  .capture-eyebrow{letter-spacing:1px;font-size:.58rem}
+  .capture{padding-left:16px;padding-right:16px}
+}
 
 /* ---------- Learn Library callout — the live, free surface (kept out of the roadmap) ---------- */
 .learn-cta{display:flex;align-items:center;gap:32px;background:var(--teal-subtle);border:1px solid rgba(13,148,136,0.2);border-radius:var(--radius-lg);padding:36px 40px}
