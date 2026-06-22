@@ -345,7 +345,7 @@ module.exports = async function handler(req, res) {
           // TEMP DIAGNOSTIC (remove before merge): surface Beehiiv's own status + body + the
           // exact fields we sent, so we can read the real rejection (auth/plan/field) straight
           // from the JSON response AND the Contacts Notes — no DevTools, no guessing.
-          build: 'diag3',
+          build: 'diag4',
           beehiiv_status: created.status,
           beehiiv_sent_keys: Object.keys(createBody).join(','),
           beehiiv_error: created.json ? JSON.stringify(created.json).slice(0, 1500) : 'non-JSON-or-empty-body' };
@@ -369,7 +369,7 @@ module.exports = async function handler(req, res) {
     // Stamp Beehiiv's real failure (status + sent fields + body) into the Contacts Notes for
     // this submit, so the exact rejection is readable straight from Airtable. TEMP — see build.
     var diagNote = beehiivResult.success ? '' :
-      '[BEEHIIV diag3] create_status=' + beehiivResult.beehiiv_status +
+      '[BEEHIIV diag4] create_status=' + beehiivResult.beehiiv_status +
       ' err=' + beehiivResult.error +
       ' sent=[' + (beehiivResult.beehiiv_sent_keys || '') + ']' +
       ' body=' + (beehiivResult.beehiiv_error || 'n/a');
@@ -383,5 +383,5 @@ module.exports = async function handler(req, res) {
       'source=' + (str(body.source) || 'unknown'), 'email=' + email, 'detail=' + JSON.stringify(beehiivResult));
   }
   var code = beehiivResult.success ? 200 : 502;
-  return res.status(code).json(Object.assign({}, beehiivResult, { build: 'diag3', airtable: airtable.written, waitlist: waitlistRes.written, contact: contactRes.written }));
+  return res.status(code).json(Object.assign({}, beehiivResult, { build: 'diag4', airtable: airtable.written, waitlist: waitlistRes.written, contact: contactRes.written }));
 };
