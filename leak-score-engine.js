@@ -259,9 +259,9 @@
     },
     q10: {
       'Under 10 (or I’m not sure)': 'You said under 10 Google reviews. Reviews are one of the biggest factors in whether customers find you in local search — and with under 10, you’re hard to find.',
-      '10–25': 'You said 10–25 reviews. A start — but you’re still well short of the 50+ tier where local visibility jumps.',
-      '25–50': 'You said 25–50 reviews. Competitive — closing the gap to 50+ is where you start outranking nearby rivals.',
-      'Over 50': '50+ Google reviews. You’re in the tier that wins the local 3-pack.'
+      '10–25': 'You said 10–25 reviews. A start — but the more you have, the easier you are to find when people search locally.',
+      '25–50': 'You said 25–50 reviews. Competitive — and the more reviews you stack up, the more you stand out against nearby shops.',
+      'Over 50': '50+ Google reviews — that’s a real edge. Reviews are one of the biggest factors in showing up in local search.'
     },
     q11: {
       'Never — once the job’s done, that’s it': 'You said you don’t follow up after a job. Keeping a past customer is far cheaper than winning a new one — so that repeat business is the cheapest work you’ll ever win.',
