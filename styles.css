@@ -443,3 +443,12 @@ p{line-height:1.7}
   .prompt-card{padding:24px 20px}
   .prompt-text{font-size:.84rem;padding:16px 14px}
 }
+
+/* ---------- Learn section sub-nav — pill/tab strip across every /learn page ---------- */
+/* Flat in-section nav (Guides / Prompts / …); top-level nav stays flat. Built to take a 3rd+ tab without rework. */
+.learn-subnav{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 36px}
+.learn-subnav a{display:inline-flex;align-items:center;min-height:44px;padding:9px 20px;border-radius:100px;font-size:.9rem;font-weight:700;text-decoration:none;border:1px solid var(--border);background:var(--white);color:var(--charcoal);transition:border-color .2s,color .2s,background .2s}
+.learn-subnav a:hover{border-color:var(--teal);color:var(--teal)}
+.learn-subnav a.is-active{background:var(--teal);border-color:var(--teal);color:var(--white)}
+.learn-subnav a.is-active:hover{color:var(--white)}
+.learn-subnav a:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
