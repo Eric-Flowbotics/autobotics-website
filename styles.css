@@ -403,3 +403,56 @@ p{line-height:1.7}
 /* ---------- Field-report stage → /learn cross-link (diagnosis → treatment) ---------- */
 .stage-learn{display:inline-block;margin-top:10px;font-family:var(--mono);font-size:.74rem;font-weight:700;letter-spacing:.3px;color:var(--teal);text-decoration:none}
 .stage-learn:hover{text-decoration:underline}
+
+/* ==========================================================================
+   /learn/prompts — Prompt Library (ungated, copy-paste AI prompts)
+   ========================================================================== */
+.prompt-intro{max-width:var(--max-prose)}
+.prompt-intro .guides-note{margin-bottom:0}
+.prompt-list{display:flex;flex-direction:column;gap:30px;margin-top:36px;max-width:var(--max-prose)}
+
+/* PromptCard — independently indexable; clean head, copy block, links, soft CTA */
+.prompt-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px 30px;box-shadow:var(--shadow-sm);transition:border-color .25s,box-shadow .25s}
+.prompt-card:hover{border-color:rgba(13,148,136,.35);box-shadow:var(--shadow-md)}
+.prompt-card .eyebrow{margin-bottom:12px}
+.prompt-card h2{font-size:1.3rem;letter-spacing:-.3px;margin-bottom:8px}
+.prompt-use{color:var(--medium);font-size:1rem;line-height:1.65;margin-bottom:22px}
+.prompt-use strong{color:var(--charcoal)}
+
+/* Copy-paste block — charcoal terminal-style with mono text */
+.prompt-block{background:var(--charcoal);border:1px solid var(--charcoal-soft);border-radius:var(--radius-md);overflow:hidden}
+.prompt-block-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;background:var(--charcoal-soft);border-bottom:1px solid rgba(255,255,255,.06)}
+.prompt-block-label{font-family:var(--mono);font-size:.64rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.prompt-copy{display:inline-flex;align-items:center;gap:7px;font-family:var(--font);font-size:.78rem;font-weight:700;color:var(--white);background:var(--teal-hover);border:none;border-radius:7px;padding:8px 14px;min-height:36px;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s}
+.prompt-copy:hover{box-shadow:0 2px 10px rgba(13,148,136,.45)}
+.prompt-copy:active{transform:scale(.97)}
+.prompt-copy:focus-visible{outline:2px solid #5EEAD4;outline-offset:2px}
+.prompt-copy svg{width:15px;height:15px;flex-shrink:0}
+.prompt-copy .ic-check{display:none}
+.prompt-copy.is-copied{background:#0F6E56}
+.prompt-copy.is-copied .ic-copy{display:none}
+.prompt-copy.is-copied .ic-check{display:inline-block}
+.prompt-text{font-family:var(--mono);font-size:.92rem;line-height:1.7;color:#E8E2D9;padding:20px 18px;margin:0;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere}
+.prompt-text strong{color:#5EEAD4;font-weight:600}
+
+/* Source/breakdown link row + soft /leak-score nudge */
+.prompt-meta{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:18px}
+.prompt-meta a{font-size:.9rem;font-weight:700;color:var(--teal);text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.prompt-meta a:hover{text-decoration:underline}
+.prompt-cta{margin-top:18px;padding-top:16px;border-top:1px dashed var(--border);font-size:.95rem;color:var(--medium);line-height:1.6}
+.prompt-cta a{color:var(--teal);font-weight:700;text-decoration:none}
+.prompt-cta a:hover{text-decoration:underline}
+
+@media (max-width:600px){
+  .prompt-card{padding:24px 20px}
+  .prompt-text{font-size:.84rem;padding:16px 14px}
+}
+
+/* ---------- Learn section sub-nav — pill/tab strip across every /learn page ---------- */
+/* Flat in-section nav (Guides / Prompts / …); top-level nav stays flat. Built to take a 3rd+ tab without rework. */
+.learn-subnav{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 36px}
+.learn-subnav a{display:inline-flex;align-items:center;min-height:44px;padding:9px 20px;border-radius:100px;font-size:.9rem;font-weight:700;text-decoration:none;border:1px solid var(--border);background:var(--white);color:var(--charcoal);transition:border-color .2s,color .2s,background .2s}
+.learn-subnav a:hover{border-color:var(--teal);color:var(--teal)}
+.learn-subnav a.is-active{background:var(--teal);border-color:var(--teal);color:var(--white)}
+.learn-subnav a.is-active:hover{color:var(--white)}
+.learn-subnav a:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
