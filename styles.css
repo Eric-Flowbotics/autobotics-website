@@ -321,6 +321,10 @@ p{line-height:1.7}
 .article-prose ul{margin:0 0 20px;padding:0;list-style:none}
 .article-prose ul li{position:relative;padding:7px 0 7px 26px;color:var(--medium);font-size:1.06rem;line-height:1.7}
 .article-prose ul li::before{content:"";position:absolute;left:2px;top:16px;width:7px;height:7px;border-radius:50%;background:var(--teal)}
+.article-prose ol{margin:0 0 20px;padding:0 0 0 24px;list-style:decimal}
+.article-prose ol li{padding:7px 0 7px 6px;color:var(--medium);font-size:1.06rem;line-height:1.7}
+.article-prose ol li::marker{color:var(--teal);font-weight:700}
+.article-prose code{font-family:var(--mono);font-size:.9em;background:var(--teal-subtle);color:var(--charcoal);padding:2px 6px;border-radius:var(--radius-sm)}
 .article-prose blockquote{border-left:4px solid var(--amber);padding:6px 0 6px 24px;margin:26px 0;font-size:1.15rem;font-weight:600;font-style:italic;color:var(--charcoal);line-height:1.6}
 .article-prose blockquote.paste{font-style:normal;font-weight:500;font-size:1.04rem;color:var(--charcoal)}
 .article-prose a{color:var(--teal);text-decoration:underline;text-decoration-color:rgba(13,148,136,.35)}
