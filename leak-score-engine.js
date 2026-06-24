@@ -179,7 +179,7 @@
       ] },
     { id: 'q10', stage: 'reviews',
       question: 'How many Google reviews does your business have right now?',
-      subtext: 'Businesses with 50+ reviews are 266% more likely to show up in Google’s local 3-pack than those with under 10 (BrightLocal).',
+      subtext: 'Reviews are one of the biggest factors in whether customers find you in local search — and most businesses never ask (Whitespark).',
       options: [
         { label: 'Under 10 (or I’m not sure)', score: 1, leakMultiplier: 0.35 },
         { label: '10–25', score: 2, leakMultiplier: 0.22 },
@@ -258,7 +258,7 @@
       'Automatic reminders go out, or they’re on autopay': 'Automatic reminders or autopay. You’re collecting what you’re owed without chasing it.'
     },
     q10: {
-      'Under 10 (or I’m not sure)': 'You said under 10 Google reviews. Businesses with 50+ are 266% more likely to show in Google’s local 3-pack (BrightLocal) — you’re hard to find.',
+      'Under 10 (or I’m not sure)': 'You said under 10 Google reviews. Reviews are one of the biggest factors in whether customers find you in local search — and with under 10, you’re hard to find.',
       '10–25': 'You said 10–25 reviews. A start — but you’re still well short of the 50+ tier where local visibility jumps.',
       '25–50': 'You said 25–50 reviews. Competitive — closing the gap to 50+ is where you start outranking nearby rivals.',
       'Over 50': '50+ Google reviews. You’re in the tier that wins the local 3-pack.'
