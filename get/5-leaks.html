@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 5 Leaks — the free guide for home-service owners | Autobotics</title>
+<meta name="description" content="The 5 ways home-service businesses leak money — missed calls, dead quotes, scheduling gaps, reviews, slow invoicing — and the one Monday fix for each. Free PDF, plain language.">
+<link rel="canonical" href="https://theautobotics.com/get/5-leaks">
+<!-- Open Graph -->
+<meta property="og:title" content="The 5 Ways Home-Service Businesses Leak Money — free guide">
+<meta property="og:description" content="The 5 leaks draining home-service revenue, and the one Monday fix for each. Free PDF, plain language, no fluff.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://theautobotics.com/get/5-leaks">
+<meta property="og:image" content="https://theautobotics.com/images/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EG6CSRBKY6"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-EG6CSRBKY6');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<style>
+/* ===== /get/[asset] lead-magnet gate — page-scoped, on top of /styles.css brand tokens =====
+   Reusable gate template; the 5-Leaks PDF is the first asset. Cream bg, Charcoal text,
+   Teal CTA, Amber for money/leak numbers only, JetBrains Mono for figures. Mobile-first. */
+.lm-wrap{min-height:100vh;background:var(--cream);display:flex;flex-direction:column}
+.lm-main{flex:1 0 auto;display:flex;align-items:center;padding:108px 0 64px}
+.lm-grid{display:grid;grid-template-columns:minmax(0,0.85fr) minmax(0,1fr);gap:48px;align-items:center}
+
+/* Cover */
+.lm-cover-col{display:flex;justify-content:center}
+.lm-cover{display:block;width:100%;max-width:340px;height:auto;border-radius:var(--radius-md);
+  box-shadow:0 18px 50px rgba(28,32,36,.22),0 4px 14px rgba(28,32,36,.12);border:1px solid var(--border)}
+
+/* Copy column */
+.lm-eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;color:var(--amber);display:block;margin-bottom:16px}
+.lm-h1{font-size:clamp(1.9rem,4.4vw,2.6rem);line-height:1.12;margin-bottom:18px;color:var(--charcoal)}
+.lm-list{list-style:none;margin:0 0 26px;padding:0;display:flex;flex-direction:column;gap:13px}
+.lm-list li{display:flex;align-items:flex-start;gap:11px;color:var(--medium);font-size:1.02rem;line-height:1.55}
+.lm-list svg{flex:0 0 auto;width:20px;height:20px;color:var(--teal);margin-top:2px}
+.lm-fig{font-family:var(--mono);font-weight:600;color:var(--amber);white-space:nowrap}
+
+/* Capture card */
+.lm-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-md);padding:24px 22px 20px;max-width:480px}
+.lm-form{display:flex;flex-direction:column;gap:12px}
+.lm-field-wrap{position:relative}
+.lm-field{width:100%;font-family:var(--font);font-size:1rem;color:var(--charcoal);background:var(--cream);
+  border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:15px 16px;min-height:52px;transition:border-color .18s,background .18s}
+.lm-field:focus{outline:none;border-color:var(--teal);background:var(--white)}
+.lm-form.is-success .lm-field{border-color:var(--teal);background:var(--teal-subtle)}
+.lm-submit{width:100%;min-height:52px}
+.lm-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
+.lm-status{font-size:.86rem;line-height:1.5;color:var(--medium);margin:2px 2px 0;min-height:0}
+.lm-status.is-error{color:#B42318}
+.lm-status.is-ok{color:var(--teal)}
+.lm-consent{font-size:.82rem;color:var(--medium);line-height:1.6;margin:14px 2px 0}
+.lm-consent strong{color:var(--medium);font-weight:600}
+
+/* Delivered state — and the in-page hide rules. NOTE: a class that sets `display` (.lm-grid → grid,
+   .lm-bridge-card → flex) overrides the UA [hidden]{display:none} at equal specificity, so each needs
+   its own [hidden] rule or it will NOT hide when JS toggles the attribute. */
+.lm-delivered[hidden],.lm-grid[hidden],.lm-bridge-card[hidden]{display:none}
+.lm-delivered-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:28px 24px}
+.lm-deliv-eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--teal);display:block;margin-bottom:12px}
+.lm-deliv-h{font-size:clamp(1.5rem,3.4vw,2rem);line-height:1.15;margin-bottom:8px;color:var(--charcoal)}
+.lm-deliv-h:focus{outline:none}
+.lm-deliv-sub{color:var(--medium);font-size:1rem;line-height:1.65;margin-bottom:20px}
+.lm-download{width:100%;min-height:54px;font-size:1rem;margin-bottom:8px}
+.lm-confirm{font-size:.86rem;color:var(--medium);line-height:1.6;margin:14px 0 0}
+
+/* Bridge */
+.lm-bridge{margin-top:28px;border-top:1px solid var(--border);padding-top:24px;display:flex;flex-direction:column;gap:16px}
+.lm-bridge-lead{font-family:var(--mono);font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;color:var(--medium)}
+.lm-bridge-card{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius-md);padding:18px 18px;display:flex;flex-direction:column;gap:8px}
+.lm-bridge-card h3{font-size:1.08rem;line-height:1.25;color:var(--charcoal)}
+.lm-bridge-card p{font-size:.94rem;color:var(--medium);line-height:1.55}
+.lm-bridge-card .lm-bridge-go{align-self:flex-start;margin-top:4px}
+.lm-bridge-links{display:flex;flex-wrap:wrap;gap:10px 22px}
+.lm-bridge-link{display:inline-flex;align-items:center;min-height:44px;padding:6px 0;font-weight:600;font-size:.96rem;color:var(--teal);text-decoration:none}
+.lm-bridge-link:hover{color:var(--teal-hover)}
+.lm-wl-slot{display:flex;flex-direction:column;gap:8px}
+.lm-wl-field{font-family:var(--font);font-size:.95rem;color:var(--charcoal);background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;min-height:46px;max-width:320px}
+.lm-wl-field:focus{outline:none;border-color:var(--teal)}
+.lm-wl-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.lm-ok{display:inline-flex;align-items:center;gap:8px;color:var(--teal);font-weight:600;font-size:.96rem}
+.lm-ok svg{width:18px;height:18px}
+
+/* Footer note under the card */
+.lm-foot-note{font-size:.82rem;color:var(--medium);margin-top:18px;text-align:center}
+.lm-foot-note a{color:var(--medium);font-weight:600;text-decoration:none}
+
+@media (max-width:780px){
+  .lm-main{padding:92px 0 48px}
+  .lm-grid{grid-template-columns:1fr;gap:26px}
+  .lm-cover-col{order:-1}
+  .lm-cover{max-width:220px}
+  .lm-h1{font-size:clamp(1.7rem,7vw,2.1rem)}
+  .lm-list li{font-size:.98rem}
+}
+</style>
+</head>
+<body>
+<div class="lm-wrap">
+
+<!-- Minimal nav: logo only — single-purpose page, no nav competition (spec §2) -->
+<nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo" aria-label="Autobotics home">
+      <svg viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Autobotics logo">
+        <rect x="2" y="2" width="44" height="44" rx="10" stroke="#0D9488" stroke-width="2.5" fill="none"/>
+        <path d="M15 34L24 12L33 34" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2" stroke-linecap="round"/>
+        <text x="60" y="34" font-family="'Plus Jakarta Sans',sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5">
+          <tspan fill="#FFFFFF">auto</tspan><tspan fill="#0D9488">botics</tspan>
+        </text>
+      </svg>
+    </a>
+  </div>
+</nav>
+
+<main class="lm-main">
+  <div class="container">
+
+    <!-- ============================ GATE STATE ============================ -->
+    <div class="lm-grid" id="lmGate">
+      <div class="lm-cover-col">
+        <img class="lm-cover" src="/images/the-5-leaks-cover.png" width="945" height="1224"
+             alt="Cover of the free guide: The 5 Ways Home-Service Businesses Leak Money">
+      </div>
+      <div class="lm-copy-col">
+        <span class="lm-eyebrow">Free guide · PDF · Plain language</span>
+        <h1 class="lm-h1">The 5 Ways Home-Service Businesses Leak Money — and the one Monday fix for each</h1>
+        <ul class="lm-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>All 5 leaks in one place — missed calls, dead quotes, scheduling gaps, missing reviews, and slow invoicing.</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Plain-language math on what each one quietly costs — e.g. two missed calls a week ≈ <span class="lm-fig">$8,800/yr</span> (an example; plug in your own numbers).</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>One copy-paste "Monday" fix per leak — the smallest move that stops the bleed, most free or near-free.</span>
+          </li>
+        </ul>
+
+        <div class="lm-card">
+          <form class="lm-form" id="lmForm" novalidate>
+            <label for="lmEmail" class="sr-only">Email address</label>
+            <div class="lm-field-wrap">
+              <input class="lm-field" type="email" id="lmEmail" name="email" inputmode="email" autocomplete="email" placeholder="you@yourbusiness.com" maxlength="120" required>
+            </div>
+            <input type="text" class="lm-hp" id="lmHp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <button type="submit" class="btn btn-primary lm-submit" id="lmSubmit">Send me the guide →</button>
+            <p class="lm-status" id="lmStatus" role="status" aria-live="polite"></p>
+          </form>
+          <p class="lm-consent">Enter your email and I'll send you the guide. You'll also get <strong>The Home Service Edge</strong> — one plain-language fix a week. Unsubscribe anytime.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================= DELIVERED STATE ========================= -->
+    <div class="lm-delivered" id="lmDelivered" hidden>
+      <div class="lm-delivered-card">
+        <span class="lm-deliv-eyebrow">You're in 🎉</span>
+        <h2 class="lm-deliv-h" id="lmDelivH" tabindex="-1">Here's your guide.</h2>
+        <p class="lm-deliv-sub">The 5 leaks, the real math, and the one Monday fix for each — it's all in the PDF. Save it, print it, share it with whoever runs your phones.</p>
+        <a class="btn btn-primary lm-download" id="lmDownload" href="/the-5-leaks.pdf" target="_blank" rel="noopener" download="The-5-Leaks.pdf">Open the 5-Leaks guide (PDF) →</a>
+        <p class="lm-confirm" id="lmConfirm">One more thing: <strong>check your inbox to confirm</strong> your subscription — that's where the weekly Home Service Edge comes from.</p>
+
+        <!-- Thank-you bridge (M7 — non-personalized PDF variant, spec §5) -->
+        <div class="lm-bridge">
+          <span class="lm-bridge-lead">While you've got momentum</span>
+
+          <!-- (a) cross-sell the quiz — the smart next move -->
+          <div class="lm-bridge-card">
+            <h3>Now see which leak is costing <em>you</em> the most</h3>
+            <p>You've got the 5 leaks. The Revenue Leak Score scores your business across 8 stages and ranks your biggest one — about 3 minutes.</p>
+            <a class="btn btn-primary btn-sm lm-bridge-go" id="lmQuizCta" href="/leak-score">Take the Revenue Leak Score →</a>
+          </div>
+
+          <!-- (e) trade Field Report — only when ?trade=x was passed AND a report exists -->
+          <div class="lm-bridge-card" id="lmTradeCard" hidden>
+            <h3 id="lmTradeH">See it for your trade</h3>
+            <p id="lmTradeP">Real numbers from operators in your trade, stage by stage.</p>
+            <a class="btn btn-ghost btn-sm lm-bridge-go" id="lmTradeCta" href="/field-reports">Read the Field Report →</a>
+          </div>
+
+          <!-- (c) community waitlist — one-click join, reuses the existing Waitlist write path -->
+          <div class="lm-bridge-card">
+            <h3>Join the community waitlist</h3>
+            <p>A free operator community is opening soon — courses, prompt libraries, copy-paste systems. Waitlist members get in first.</p>
+            <div class="lm-wl-slot" id="lmWlSlot"></div>
+          </div>
+
+          <!-- (b) /learn hub -->
+          <div class="lm-bridge-links">
+            <a class="lm-bridge-link" id="lmLearnLink" href="/learn">Browse the plain-language fixes →</a>
+          </div>
+        </div>
+      </div>
+      <p class="lm-foot-note">Trouble opening it? <a href="/the-5-leaks.pdf" target="_blank" rel="noopener">Open the PDF directly →</a></p>
+    </div>
+
+  </div>
+</main>
+
+<!-- SLOT: footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <a href="/" class="footer-logo" aria-label="Autobotics home">
+        <svg viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Autobotics logo">
+          <rect x="2" y="2" width="44" height="44" rx="10" stroke="#0D9488" stroke-width="2.5" fill="none"/>
+          <path d="M15 34L24 12L33 34" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2" stroke-linecap="round"/>
+          <text x="60" y="34" font-family="'Plus Jakarta Sans',sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5">
+            <tspan fill="#FFFFFF">auto</tspan><tspan fill="#0D9488">botics</tspan>
+          </text>
+        </svg>
+      </a>
+      <div class="footer-links">
+        <a href="/about">About</a>
+        <a href="/learn">Learn</a>
+        <a href="/field-reports">Field Reports</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+      </div>
+      <p class="footer-meta">© 2026 Autobotics · 1712 6th Ave, Ste 100 PMB 1124, Tacoma, WA 98405</p>
+    </div>
+  </div>
+</footer>
+</div>
+
+<script>
+// Fixed nav: transparent over the cream hero, dark blur once scrolled
+(function(){var nav=document.getElementById('nav');if(!nav)return;
+  window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>40)},{passive:true});})();
+
+// ===== Lead-magnet gate → the ONE shared /api/subscribe path (Beehiiv primary + best-effort Airtable).
+//       The file delivers on-screen regardless of the subscribe result (spec §4): we always reveal the
+//       download. JS-required for the gate, same pattern as the Leak Score / newsletter captures. =====
+(function(){
+  var EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var ASSET='5-leaks';
+  // Trades that have a live Field Report (mirrors leak-score-engine FIELD_REPORT_TRADES).
+  var FIELD_REPORT_TRADES={cleaning:'Cleaning',landscaping:'Landscaping',hvac:'HVAC',plumbing:'Plumbing',handyman:'Handyman'};
+
+  function qp(name){ try{ return new URLSearchParams(location.search).get(name)||''; }catch(e){ return ''; } }
+  var trade=(qp('trade')||'').toLowerCase().trim();
+  var utm={
+    utm_source:qp('utm_source')||'lead-magnet',
+    utm_medium:qp('utm_medium')||'website',
+    utm_campaign:qp('utm_campaign')||'5-leaks',
+    utm_content:qp('utm_content')||'',
+    utm_term:qp('utm_term')||''
+  };
+  // Carry UTM + trade onto the in-page bridge links so the landing attribution survives the next
+  // click: preserve the original source/medium/content/term and mark the internal hop via campaign.
+  function withParams(base, extra){
+    var p=new URLSearchParams();
+    p.set('utm_source', utm.utm_source);       // preserved (defaults to 'lead-magnet' if landed w/o utm)
+    p.set('utm_medium', utm.utm_medium);       // preserved (defaults to 'website')
+    p.set('utm_campaign','5-leaks-bridge');    // marks the 5-Leaks → quiz / learn / field-report hop
+    if(utm.utm_content) p.set('utm_content', utm.utm_content);
+    if(utm.utm_term) p.set('utm_term', utm.utm_term);
+    Object.keys(extra||{}).forEach(function(k){ if(extra[k]) p.set(k,extra[k]); });
+    return base+'?'+p.toString();
+  }
+
+  var form=document.getElementById('lmForm');
+  var field=document.getElementById('lmEmail');
+  var hp=document.getElementById('lmHp');
+  var btn=document.getElementById('lmSubmit');
+  var status=document.getElementById('lmStatus');
+  var gate=document.getElementById('lmGate');
+  var delivered=document.getElementById('lmDelivered');
+  var done=false;
+
+  // Wire bridge links with attribution up-front.
+  document.getElementById('lmQuizCta').href = withParams('/leak-score', trade?{trade:trade}:{});
+  document.getElementById('lmLearnLink').href = withParams('/learn', {});
+
+  // Trade-conditional Field Report card (only for trades with a live report).
+  if(trade && FIELD_REPORT_TRADES[trade]){
+    var label=FIELD_REPORT_TRADES[trade];
+    var card=document.getElementById('lmTradeCard');
+    document.getElementById('lmTradeH').textContent='See it for '+label.toLowerCase()+' operators';
+    document.getElementById('lmTradeP').textContent='Exactly how '+label.toLowerCase()+' businesses lose money at each stage — real numbers, reviewed by Eric.';
+    var cta=document.getElementById('lmTradeCta');
+    cta.href=withParams('/field-reports/'+trade,{});
+    cta.textContent='Read the '+label+' Field Report →';
+    card.hidden=false;
+  }
+
+  function say(msg,kind){ if(!status)return; status.textContent=msg||''; status.className='lm-status'+(kind?' is-'+kind:''); }
+
+  function reveal(noteOk){
+    if(gate) gate.hidden=true;
+    if(delivered) delivered.hidden=false;
+    var h=document.getElementById('lmDelivH');
+    if(h){ try{ h.focus(); }catch(e){} }       // move focus to the delivered heading for SR + keyboard
+    wireWaitlist();
+    if(!noteOk){
+      // Subscribe didn't confirm — the file still delivers; soften the confirm nudge honestly.
+      var c=document.getElementById('lmConfirm');
+      if(c) c.innerHTML='Your guide is right above. I couldn’t confirm your email just now — if you don’t get a confirmation note, just <a href="/#final-capture" style="color:var(--medium);font-weight:600">try the newsletter signup here</a>.';
+    }
+  }
+
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(done) return;
+    if(hp && hp.value){ done=true; reveal(true); return; }   // honeypot: bots fill this; humans never do
+    var email=(field&&field.value||'').trim();
+    if(!EMAIL_RE.test(email)){ say('Enter a valid email and I’ll send the guide.','error'); if(field)field.focus(); return; }
+    if(btn){ btn.disabled=true; btn.dataset.label=btn.textContent; btn.textContent='Sending…'; }
+    say('','');
+    done=true;
+    form.classList.add('is-success');
+
+    var payload={
+      email:email, website:'', source:'lead-magnet', asset:ASSET,
+      tags:['source:lead-magnet','asset:'+ASSET].concat(trade?['trade:'+trade]:[]),
+      trade:trade||'',
+      utm_source:utm.utm_source, utm_medium:utm.utm_medium, utm_campaign:utm.utm_campaign,
+      utm_content:utm.utm_content, utm_term:utm.utm_term,
+      referring_site:(document.referrer||'').slice(0,255)
+    };
+    var ctrl=('AbortController' in window)?new AbortController():null;
+    var timer=setTimeout(function(){ if(ctrl)ctrl.abort(); },9000);
+    fetch('/api/subscribe',{ method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload), signal:ctrl?ctrl.signal:undefined })
+      .then(function(res){ clearTimeout(timer); return res.json().then(function(j){ return {ok:res.ok,j:j||{}}; },function(){ return {ok:res.ok,j:{}}; }); })
+      .then(function(r){
+        if(typeof gtag==='function') gtag('event','lead_magnet_download',{asset:ASSET,trade:trade||'none'});
+        reveal(!!(r.ok && r.j.success));      // file delivers either way; tailor the confirm note
+      })
+      .catch(function(){ clearTimeout(timer); reveal(false); });   // network error → still deliver the file
+
+    // localStorage so the bridge waitlist join can reuse the email (best-effort; ignore failures).
+    try{ localStorage.setItem('lm_email',email); }catch(e){}
+  });
+
+  // ----- Community waitlist join — reuses the existing Waitlist write path (Interest=Community).
+  //       Same mechanism as the Leak Score results bridge: source 'quiz-results' + community-waitlist tag. -----
+  function wireWaitlist(){
+    var slot=document.getElementById('lmWlSlot');
+    if(!slot || slot.dataset.wired) return;
+    slot.dataset.wired='1';
+    var stored=''; try{ stored=localStorage.getItem('lm_email')||''; }catch(e){}
+    if(stored){
+      slot.innerHTML='<button class="btn btn-primary btn-sm" id="lmWlBtn" style="align-self:flex-start">Add me to the waitlist →</button>';
+      document.getElementById('lmWlBtn').onclick=function(){ joinWaitlist(stored,slot); };
+    } else {
+      slot.innerHTML=
+        '<label for="lmWlEmail" class="sr-only">Email address</label>'+
+        '<input class="lm-wl-field" type="email" id="lmWlEmail" inputmode="email" autocomplete="email" placeholder="you@yourbusiness.com">'+
+        '<input type="text" class="lm-wl-hp" id="lmWlHp" tabindex="-1" autocomplete="off" aria-hidden="true">'+
+        '<button class="btn btn-primary btn-sm" id="lmWlBtn" style="align-self:flex-start">Join the waitlist →</button>';
+      document.getElementById('lmWlBtn').onclick=function(){
+        var h=document.getElementById('lmWlHp'); if(h && h.value){ wlDone(slot); return; }
+        var v=(document.getElementById('lmWlEmail').value||'').trim();
+        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){ document.getElementById('lmWlEmail').focus(); return; }
+        joinWaitlist(v,slot);
+      };
+    }
+  }
+  function joinWaitlist(email,slot){
+    if(typeof gtag==='function') gtag('event','lead_magnet_waitlist_join',{asset:ASSET});
+    var b=document.getElementById('lmWlBtn'); if(b){ b.disabled=true; b.textContent='Adding…'; }
+    var body={ email:email, website:'', source:'quiz-results', tags:['community-waitlist'] };
+    if(trade) body.trade=trade;
+    fetch('/api/subscribe',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) })
+      .then(function(res){ return res.json().then(function(j){ return res.ok && !!j && (j.waitlist===true || j.tagged===true); },function(){ return res.ok; }); })
+      .then(function(ok){ ok ? wlDone(slot) : wlFail(slot,email); })
+      .catch(function(){ wlFail(slot,email); });
+  }
+  function wlDone(slot){ slot.innerHTML='<div class="lm-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg> You’re on the waitlist.</div>'; }
+  function wlFail(slot,email){
+    slot.innerHTML='<button class="btn btn-primary btn-sm" id="lmWlBtn" style="align-self:flex-start">Try again →</button>'+
+      '<p style="color:var(--medium);font-size:.82rem;margin-top:6px">That didn’t go through — give it another tap.</p>';
+    document.getElementById('lmWlBtn').onclick=function(){ joinWaitlist(email,slot); };
+  }
+})();
+</script>
+</body>
+</html>

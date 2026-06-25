@@ -12,7 +12,8 @@
     { "source": "/checkout", "destination": "/", "statusCode": 301 },
     { "source": "/cancel", "destination": "/", "statusCode": 301 },
     { "source": "/success", "destination": "/", "statusCode": 301 },
-    { "source": "/log", "destination": "/", "statusCode": 301 }
+    { "source": "/log", "destination": "/", "statusCode": 301 },
+    { "source": "/5-leaks", "destination": "/get/5-leaks", "statusCode": 301 }
   ],
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
@@ -28,6 +29,7 @@
     { "source": "/terms", "destination": "/terms.html" },
     { "source": "/learn", "destination": "/learn.html" },
     { "source": "/learn/:cluster/:topic", "destination": "/learn/:cluster/:topic.html" },
-    { "source": "/learn/:cluster", "destination": "/learn/:cluster.html" }
+    { "source": "/learn/:cluster", "destination": "/learn/:cluster.html" },
+    { "source": "/get/:asset", "destination": "/get/:asset.html" }
   ]
 }
