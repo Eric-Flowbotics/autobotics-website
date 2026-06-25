@@ -342,15 +342,15 @@
     <button type="button" class="wl-close" data-wl-close aria-label="Close">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
-    <span class="capture-eyebrow wl-eyebrow">Join the waitlist · Free</span>
+    <span class="capture-eyebrow wl-eyebrow">Early access</span>
     <h2 class="capture-h" id="wlTitle">Join the waitlist</h2>
     <p class="capture-sub" id="wlMicro">Join the waitlist — I'll email you the moment this opens, plus the weekly Home Service Edge. No spam, unsubscribe anytime.</p>
     <form class="nl-form wl-form" id="wlForm" novalidate>
       <input type="hidden" name="interest" id="wlInterest" value="">
       <label for="wlFirst" class="sr-only">First name</label>
-      <input class="nl-field" type="text" id="wlFirst" name="first_name" autocomplete="given-name" placeholder="First name" required>
+      <input class="nl-field" type="text" id="wlFirst" name="first_name" autocomplete="given-name" placeholder="First name" maxlength="80" required>
       <label for="wlEmail" class="sr-only">Email address</label>
-      <input class="nl-field" type="email" id="wlEmail" name="email" inputmode="email" autocomplete="email" placeholder="you@yourbusiness.com" required>
+      <input class="nl-field" type="email" id="wlEmail" name="email" inputmode="email" autocomplete="email" placeholder="you@yourbusiness.com" maxlength="120" required>
       <label for="wlTrade" class="sr-only">Your trade (optional)</label>
       <select class="nl-field wl-select" id="wlTrade" name="trade">
         <option value="">Your trade (optional)</option>
@@ -502,6 +502,7 @@ if(mobileCta){
   var successLine=document.getElementById('wlSuccessLine');
   var status=form.querySelector('.nl-status');
   var btn=form.querySelector('button[type=submit]');
+  var closeBtn=modal.querySelector('.wl-close');
   var firstField=document.getElementById('wlFirst');
   var emailField=document.getElementById('wlEmail');
   var tradeField=document.getElementById('wlTrade');
@@ -547,6 +548,7 @@ if(mobileCta){
     if(e.key==='Tab'){
       var f=focusable(); if(!f.length)return;
       var first=f[0],last=f[f.length-1];
+      if(!dialog.contains(document.activeElement)){ e.preventDefault(); first.focus(); return; }  // focus drifted out (body) → pull it back in
       if(e.shiftKey&&document.activeElement===first){ e.preventDefault(); last.focus(); }
       else if(!e.shiftKey&&document.activeElement===last){ e.preventDefault(); first.focus(); }
     }
@@ -581,6 +583,7 @@ if(mobileCta){
       .then(function(r){
         if(r.ok&&r.j.success){                               // Beehiiv is the source of truth for success
           form.hidden=true; if(successPanel)successPanel.hidden=false;
+          if(closeBtn)closeBtn.focus();                      // form is now display:none — keep focus inside the dialog
           if(successLine){ var s=successLine.textContent; successLine.textContent=''; setTimeout(function(){ successLine.textContent=s; },60); }
           if(typeof gtag==='function')gtag('event','waitlist_signup',{interest:interest});
         } else { fail(); }

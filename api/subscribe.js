@@ -6,9 +6,9 @@
    Native fetch() from those pages  →  this serverless function  →
      1) Beehiiv  (PRIMARY — the list/gate; double opt-in + tags; success gates here)
      2) Airtable (BEST-EFFORT backup — first-party record; one retry + log):
-          quiz           → Leak Score Submissions
-          quiz-results   → Community Waitlist
-          homepage/about → Contacts  (insert-if-absent Lead; never downgrades a row)
+          quiz                           → Leak Score Submissions
+          quiz-results / homepage-road-ahead → Waitlist  (Interest: Community / Playbook / DFY)
+          homepage/about                 → Contacts  (insert-if-absent Lead; never downgrades a row)
 
    Both API keys live ONLY here, as Vercel env vars — never in the browser:
      BEEHIIV_API_KEY            (already set)
@@ -172,7 +172,7 @@ async function writeAirtable(body, tags) {
 async function writeWaitlist(body) {
   var key = process.env.AIRTABLE_API_KEY;
   if (!key) { console.warn('[subscribe] AIRTABLE_API_KEY not set — skipping waitlist write.'); return { written: false, reason: 'no_key' }; }
-  var email = str(body.email).toLowerCase();
+  var email = str(body.email).trim().toLowerCase();
   if (!email) return { written: false, reason: 'no_email' };
 
   var interest = INTEREST_LABEL[body.interest] || 'Community'; // quiz-results bridge defaults to Community
@@ -182,7 +182,11 @@ async function writeWaitlist(body) {
 
   try {
     // Upsert key = Email + Interest (one row per person per list), so a repeat click updates, not duplicates.
-    var formula = "AND(LOWER({Email})='" + email.replace(/'/g, "\\'") + "',{Interest}='" + interest + "')";
+    // Airtable formula string literals do NOT honor backslash escaping, so use a double-quote delimiter and
+    // strip any double-quote from the address (same approach as writeContact) — an apostrophe address
+    // (o'brien@…) must MATCH its existing row, not 422 and fall through to a duplicate POST. The Interest
+    // half comes from a controlled map, so it is injection-safe.
+    var formula = 'AND(LOWER({Email})="' + email.replace(/"/g, '') + '",{Interest}="' + interest + '")';
     var lookup = await fetch(base + '?maxRecords=1&filterByFormula=' + encodeURIComponent(formula), { headers: headers });
     var existingId = null;
     if (lookup.ok) { var lj = await lookup.json().catch(function () { return null; }); existingId = lj && lj.records && lj.records[0] && lj.records[0].id; }
@@ -370,7 +374,7 @@ module.exports = async function handler(req, res) {
 
   // Best-effort data writes — awaited so they run, but never able to change the outcome
   // the front end / Beehiiv saw. A completed quiz writes the full Leak Score Submissions
-  // row; the waitlist click upserts the Community Waitlist row. Failures are logged only.
+  // row; a waitlist click (quiz-results or Road-Ahead) upserts the Waitlist row. Failures are logged only.
   var airtable = { written: false }, waitlistRes = { written: false }, contactRes = { written: false };
   if (isSubmission) {
     try { airtable = await writeAirtable(body, tags); } catch (e) { console.error('[subscribe] airtable wrapper error', e && e.message); }
