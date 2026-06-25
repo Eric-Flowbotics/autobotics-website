@@ -210,17 +210,17 @@
       <div class="road-card reveal rd1">
         <h3>The Operator Community</h3>
         <p>Free courses, prompt libraries, and copy-paste AI systems for home-service businesses — everything in one place.</p>
-        <a href="#final-capture" class="btn btn-ghost btn-sm">Get notified</a>
+        <button type="button" class="btn btn-ghost btn-sm" data-waitlist="community" data-waitlist-label="Operator Community" aria-haspopup="dialog">Get notified</button>
       </div>
       <div class="road-card reveal rd2">
         <h3>The Operator Playbook</h3>
         <p>The complete written system, shaped by what real operators ask for.</p>
-        <a href="#final-capture" class="btn btn-ghost btn-sm">Get notified</a>
+        <button type="button" class="btn btn-ghost btn-sm" data-waitlist="playbook" data-waitlist-label="Operator Playbook" aria-haspopup="dialog">Get notified</button>
       </div>
       <div class="road-card reveal rd3">
         <h3>Done-For-You Setup</h3>
         <p>Rather have it built for you than do it yourself? That path is coming, and the list hears about it first.</p>
-        <a href="#final-capture" class="btn btn-ghost btn-sm">Get notified</a>
+        <button type="button" class="btn btn-ghost btn-sm" data-waitlist="dfy" data-waitlist-label="Done-For-You Setup" aria-haspopup="dialog">Get notified</button>
       </div>
     </div>
   </div>
@@ -334,6 +334,49 @@
   </div>
 </footer>
 
+<!-- ROAD-AHEAD WAITLIST MODAL — one dialog, reused by all three "Get notified" cards.
+     The interest is preset by the button that opens it. Captures INTEREST only. -->
+<div class="wl-modal" id="wlModal" hidden>
+  <div class="wl-overlay" data-wl-close tabindex="-1"></div>
+  <div class="wl-dialog capture" role="dialog" aria-modal="true" aria-labelledby="wlTitle" aria-describedby="wlMicro">
+    <button type="button" class="wl-close" data-wl-close aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <span class="capture-eyebrow wl-eyebrow">Early access</span>
+    <h2 class="capture-h" id="wlTitle">Join the waitlist</h2>
+    <p class="capture-sub" id="wlMicro">Join the waitlist — I'll email you the moment this opens, plus the weekly Home Service Edge. No spam, unsubscribe anytime.</p>
+    <form class="nl-form wl-form" id="wlForm" novalidate>
+      <input type="hidden" name="interest" id="wlInterest" value="">
+      <label for="wlFirst" class="sr-only">First name</label>
+      <input class="nl-field" type="text" id="wlFirst" name="first_name" autocomplete="given-name" placeholder="First name" maxlength="80" required>
+      <label for="wlEmail" class="sr-only">Email address</label>
+      <input class="nl-field" type="email" id="wlEmail" name="email" inputmode="email" autocomplete="email" placeholder="you@yourbusiness.com" maxlength="120" required>
+      <label for="wlTrade" class="sr-only">Your trade (optional)</label>
+      <select class="nl-field wl-select" id="wlTrade" name="trade">
+        <option value="">Your trade (optional)</option>
+        <option value="cleaning">Cleaning</option>
+        <option value="landscaping">Landscaping</option>
+        <option value="hvac">HVAC</option>
+        <option value="plumbing">Plumbing</option>
+        <option value="handyman">Handyman</option>
+        <option value="other">Other</option>
+      </select>
+      <label for="wlNote" class="sr-only">Anything you want me to know? (optional)</label>
+      <input class="nl-field" type="text" id="wlNote" name="note" maxlength="200" placeholder="Anything you want me to know? (optional)">
+      <input type="text" class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button type="submit" class="btn btn-primary nl-submit">Join the waitlist →</button>
+      <p class="nl-status" role="status" aria-live="polite"></p>
+    </form>
+    <div class="nl-success wl-success" role="status" aria-live="polite" hidden>
+      <svg class="nl-success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>
+      <div class="nl-success-text">
+        <strong class="nl-success-title">You're on the list</strong>
+        <span class="nl-success-line" id="wlSuccessLine">I'll be in touch.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 // Fixed nav: transparent over the hero, dark blur once scrolled
 const nav=document.getElementById('nav');
@@ -443,5 +486,116 @@ if(mobileCta){
 </script>
 
 <script>/* mobile nav toggle */(function(){var n=document.getElementById('nav'),t=document.getElementById('navToggle'),l=document.getElementById('navLinks');if(!t||!l)return;function close(){l.classList.remove('open');t.setAttribute('aria-expanded','false');if(n)n.classList.remove('menu-open');}t.addEventListener('click',function(){var o=l.classList.toggle('open');t.setAttribute('aria-expanded',o);if(n)n.classList.toggle('menu-open',o);});l.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close);});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&l.classList.contains('open')){close();t.focus();}});})();</script>
+
+<script>
+/* Road-Ahead waitlist modal — one accessible dialog reused by all three "Get notified" cards.
+   Interest is preset by the opening button. Posts to the shared /api/subscribe path (Beehiiv
+   primary; Airtable best-effort and non-blocking). JS-required, same as the other native forms. */
+(function(){
+  var modal=document.getElementById('wlModal');
+  var dialog=modal&&modal.querySelector('.wl-dialog');
+  var form=document.getElementById('wlForm');
+  if(!modal||!dialog||!form)return;
+  var titleEl=document.getElementById('wlTitle');
+  var interestEl=document.getElementById('wlInterest');
+  var successPanel=modal.querySelector('.wl-success');
+  var successLine=document.getElementById('wlSuccessLine');
+  var status=form.querySelector('.nl-status');
+  var btn=form.querySelector('button[type=submit]');
+  var closeBtn=modal.querySelector('.wl-close');
+  var firstField=document.getElementById('wlFirst');
+  var emailField=document.getElementById('wlEmail');
+  var tradeField=document.getElementById('wlTrade');
+  var noteField=document.getElementById('wlNote');
+  var hp=form.querySelector('input[name=website]');
+  var EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var INTEREST_TITLE={community:'Operator Community',playbook:'Operator Playbook',dfy:'Done-For-You Setup'};
+  var INTEREST_SHORT={community:'Community',playbook:'Playbook',dfy:'DFY'};
+  var lastTrigger=null,sending=false;
+
+  function say(msg,kind){ if(!status)return; status.textContent=msg||''; status.className='nl-status'+(kind?' is-'+kind:''); }
+  function focusable(){
+    return Array.prototype.slice.call(dialog.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href]'))
+      .filter(function(el){ return el.offsetParent!==null; });
+  }
+  function resetForm(){
+    form.hidden=false; if(successPanel)successPanel.hidden=true;
+    form.reset(); say('','');
+    if(btn){ btn.disabled=false; btn.textContent=btn.dataset.label||'Join the waitlist →'; }
+    sending=false;
+  }
+  function open(trigger){
+    var interest=trigger.getAttribute('data-waitlist');
+    if(!INTEREST_TITLE[interest])return;
+    lastTrigger=trigger; resetForm();
+    interestEl.value=interest;
+    var label=trigger.getAttribute('data-waitlist-label')||INTEREST_TITLE[interest];
+    titleEl.textContent='Join the '+label+' waitlist';
+    if(successLine)successLine.textContent="You're on the "+INTEREST_SHORT[interest]+" list — I'll be in touch.";
+    modal.hidden=false; document.body.classList.add('wl-open');
+    setTimeout(function(){ if(firstField)firstField.focus(); },20);
+    document.addEventListener('keydown',onKey,true);
+  }
+  function close(){
+    if(modal.hidden)return;
+    modal.hidden=true; document.body.classList.remove('wl-open');
+    document.removeEventListener('keydown',onKey,true);
+    if(lastTrigger&&typeof lastTrigger.focus==='function')lastTrigger.focus();
+    lastTrigger=null;
+  }
+  function onKey(e){
+    if(e.key==='Escape'){ e.preventDefault(); close(); return; }
+    if(e.key==='Tab'){
+      var f=focusable(); if(!f.length)return;
+      var first=f[0],last=f[f.length-1];
+      if(!dialog.contains(document.activeElement)){ e.preventDefault(); first.focus(); return; }  // focus drifted out (body) → pull it back in
+      if(e.shiftKey&&document.activeElement===first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey&&document.activeElement===last){ e.preventDefault(); first.focus(); }
+    }
+  }
+
+  document.querySelectorAll('[data-waitlist]').forEach(function(b){ b.addEventListener('click',function(){ open(b); }); });
+  modal.querySelectorAll('[data-wl-close]').forEach(function(c){ c.addEventListener('click',close); });
+
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(sending)return;
+    if(hp&&hp.value)return;                                  // honeypot: bots fill this; humans never do
+    var first=(firstField.value||'').trim();
+    var email=(emailField.value||'').trim();
+    if(!first){ say('Add your first name so I know who I’m talking to.','error'); firstField.focus(); return; }
+    if(!EMAIL_RE.test(email)){ say('Enter a valid email and I’ll save your spot.','error'); emailField.focus(); return; }
+    sending=true;
+    if(btn){ btn.dataset.label=btn.textContent; btn.disabled=true; btn.textContent='Sending…'; }
+    say('','');
+    var interest=interestEl.value;
+    var payload={
+      email:email, first_name:first,
+      trade:(tradeField&&tradeField.value)||'', note:(noteField&&noteField.value||'').trim(), website:'',
+      source:'homepage-road-ahead', interest:interest,
+      tags:['newsletter', interest+'-waitlist'],
+      utm_source:'homepage', utm_medium:'website', utm_campaign:'road-ahead-waitlist', utm_content:interest+'-waitlist'
+    };
+    var ctrl=('AbortController' in window)?new AbortController():null;
+    var timer=setTimeout(function(){ if(ctrl)ctrl.abort(); },9000);
+    fetch('/api/subscribe',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload), signal:ctrl?ctrl.signal:undefined })
+      .then(function(res){ clearTimeout(timer); return res.json().then(function(j){ return {ok:res.ok,j:j||{}}; },function(){ return {ok:res.ok,j:{}}; }); })
+      .then(function(r){
+        if(r.ok&&r.j.success){                               // Beehiiv is the source of truth for success
+          form.hidden=true; if(successPanel)successPanel.hidden=false;
+          if(closeBtn)closeBtn.focus();                      // form is now display:none — keep focus inside the dialog
+          if(successLine){ var s=successLine.textContent; successLine.textContent=''; setTimeout(function(){ successLine.textContent=s; },60); }
+          if(typeof gtag==='function')gtag('event','waitlist_signup',{interest:interest});
+        } else { fail(); }
+      })
+      .catch(function(){ clearTimeout(timer); fail(); });
+    function fail(){
+      sending=false;
+      if(btn){ btn.disabled=false; btn.textContent=btn.dataset.label||'Join the waitlist →'; }
+      say('That didn’t go through — give it another tap.','error');  // input preserved (form not reset)
+    }
+  });
+})();
+</script>
 </body>
 </html>

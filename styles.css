@@ -460,3 +460,27 @@ p{line-height:1.7}
 .learn-subnav a.is-active{background:var(--teal);border-color:var(--teal);color:var(--white)}
 .learn-subnav a.is-active:hover{color:var(--white)}
 .learn-subnav a:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+
+/* ---------- Road-Ahead waitlist modal — one accessible dialog reused by the 3 "Get notified" cards ---------- */
+.wl-modal{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px}
+.wl-modal[hidden]{display:none}
+.wl-overlay{position:absolute;inset:0;background:rgba(28,32,36,.62);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);animation:wlFade .2s ease both}
+.wl-dialog{position:relative;z-index:1;width:100%;max-width:430px;max-height:calc(100vh - 40px);overflow-y:auto;padding:30px 26px 24px;box-shadow:var(--shadow-lg);text-align:left;animation:wlPop .24s cubic-bezier(.22,1,.36,1) both}
+.wl-close{position:absolute;top:12px;right:12px;width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;background:none;border:none;color:var(--muted);cursor:pointer;border-radius:var(--radius-sm);transition:color .2s,background .2s}
+.wl-close svg{width:20px;height:20px}
+.wl-close:hover{color:var(--charcoal);background:var(--cream)}
+.wl-close:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.wl-eyebrow{text-align:left;margin-bottom:12px}
+.wl-dialog .capture-h{margin-top:0;padding-right:34px}
+.wl-dialog .capture-sub{margin-bottom:18px}
+.wl-form{margin-top:2px}
+.wl-form .wl-select{appearance:none;-webkit-appearance:none;-moz-appearance:none;color:var(--charcoal);cursor:pointer;padding-right:42px;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235C6370' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:18px}
+.wl-success{margin-top:4px}
+body.wl-open{overflow:hidden}
+@keyframes wlFade{from{opacity:0}to{opacity:1}}
+@keyframes wlPop{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+/* Phone: present as a bottom sheet so the form sits above the thumb and never clips */
+@media (max-width:420px){
+  .wl-modal{padding:0;align-items:flex-end}
+  .wl-dialog{max-width:none;max-height:92vh;border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:26px 20px 20px}
+}
