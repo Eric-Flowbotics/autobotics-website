@@ -370,8 +370,8 @@
     <div class="nl-success wl-success" role="status" aria-live="polite" hidden>
       <svg class="nl-success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>
       <div class="nl-success-text">
-        <strong class="nl-success-title">You're on the list</strong>
-        <span class="nl-success-line" id="wlSuccessLine">I'll be in touch.</span>
+        <strong class="nl-success-title">You're on the list.</strong>
+        <span class="nl-success-line" id="wlSuccessLine"></span>
       </div>
     </div>
   </div>
@@ -503,6 +503,7 @@ if(mobileCta){
   var status=form.querySelector('.nl-status');
   var btn=form.querySelector('button[type=submit]');
   var closeBtn=modal.querySelector('.wl-close');
+  var microEl=document.getElementById('wlMicro');
   var firstField=document.getElementById('wlFirst');
   var emailField=document.getElementById('wlEmail');
   var tradeField=document.getElementById('wlTrade');
@@ -510,17 +511,21 @@ if(mobileCta){
   var hp=form.querySelector('input[name=website]');
   var EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   var INTEREST_TITLE={community:'Operator Community',playbook:'Operator Playbook',dfy:'Done-For-You Setup'};
-  var INTEREST_SHORT={community:'Community',playbook:'Playbook',dfy:'DFY'};
+  var INTEREST_OFFER={community:'the Operator Community',playbook:'the Operator Playbook',dfy:'Done-For-You Setup'};
   var lastTrigger=null,sending=false;
 
   function say(msg,kind){ if(!status)return; status.textContent=msg||''; status.className='nl-status'+(kind?' is-'+kind:''); }
   function focusable(){
+    // Exclude tabindex=-1 / aria-hidden nodes (e.g. the off-screen honeypot) so that once the fields
+    // are disabled on success the close button is the SOLE focusable element — a clean single-element trap.
     return Array.prototype.slice.call(dialog.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href]'))
-      .filter(function(el){ return el.offsetParent!==null; });
+      .filter(function(el){ return el.offsetParent!==null && el.tabIndex!==-1 && el.getAttribute('aria-hidden')!=='true'; });
   }
   function resetForm(){
-    form.hidden=false; if(successPanel)successPanel.hidden=true;
+    if(successPanel)successPanel.hidden=true;
+    if(microEl)microEl.hidden=false;
     form.reset(); say('','');
+    [firstField,emailField,tradeField,noteField].forEach(function(f){ if(f)f.disabled=false; });
     if(btn){ btn.disabled=false; btn.textContent=btn.dataset.label||'Join the waitlist →'; }
     sending=false;
   }
@@ -531,7 +536,7 @@ if(mobileCta){
     interestEl.value=interest;
     var label=trigger.getAttribute('data-waitlist-label')||INTEREST_TITLE[interest];
     titleEl.textContent='Join the '+label+' waitlist';
-    if(successLine)successLine.textContent="You're on the "+INTEREST_SHORT[interest]+" list — I'll be in touch.";
+    if(successLine)successLine.textContent="I'll reach out the moment "+INTEREST_OFFER[interest]+" opens. Check your inbox to confirm and start getting The Home Service Edge each week.";
     modal.hidden=false; document.body.classList.add('wl-open');
     setTimeout(function(){ if(firstField)firstField.focus(); },20);
     document.addEventListener('keydown',onKey,true);
@@ -581,9 +586,12 @@ if(mobileCta){
     fetch('/api/subscribe',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload), signal:ctrl?ctrl.signal:undefined })
       .then(function(res){ clearTimeout(timer); return res.json().then(function(j){ return {ok:res.ok,j:j||{}}; },function(){ return {ok:res.ok,j:{}}; }); })
       .then(function(r){
-        if(r.ok&&r.j.success){                               // Beehiiv is the source of truth for success
-          form.hidden=true; if(successPanel)successPanel.hidden=false;
-          if(closeBtn)closeBtn.focus();                      // form is now display:none — keep focus inside the dialog
+        if(r.ok&&r.j.success){                               // success (Road-Ahead: server returns success even on a Beehiiv miss — lead captured in Airtable)
+          if(btn){ btn.disabled=true; btn.textContent='Sent ✓'; }            // settle the button — no longer "Sending…"
+          [firstField,emailField,tradeField,noteField].forEach(function(f){ if(f)f.disabled=true; });  // lock the completed form
+          if(microEl)microEl.hidden=true;                                    // the banner is the message now — drop the duplicate consent line
+          if(successPanel)successPanel.hidden=false;                         // reveal the confirmation banner
+          if(closeBtn)closeBtn.focus();                                     // submit is now disabled → move focus to a live control in the dialog
           if(successLine){ var s=successLine.textContent; successLine.textContent=''; setTimeout(function(){ successLine.textContent=s; },60); }
           if(typeof gtag==='function')gtag('event','waitlist_signup',{interest:interest});
         } else { fail(); }
