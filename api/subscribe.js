@@ -320,10 +320,10 @@ module.exports = async function handler(req, res) {
     var aOnly = isSubmission ? await writeAirtable(body, tags) : { written: false };
     var wOnly = (isWaitlist || isRoadAhead) ? await writeWaitlist(body) : { written: false };
     var cOnly = isNewsletter ? await writeContact(body) : { written: false };  // still capture the lead
-    return res.status(200).json({ success: false, configured: false, airtable: aOnly.written, waitlist: wOnly.written, contact: cOnly.written });
+    return res.status(200).json({ success: isRoadAhead ? true : false, beehiivOk: false, configured: false, airtable: aOnly.written, waitlist: wOnly.written, contact: cOnly.written });
   }
 
-  var beehiivResult = { success: false };
+  var beehiivResult = { success: false, beehiivOk: false };
   // List-like sources (native newsletter + Road-Ahead waitlist) join the weekly Edge and share
   // website-style utm defaults; the quiz keeps its leak-score attribution.
   var listLike = isNewsletter || isRoadAhead;
@@ -348,28 +348,37 @@ module.exports = async function handler(req, res) {
     if (body.referring_site) createBody.referring_site = String(body.referring_site).slice(0, 255);
 
     var created = await beehiiv('/publications/' + PUBLICATION_ID + '/subscriptions', 'POST', apiKey, createBody);
-    var subId = created.json && created.json.data && created.json.data.id;
-    var status = created.json && created.json.data && created.json.data.status;
+    var createData = created.json && created.json.data;
+    var subId = (createData && createData.id) || null;
+    var status = (createData && createData.status) || null;
 
-    if (!subId) {
+    // beehiivOk = the create call itself genuinely returned a created/updated subscriber. This is the
+    // HONEST signal: a subId resolved only via the by_email fallback below does NOT flip it true — that
+    // recycled/suppressed-address case is exactly the silent miss we must surface (a row was written and
+    // the user saw success, but no Beehiiv subscriber was created).
+    var beehiivOk = !!(created.ok && subId);
+
+    if (!beehiivOk) {
+      console.error('[subscribe] Beehiiv subscribe MISS — status=' + created.status +
+        ' body=' + (created.json ? JSON.stringify(created.json).slice(0, 500) : '(no body)') +
+        ' email=' + email + ' source=' + (str(body.source) || 'unknown') + ' interest=' + (str(body.interest) || 'n/a'));
+      // Best-effort: the subscriber may already exist — resolve an id so we can still apply the tags.
       var found = await beehiiv('/publications/' + PUBLICATION_ID + '/subscriptions/by_email/' + encodeURIComponent(email), 'GET', apiKey);
-      subId = found.json && found.json.data && found.json.data.id;
-      status = (found.json && found.json.data && found.json.data.status) || status;
+      subId = subId || (found.json && found.json.data && found.json.data.id) || null;
+      status = status || (found.json && found.json.data && found.json.data.status) || null;
     }
 
     var tagged = false;
     if (subId && tags.length) {
       var t = await beehiiv('/publications/' + PUBLICATION_ID + '/subscriptions/' + subId + '/tags', 'POST', apiKey, { tags: tags });
       tagged = t.ok;
-      if (!t.ok) console.error('[subscribe] tagging failed', t.status, JSON.stringify(t.json));
+      if (!t.ok) console.error('[subscribe] Beehiiv tagging failed — status=' + t.status + ' body=' + JSON.stringify(t.json) + ' email=' + email);
     }
-    beehiivResult = subId
-      ? { success: true, status: status || 'pending', tagged: tagged, tags: tags }
-      : { success: false, error: 'subscribe_failed', status: created.status };
-    if (!subId) console.error('[subscribe] could not resolve subscription id', created.status, JSON.stringify(created.json));
+    beehiivResult = { success: !!subId, beehiivOk: beehiivOk, status: status || 'pending', tagged: tagged, tags: tags };
   } catch (err) {
-    console.error('[subscribe] Beehiiv error:', err && err.message);
-    beehiivResult = { success: false, error: 'exception' };
+    console.error('[subscribe] Beehiiv error:', err && err.message,
+      '— email=' + email + ' source=' + (str(body.source) || 'unknown') + ' interest=' + (str(body.interest) || 'n/a'));
+    beehiivResult = { success: false, beehiivOk: false, error: 'exception' };
   }
 
   // Best-effort data writes — awaited so they run, but never able to change the outcome
@@ -386,12 +395,20 @@ module.exports = async function handler(req, res) {
     try { contactRes = await writeContact(body); } catch (e) { console.error('[subscribe] contact wrapper error', e && e.message); }
   }
 
-  // Beehiiv is the source of truth. If it failed, return 502 with success:false so the front
-  // end shows its error state — NEVER a false "success" — and log it loudly for ops.
-  if (!beehiivResult.success) {
-    console.error('[subscribe] Beehiiv subscribe FAILED — returning 502 (no false success).',
-      'source=' + (str(body.source) || 'unknown'), 'email=' + email, 'detail=' + JSON.stringify(beehiivResult));
+  // User-facing success vs the honest Beehiiv signal:
+  //  • Road-Ahead waitlist: NEVER fail the user on a Beehiiv miss — the Airtable row captured the lead
+  //    and we follow up by hand — so success stays true; beehiivOk:false (logged) surfaces the miss.
+  //  • Newsletter / quiz: unchanged — Beehiiv is the source of truth; a miss returns 502 (no false success).
+  var userSuccess = isRoadAhead ? true : beehiivResult.success;
+  if (!beehiivResult.beehiivOk) {
+    console.error('[subscribe] Beehiiv NOT confirmed (beehiivOk=false) — source=' + (str(body.source) || 'unknown') +
+      ' email=' + email + ' interest=' + (str(body.interest) || 'n/a') +
+      ' userSuccess=' + userSuccess + ' waitlistWritten=' + waitlistRes.written);
   }
-  var code = beehiivResult.success ? 200 : 502;
-  return res.status(code).json(Object.assign({}, beehiivResult, { airtable: airtable.written, waitlist: waitlistRes.written, contact: contactRes.written }));
+  var code = userSuccess ? 200 : 502;
+  return res.status(code).json(Object.assign({}, beehiivResult, {
+    success: userSuccess,
+    beehiivOk: !!beehiivResult.beehiivOk,
+    airtable: airtable.written, waitlist: waitlistRes.written, contact: contactRes.written
+  }));
 };

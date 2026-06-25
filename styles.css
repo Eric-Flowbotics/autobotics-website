@@ -89,7 +89,7 @@ p{line-height:1.7}
 /* ---------- Hero — dark cinematic, full-bleed photo with Ken Burns ---------- */
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;background:var(--charcoal);color:var(--white)}
 .hero-image{position:absolute;inset:-40px;z-index:0}
-.hero-image img{width:100%;height:100%;object-fit:cover;animation:kenBurns 8s ease-in-out infinite alternate}
+.hero-image img{width:100%;height:100%;object-fit:cover;filter:brightness(1.08);animation:kenBurns 8s ease-in-out infinite alternate}
 .hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(28,32,36,.86) 0%,rgba(28,32,36,.74) 50%,rgba(28,32,36,.40) 100%)}
 .hero .container{position:relative;z-index:2;width:100%}
 .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;padding:150px 0 110px}
