@@ -2,6 +2,7 @@
    /api/subscribe — the ONE shared write path for the site's email capture:
      • the Revenue Leak Score quiz   (source 'quiz' / 'quiz-results')
      • the native newsletter form    (source 'homepage' / 'about')
+     • the PDF lead-magnet gate      (source 'lead-magnet' — /get/[asset], the 5-Leaks PDF first)
 
    Native fetch() from those pages  →  this serverless function  →
      1) Beehiiv  (PRIMARY — the list/gate; double opt-in + tags; success gates here)
@@ -9,6 +10,7 @@
           quiz                           → Leak Score Submissions
           quiz-results / homepage-road-ahead → Waitlist  (Interest: Community / Playbook / DFY)
           homepage/about                 → Contacts  (insert-if-absent Lead; never downgrades a row)
+          lead-magnet                    → Lead Magnet Downloads  (upsert by Email+Asset; never blocks the unlock)
 
    Both API keys live ONLY here, as Vercel env vars — never in the browser:
      BEEHIIV_API_KEY            (already set)
@@ -35,6 +37,9 @@ var AIRTABLE_TABLE = process.env.AIRTABLE_TABLE || 'Leak Score Submissions';
 // never breaks this write. If AIRTABLE_WAITLIST_TABLE is ever set, use the table ID, not the name.
 var WAITLIST_TABLE = process.env.AIRTABLE_WAITLIST_TABLE || 'tblKmfyAhXQqyT1gh';
 var CONTACTS_TABLE = process.env.AIRTABLE_CONTACTS_TABLE || 'Contacts';
+// Lead Magnet Downloads — one row per Email+Asset for the /get/[asset] gate. Referenced by table ID
+// (like WAITLIST_TABLE) so renaming the table in Airtable never breaks this write.
+var LEAD_MAGNET_TABLE = process.env.AIRTABLE_LEAD_MAGNET_TABLE || 'tbllmU2jkjmRrG9FA';
 
 var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -213,6 +218,57 @@ async function writeWaitlist(body) {
   return { written: false, reason: 'write_failed' };
 }
 
+// ---- Best-effort UPSERT into Lead Magnet Downloads (its own table — NOT Leak Score Submissions).
+//      Serves the reusable /get/[asset] gate (the 5-Leaks PDF first; the skill-drop gate later).
+//      Beehiiv is the source of truth AND the file delivers on-screen regardless, so this write can
+//      never block the unlock or the subscribe. Upsert key = Email + Asset (a repeat download updates
+//      rather than duplicates; a second asset is its own row). Created is stamped on first insert and
+//      preserved on repeat downloads. One retry; never throws. ----
+async function writeLeadMagnet(body) {
+  var key = process.env.AIRTABLE_API_KEY;
+  if (!key) { console.warn('[subscribe] AIRTABLE_API_KEY not set — skipping Lead Magnet Downloads write.'); return { written: false, reason: 'no_key' }; }
+  var email = str(body.email).trim().toLowerCase();
+  if (!email) return { written: false, reason: 'no_email' };
+  var asset = (str(body.asset) || '5-leaks').trim().toLowerCase().slice(0, 48);
+
+  var base = AIRTABLE_API + '/' + AIRTABLE_BASE + '/' + encodeURIComponent(LEAD_MAGNET_TABLE);
+  var headers = { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' };
+  var tradeLabel = TRADE_LABELS[body.trade] || str(body.trade);
+
+  try {
+    // Upsert key = Email + Asset. Use double-quoted formula literals (Airtable formulas don't honor
+    // backslash escaping) and strip any double-quote so an apostrophe address ("o'neil@…") matches its
+    // existing row instead of 422-ing into a duplicate POST. Both halves are controlled/sanitized.
+    var formula = 'AND(LOWER({Email})="' + email.replace(/"/g, '') + '",{Asset}="' + asset.replace(/"/g, '') + '")';
+    var lookup = await fetch(base + '?maxRecords=1&filterByFormula=' + encodeURIComponent(formula), { headers: headers });
+    var existingId = null;
+    if (lookup.ok) { var lj = await lookup.json().catch(function () { return null; }); existingId = lj && lj.records && lj.records[0] && lj.records[0].id; }
+
+    var fields = { Email: email, Asset: asset, Source: str(body.source) || 'lead-magnet' };
+    if (tradeLabel) fields.Trade = tradeLabel;
+    if (str(body.utm_source))   fields['UTM Source']   = str(body.utm_source).slice(0, 255);
+    if (str(body.utm_medium))   fields['UTM Medium']   = str(body.utm_medium).slice(0, 255);
+    if (str(body.utm_campaign)) fields['UTM Campaign'] = str(body.utm_campaign).slice(0, 255);
+    if (str(body.utm_content))  fields['UTM Content']  = str(body.utm_content).slice(0, 255);
+
+    var method, url;
+    if (existingId) { method = 'PATCH'; url = base + '/' + existingId; }            // update — keep the original Created
+    else { fields.Created = new Date().toISOString(); method = 'POST'; url = base; } // new — stamp Created
+
+    var payload = { fields: fields, typecast: true }; // typecast lets a new asset/source/trade option pass
+    for (var attempt = 1; attempt <= 2; attempt++) {
+      var res = await fetch(url, { method: method, headers: headers, body: JSON.stringify(payload) });
+      if (res.ok) return { written: true, status: res.status, action: existingId ? 'updated' : 'created' };
+      var txt = ''; try { txt = await res.text(); } catch (e) {}
+      console.error('[subscribe] Lead Magnet ' + method + ' failed (attempt ' + attempt + ') status=' + res.status + ' ' + txt.slice(0, 300));
+      if (res.status < 500 && res.status !== 429) break; // 4xx (bad field) won't fix on retry
+    }
+  } catch (err) {
+    console.error('[subscribe] Lead Magnet write error:', err && err.message);
+  }
+  return { written: false, reason: 'write_failed' };
+}
+
 // ---- Best-effort backup for the NATIVE newsletter form (source 'homepage'/'about').
 //      Beehiiv is the source of truth; this only guarantees the lead is still captured in
 //      Airtable's Contacts table if Beehiiv ever fails. INSERT-IF-ABSENT by Email: a person
@@ -295,15 +351,20 @@ module.exports = async function handler(req, res) {
   var isWaitlist = body.source === 'quiz-results';
   var isRoadAhead = body.source === 'homepage-road-ahead'; // homepage Road-Ahead "Get notified" cards
   var isNewsletter = body.source === 'homepage' || body.source === 'about';
+  var isLeadMagnet = body.source === 'lead-magnet';        // /get/[asset] PDF gate (5-Leaks first)
 
   // Build the tag set — trust the client's tags but also rebuild from the structured fields so a
-  // tampered/empty array still segments correctly. Source-aware: a Road-Ahead signup can carry a
-  // trade, so guard the 'quiz' tag to genuine quiz traffic and add the interest waitlist tag.
+  // tampered/empty array still segments correctly. Source-aware: a Road-Ahead / lead-magnet signup can
+  // carry a trade, so guard the 'quiz' tag to genuine quiz traffic and add the interest waitlist tag.
   var derived = [];
   var isQuizFamily = body.source === 'quiz' || body.source === 'quiz-results';
-  if (isQuizFamily || (!isNewsletter && !isRoadAhead && (body.trade || body.leak))) derived.push('quiz');
-  if (isNewsletter || isRoadAhead) derived.push('newsletter');                                  // both join the weekly Edge
+  if (isQuizFamily || (!isNewsletter && !isRoadAhead && !isLeadMagnet && (body.trade || body.leak))) derived.push('quiz');
+  if (isNewsletter || isRoadAhead || isLeadMagnet) derived.push('newsletter');                  // all join the weekly Edge
   if (isRoadAhead && INTEREST_TAG[body.interest]) derived.push(INTEREST_TAG[body.interest]);    // community-/playbook-/dfy-waitlist
+  if (isLeadMagnet) {                                                                            // lead-magnet segmentation (spec §4)
+    derived.push('source:lead-magnet');
+    if (body.asset) derived.push('asset:' + String(body.asset).toLowerCase());
+  }
   if (body.trade) derived.push('trade:' + String(body.trade).toLowerCase());
   if (body.leak && body.leak !== 'none') derived.push('leak:' + String(body.leak).toLowerCase());
   var rawTags = Array.isArray(body.tags) ? body.tags.slice(0, 50) : [];
@@ -320,13 +381,14 @@ module.exports = async function handler(req, res) {
     var aOnly = isSubmission ? await writeAirtable(body, tags) : { written: false };
     var wOnly = (isWaitlist || isRoadAhead) ? await writeWaitlist(body) : { written: false };
     var cOnly = isNewsletter ? await writeContact(body) : { written: false };  // still capture the lead
-    return res.status(200).json({ success: isRoadAhead ? true : false, beehiivOk: false, configured: false, airtable: aOnly.written, waitlist: wOnly.written, contact: cOnly.written });
+    var lOnly = isLeadMagnet ? await writeLeadMagnet(body) : { written: false }; // still capture + deliver the file
+    return res.status(200).json({ success: (isRoadAhead || isLeadMagnet) ? true : false, beehiivOk: false, configured: false, airtable: aOnly.written, waitlist: wOnly.written, contact: cOnly.written, leadMagnet: lOnly.written });
   }
 
   var beehiivResult = { success: false, beehiivOk: false };
-  // List-like sources (native newsletter + Road-Ahead waitlist) join the weekly Edge and share
-  // website-style utm defaults; the quiz keeps its leak-score attribution.
-  var listLike = isNewsletter || isRoadAhead;
+  // List-like sources (native newsletter + Road-Ahead waitlist + lead-magnet) join the weekly Edge and
+  // share website-style utm defaults; the quiz keeps its leak-score attribution.
+  var listLike = isNewsletter || isRoadAhead || isLeadMagnet;
   try {
     var createBody = {
       email: email,
@@ -384,7 +446,7 @@ module.exports = async function handler(req, res) {
   // Best-effort data writes — awaited so they run, but never able to change the outcome
   // the front end / Beehiiv saw. A completed quiz writes the full Leak Score Submissions
   // row; a waitlist click (quiz-results or Road-Ahead) upserts the Waitlist row. Failures are logged only.
-  var airtable = { written: false }, waitlistRes = { written: false }, contactRes = { written: false };
+  var airtable = { written: false }, waitlistRes = { written: false }, contactRes = { written: false }, leadMagnetRes = { written: false };
   if (isSubmission) {
     try { airtable = await writeAirtable(body, tags); } catch (e) { console.error('[subscribe] airtable wrapper error', e && e.message); }
   }
@@ -394,12 +456,16 @@ module.exports = async function handler(req, res) {
   if (isNewsletter) {
     try { contactRes = await writeContact(body); } catch (e) { console.error('[subscribe] contact wrapper error', e && e.message); }
   }
+  if (isLeadMagnet) {
+    try { leadMagnetRes = await writeLeadMagnet(body); } catch (e) { console.error('[subscribe] lead-magnet wrapper error', e && e.message); }
+  }
 
   // User-facing success vs the honest Beehiiv signal:
-  //  • Road-Ahead waitlist: NEVER fail the user on a Beehiiv miss — the Airtable row captured the lead
-  //    and we follow up by hand — so success stays true; beehiivOk:false (logged) surfaces the miss.
+  //  • Road-Ahead waitlist + lead-magnet: NEVER fail the user on a Beehiiv miss — the lead is captured
+  //    in Airtable (and the lead-magnet file delivers on-screen regardless, spec §4) and we follow up by
+  //    hand — so success stays true; beehiivOk:false (logged) still surfaces the miss.
   //  • Newsletter / quiz: unchanged — Beehiiv is the source of truth; a miss returns 502 (no false success).
-  var userSuccess = isRoadAhead ? true : beehiivResult.success;
+  var userSuccess = (isRoadAhead || isLeadMagnet) ? true : beehiivResult.success;
   if (!beehiivResult.beehiivOk) {
     console.error('[subscribe] Beehiiv NOT confirmed (beehiivOk=false) — source=' + (str(body.source) || 'unknown') +
       ' email=' + email + ' interest=' + (str(body.interest) || 'n/a') +
@@ -409,7 +475,7 @@ module.exports = async function handler(req, res) {
   var payload = Object.assign({}, beehiivResult, {
     success: userSuccess,
     beehiivOk: !!beehiivResult.beehiivOk,
-    airtable: airtable.written, waitlist: waitlistRes.written, contact: contactRes.written
+    airtable: airtable.written, waitlist: waitlistRes.written, contact: contactRes.written, leadMagnet: leadMagnetRes.written
   });
   if (userSuccess && payload.error) delete payload.error;   // don't ship a contradictory success:true + error
   return res.status(code).json(payload);
