@@ -139,6 +139,12 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://theautobotics.com/learn/get-found/ai-search-aeo</loc>
+    <lastmod>2026-06-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://theautobotics.com/field-reports</loc>
     <lastmod>2026-06-19</lastmod>
     <changefreq>weekly</changefreq>
