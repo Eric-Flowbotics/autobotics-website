@@ -31,7 +31,9 @@ var AIRTABLE_API = 'https://api.airtable.com/v0';
 var PUBLICATION_ID = process.env.BEEHIIV_PUBLICATION_ID || 'pub_03c86483-4f76-4b5f-bbf5-78e094b3c599';
 var AIRTABLE_BASE = process.env.AIRTABLE_BASE_ID || 'appyyjGuoyHBGQGW6';
 var AIRTABLE_TABLE = process.env.AIRTABLE_TABLE || 'Leak Score Submissions';
-var WAITLIST_TABLE = process.env.AIRTABLE_WAITLIST_TABLE || 'Community Waitlist';
+// Referenced by table ID (not name) so renaming the table in Airtable (Community Waitlist → Waitlist)
+// never breaks this write. If AIRTABLE_WAITLIST_TABLE is ever set, use the table ID, not the name.
+var WAITLIST_TABLE = process.env.AIRTABLE_WAITLIST_TABLE || 'tblKmfyAhXQqyT1gh';
 var CONTACTS_TABLE = process.env.AIRTABLE_CONTACTS_TABLE || 'Contacts';
 
 var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -52,6 +54,10 @@ var TRADE_LABELS = {
   plumbing: 'Plumbing', handyman: 'Handyman', electrical: 'Electrical',
   pest: 'Pest Control', painting: 'Painting', other: 'Other Home Service'
 };
+// Road-Ahead waitlist: interest key → Airtable "Interest" value and the Beehiiv interest tag.
+// community-waitlist + dfy-waitlist already exist in Beehiiv; playbook-waitlist is new.
+var INTEREST_LABEL = { community: 'Community', playbook: 'Playbook', dfy: 'DFY' };
+var INTEREST_TAG = { community: 'community-waitlist', playbook: 'playbook-waitlist', dfy: 'dfy-waitlist' };
 
 function sanitizeTags(list) {
   var out = [];
@@ -156,28 +162,35 @@ async function writeAirtable(body, tags) {
   return { written: false, reason: 'write_failed' };
 }
 
-// ---- Best-effort UPSERT (by Email) into the Community Waitlist table — its own table,
-//      NOT the completions log. Created is set on first insert and preserved on repeat
-//      clicks (a repeat is a PATCH that doesn't touch Created). One retry; never throws. ----
+// ---- Best-effort UPSERT into the Waitlist table (its own table, NOT the completions log).
+//      Serves both the quiz-results "join the community waitlist" bridge (Interest → Community)
+//      and the homepage Road-Ahead "Get notified" cards (Interest → Community / Playbook / DFY).
+//      Upsert key = Email + Interest, so one person can sit on more than one list without a later
+//      interest overwriting an earlier one, while a repeat click on the SAME interest updates
+//      rather than duplicates. Created is stamped on first insert and preserved on repeat clicks.
+//      One retry; never throws — the Airtable write can never block the Beehiiv subscribe. ----
 async function writeWaitlist(body) {
   var key = process.env.AIRTABLE_API_KEY;
   if (!key) { console.warn('[subscribe] AIRTABLE_API_KEY not set — skipping waitlist write.'); return { written: false, reason: 'no_key' }; }
   var email = str(body.email).toLowerCase();
   if (!email) return { written: false, reason: 'no_email' };
 
+  var interest = INTEREST_LABEL[body.interest] || 'Community'; // quiz-results bridge defaults to Community
   var base = AIRTABLE_API + '/' + AIRTABLE_BASE + '/' + encodeURIComponent(WAITLIST_TABLE);
   var headers = { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' };
   var tradeLabel = TRADE_LABELS[body.trade] || str(body.trade);
 
   try {
-    // Find an existing row by Email (the upsert key) so a repeat click updates, not duplicates.
-    var formula = "LOWER({Email})='" + email.replace(/'/g, "\\'") + "'";
+    // Upsert key = Email + Interest (one row per person per list), so a repeat click updates, not duplicates.
+    var formula = "AND(LOWER({Email})='" + email.replace(/'/g, "\\'") + "',{Interest}='" + interest + "')";
     var lookup = await fetch(base + '?maxRecords=1&filterByFormula=' + encodeURIComponent(formula), { headers: headers });
     var existingId = null;
     if (lookup.ok) { var lj = await lookup.json().catch(function () { return null; }); existingId = lj && lj.records && lj.records[0] && lj.records[0].id; }
 
-    var fields = { Email: email, Source: str(body.source) || 'quiz-results' };
+    var fields = { Email: email, Interest: interest, Source: str(body.source) || 'quiz-results' };
     if (tradeLabel) fields.Trade = tradeLabel;
+    if (str(body.first_name)) fields['First Name'] = str(body.first_name).slice(0, 100);
+    if (str(body.note)) fields.Note = str(body.note).slice(0, 500);
     var method, url;
     if (existingId) { method = 'PATCH'; url = base + '/' + existingId; }          // update — keep the original Created
     else { fields.Created = new Date().toISOString(); method = 'POST'; url = base; } // new — stamp Created
@@ -276,15 +289,19 @@ module.exports = async function handler(req, res) {
   //   homepage/about → native newsletter form: Beehiiv 'newsletter' tag + Contacts backup
   var isSubmission = body.source === 'quiz';
   var isWaitlist = body.source === 'quiz-results';
+  var isRoadAhead = body.source === 'homepage-road-ahead'; // homepage Road-Ahead "Get notified" cards
   var isNewsletter = body.source === 'homepage' || body.source === 'about';
 
-  // Build the tag set — trust the client's tags but also rebuild from the
-  // structured fields so a tampered/empty array still segments correctly.
+  // Build the tag set — trust the client's tags but also rebuild from the structured fields so a
+  // tampered/empty array still segments correctly. Source-aware: a Road-Ahead signup can carry a
+  // trade, so guard the 'quiz' tag to genuine quiz traffic and add the interest waitlist tag.
   var derived = [];
-  if (body.source === 'quiz' || body.trade || body.leak) derived.push('quiz');
+  var isQuizFamily = body.source === 'quiz' || body.source === 'quiz-results';
+  if (isQuizFamily || (!isNewsletter && !isRoadAhead && (body.trade || body.leak))) derived.push('quiz');
+  if (isNewsletter || isRoadAhead) derived.push('newsletter');                                  // both join the weekly Edge
+  if (isRoadAhead && INTEREST_TAG[body.interest]) derived.push(INTEREST_TAG[body.interest]);    // community-/playbook-/dfy-waitlist
   if (body.trade) derived.push('trade:' + String(body.trade).toLowerCase());
   if (body.leak && body.leak !== 'none') derived.push('leak:' + String(body.leak).toLowerCase());
-  if (isNewsletter) derived.push('newsletter');   // native form is always a newsletter subscribe
   var rawTags = Array.isArray(body.tags) ? body.tags.slice(0, 50) : [];
   var tags = sanitizeTags(derived.concat(rawTags));
 
@@ -297,12 +314,15 @@ module.exports = async function handler(req, res) {
   if (!apiKey) {
     console.error('[subscribe] BEEHIIV_API_KEY not set — cannot add to the list:', email, tags.join(','));
     var aOnly = isSubmission ? await writeAirtable(body, tags) : { written: false };
-    var wOnly = isWaitlist ? await writeWaitlist(body) : { written: false };
+    var wOnly = (isWaitlist || isRoadAhead) ? await writeWaitlist(body) : { written: false };
     var cOnly = isNewsletter ? await writeContact(body) : { written: false };  // still capture the lead
     return res.status(200).json({ success: false, configured: false, airtable: aOnly.written, waitlist: wOnly.written, contact: cOnly.written });
   }
 
   var beehiivResult = { success: false };
+  // List-like sources (native newsletter + Road-Ahead waitlist) join the weekly Edge and share
+  // website-style utm defaults; the quiz keeps its leak-score attribution.
+  var listLike = isNewsletter || isRoadAhead;
   try {
     var createBody = {
       email: email,
@@ -310,10 +330,10 @@ module.exports = async function handler(req, res) {
       send_welcome_email: false,        // welcome handled in Beehiiv (repointed to /leak-score)
       double_opt_override: 'on',        // double opt-in preserved
       // Source-aware defaults so a native subscribe is never mislabeled as the quiz if the
-      // form ever omits utm (the homepage/about forms do send these explicitly).
-      utm_source: body.utm_source || (isNewsletter ? (body.source || 'newsletter') : 'leak-score-quiz'),
-      utm_medium: body.utm_medium || (isNewsletter ? 'website' : 'quiz'),
-      utm_campaign: body.utm_campaign || (isNewsletter ? 'newsletter' : 'revenue-leak-score')
+      // form ever omits utm (the homepage/about/road-ahead forms do send these explicitly).
+      utm_source: body.utm_source || (listLike ? (body.source || 'newsletter') : 'leak-score-quiz'),
+      utm_medium: body.utm_medium || (listLike ? 'website' : 'quiz'),
+      utm_campaign: body.utm_campaign || (listLike ? 'newsletter' : 'revenue-leak-score')
     };
     // Beehiiv's create-subscription endpoint accepts only utm_source / utm_medium /
     // utm_campaign (+ referring_site). Forwarding utm_content or utm_term makes Beehiiv
@@ -355,7 +375,7 @@ module.exports = async function handler(req, res) {
   if (isSubmission) {
     try { airtable = await writeAirtable(body, tags); } catch (e) { console.error('[subscribe] airtable wrapper error', e && e.message); }
   }
-  if (isWaitlist) {
+  if (isWaitlist || isRoadAhead) {
     try { waitlistRes = await writeWaitlist(body); } catch (e) { console.error('[subscribe] waitlist wrapper error', e && e.message); }
   }
   if (isNewsletter) {
