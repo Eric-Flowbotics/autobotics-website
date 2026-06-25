@@ -406,9 +406,11 @@ module.exports = async function handler(req, res) {
       ' userSuccess=' + userSuccess + ' waitlistWritten=' + waitlistRes.written);
   }
   var code = userSuccess ? 200 : 502;
-  return res.status(code).json(Object.assign({}, beehiivResult, {
+  var payload = Object.assign({}, beehiivResult, {
     success: userSuccess,
     beehiivOk: !!beehiivResult.beehiivOk,
     airtable: airtable.written, waitlist: waitlistRes.written, contact: contactRes.written
-  }));
+  });
+  if (userSuccess && payload.error) delete payload.error;   // don't ship a contradictory success:true + error
+  return res.status(code).json(payload);
 };

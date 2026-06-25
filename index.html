@@ -516,8 +516,10 @@ if(mobileCta){
 
   function say(msg,kind){ if(!status)return; status.textContent=msg||''; status.className='nl-status'+(kind?' is-'+kind:''); }
   function focusable(){
+    // Exclude tabindex=-1 / aria-hidden nodes (e.g. the off-screen honeypot) so that once the fields
+    // are disabled on success the close button is the SOLE focusable element — a clean single-element trap.
     return Array.prototype.slice.call(dialog.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href]'))
-      .filter(function(el){ return el.offsetParent!==null; });
+      .filter(function(el){ return el.offsetParent!==null && el.tabIndex!==-1 && el.getAttribute('aria-hidden')!=='true'; });
   }
   function resetForm(){
     if(successPanel)successPanel.hidden=true;
