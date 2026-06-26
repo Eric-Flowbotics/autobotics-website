@@ -267,18 +267,8 @@
     utm_content:qp('utm_content')||'',
     utm_term:qp('utm_term')||''
   };
-  // Carry UTM + trade onto the in-page bridge links so the landing attribution survives the next
-  // click: preserve the original source/medium/content/term and mark the internal hop via campaign.
-  function withParams(base, extra){
-    var p=new URLSearchParams();
-    p.set('utm_source', utm.utm_source);       // preserved (defaults to 'lead-magnet' if landed w/o utm)
-    p.set('utm_medium', utm.utm_medium);       // preserved (defaults to 'website')
-    p.set('utm_campaign','5-leaks-bridge');    // marks the 5-Leaks → quiz / learn / field-report hop
-    if(utm.utm_content) p.set('utm_content', utm.utm_content);
-    if(utm.utm_term) p.set('utm_term', utm.utm_term);
-    Object.keys(extra||{}).forEach(function(k){ if(extra[k]) p.set(k,extra[k]); });
-    return base+'?'+p.toString();
-  }
+  // Internal bridge links stay plain (no utm_*): same-domain hrefs must not carry UTMs or they reset
+  // GA4 session attribution mid-visit. Inbound UTM capture for the subscribe payload is untouched below.
 
   var form=document.getElementById('lmForm');
   var field=document.getElementById('lmEmail');
@@ -289,10 +279,8 @@
   var delivered=document.getElementById('lmDelivered');
   var done=false;
 
-  // Wire bridge links with attribution up-front.
-  document.getElementById('lmQuizCta').href = withParams('/leak-score', trade?{trade:trade}:{});
+  // Bridge links use their plain static hrefs (/leak-score, /learn); only wire the CTA analytics here.
   document.getElementById('lmQuizCta').addEventListener('click',function(){ if(typeof gtag==='function') gtag('event','cta_click',{cta:'quiz'}); });
-  document.getElementById('lmLearnLink').href = withParams('/learn', {});
 
   // Trade-conditional Field Report card (only for trades with a live report).
   if(trade && FIELD_REPORT_TRADES[trade]){
@@ -301,7 +289,7 @@
     document.getElementById('lmTradeH').textContent='See it for '+label.toLowerCase()+' operators';
     document.getElementById('lmTradeP').textContent='Exactly how '+label.toLowerCase()+' businesses lose money at each stage — real numbers, reviewed by Eric.';
     var cta=document.getElementById('lmTradeCta');
-    cta.href=withParams('/field-reports/'+trade,{});
+    cta.href='/field-reports/'+trade;
     cta.textContent='Read the '+label+' Field Report →';
     card.hidden=false;
   }
