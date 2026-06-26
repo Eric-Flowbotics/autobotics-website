@@ -291,6 +291,7 @@
 
   // Wire bridge links with attribution up-front.
   document.getElementById('lmQuizCta').href = withParams('/leak-score', trade?{trade:trade}:{});
+  document.getElementById('lmQuizCta').addEventListener('click',function(){ if(typeof gtag==='function') gtag('event','cta_click',{cta:'quiz'}); });
   document.getElementById('lmLearnLink').href = withParams('/learn', {});
 
   // Trade-conditional Field Report card (only for trades with a live report).
@@ -346,6 +347,7 @@
       .then(function(res){ clearTimeout(timer); return res.json().then(function(j){ return {ok:res.ok,j:j||{}}; },function(){ return {ok:res.ok,j:{}}; }); })
       .then(function(r){
         if(typeof gtag==='function') gtag('event','lead_magnet_download',{asset:ASSET,trade:trade||'none'});
+        if((r.ok && r.j.success) && typeof gtag==='function') gtag('event','generate_lead',{lead_source:'pdf_gate'});
         reveal(!!(r.ok && r.j.success));      // file delivers either way; tailor the confirm note
       })
       .catch(function(){ clearTimeout(timer); reveal(false); });   // network error → still deliver the file
@@ -386,7 +388,7 @@
     if(trade) body.trade=trade;
     fetch('/api/subscribe',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) })
       .then(function(res){ return res.json().then(function(j){ return res.ok && !!j && (j.waitlist===true || j.tagged===true); },function(){ return res.ok; }); })
-      .then(function(ok){ ok ? wlDone(slot) : wlFail(slot,email); })
+      .then(function(ok){ if(ok && typeof gtag==='function') gtag('event','generate_lead',{lead_source:'waitlist'}); ok ? wlDone(slot) : wlFail(slot,email); })
       .catch(function(){ wlFail(slot,email); });
   }
   function wlDone(slot){ slot.innerHTML='<div class="lm-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg> You’re on the waitlist.</div>'; }

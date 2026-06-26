@@ -176,6 +176,7 @@
     }); return o;
   }
   var startedAt = Date.now();
+  var quizStarted = false;   // guard: GA4 quiz_start fires once per attempt
 
   var state = {
     screen: 'welcome',      // welcome | setup | audit
@@ -254,7 +255,7 @@
       '</div>'+
       '<button class="btn btn-primary ls-btn-block" id="start">Start my Leak Score →</button>'+
       '<p class="ls-meta">~3 min · works on your phone · free</p>';
-    document.getElementById('start').onclick=function(){ track('leakscore_start'); state.screen='setup'; state.setupStep=0; render(); };
+    document.getElementById('start').onclick=function(){ if(!quizStarted){ quizStarted=true; track('quiz_start'); } track('leakscore_start'); state.screen='setup'; state.setupStep=0; render(); };
   }
   function feature(t){ return '<div class="ls-feature">'+CHECK+'<span>'+t+'</span></div>'; }
 
@@ -381,6 +382,7 @@
 
   function finish(){
     track('leakscore_complete', { trade: state.trade });
+    track('quiz_complete', { trade: state.trade });
     var digits='';
     for(var i=0;i<12;i++){ digits += (state.answers['q'+(i+1)]!=null ? state.answers['q'+(i+1)] : 0); }
     var st = { trade:state.trade, revenueIndex:state.revenueIndex, teamIndex:state.teamIndex, jobsIndex:state.jobsIndex, answerDigits:digits };

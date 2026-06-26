@@ -325,6 +325,7 @@
     wrap.innerHTML = breakdownSection() + planSection() + scorecardSection() + bridgesSection();
     main.appendChild(wrap);
     wireShare(); wireWaitlist();
+    wrap.addEventListener('click', function(e){ var a=e.target.closest && e.target.closest('a[data-go="learn_bridge"]'); if(a) track('cta_click', { cta: 'playbook' }); });
     requestAnimationFrame(function(){ requestAnimationFrame(function(){
       Array.prototype.forEach.call(document.querySelectorAll('#unlocked .lr-fill'), function(el){ el.style.width = el.getAttribute('data-w'); });
     });});
@@ -527,7 +528,7 @@
     fetch('/api/subscribe', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify(payload), signal: ctrl ? ctrl.signal : undefined
-    }).then(function(res){ clearTimeout(timer); })
+    }).then(function(res){ clearTimeout(timer); if(res && res.ok){ track('generate_lead', { lead_source: 'quiz' }); } })
       .catch(function(){ clearTimeout(timer); }); // never surfaced — unlock already happened
   }
 
@@ -585,6 +586,7 @@
   }
   function joinWaitlist(email, slot){
     track('leakscore_waitlist_join');
+    track('cta_click', { cta: 'community' });
     var btn=document.getElementById('wlBtn'); if(btn){ btn.disabled=true; btn.textContent='Adding…'; }
     fetch('/api/subscribe', {
       method:'POST', headers:{'Content-Type':'application/json'},
@@ -593,7 +595,7 @@
       // success = the Community Waitlist write landed (primary), with the Beehiiv
       // community-waitlist tag as a fallback signal.
       return res.json().then(function(j){ return res.ok && !!j && (j.waitlist===true || j.tagged===true); }, function(){ return res.ok; });
-    }).then(function(ok){ ok ? done(slot) : wlFail(slot, email); })
+    }).then(function(ok){ if(ok){ track('generate_lead', { lead_source: 'waitlist' }); done(slot); } else { wlFail(slot, email); } })
       .catch(function(){ wlFail(slot, email); });
   }
   function done(slot){ slot.innerHTML = '<div class="lr-ok">'+CHECK+' You’re on the waitlist.</div>'; }

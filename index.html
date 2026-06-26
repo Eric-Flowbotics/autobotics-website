@@ -80,7 +80,7 @@
         <span class="capture-eyebrow">Revenue Leak Score · Free · 3 min</span>
         <p class="capture-h">What's your #1 money leak?</p>
         <p class="capture-sub">See exactly where your business is leaking money — and the first fix for it.</p>
-        <a href="/leak-score" class="btn btn-primary hero-quiz-btn">Find my #1 leak →</a>
+        <a href="/leak-score" class="btn btn-primary hero-quiz-btn" onclick="if(typeof gtag==='function')gtag('event','cta_click',{cta:'home_hero'});">Find my #1 leak →</a>
         <p class="hero-quiz-meta">Works on your phone · free · no card needed.</p>
         <!-- Secondary door: the email option is hidden until the operator opens it -->
         <button type="button" class="nl-reveal" id="nlReveal" aria-expanded="false" aria-controls="heroNl">Prefer email? →</button>
@@ -311,7 +311,7 @@
 
 <!-- STICKY MOBILE CTA -->
 <div class="mobile-cta-bar" id="mobileCta">
-  <a href="/leak-score" class="btn btn-primary">Find your #1 money leak — 3 min</a>
+  <a href="/leak-score" class="btn btn-primary" onclick="if(typeof gtag==='function')gtag('event','cta_click',{cta:'quiz'});">Find your #1 money leak — 3 min</a>
 </div>
 
 <!-- SLOT: footer -->
@@ -566,7 +566,7 @@ if(mobileCta){
     }
   }
 
-  document.querySelectorAll('[data-waitlist]').forEach(function(b){ b.addEventListener('click',function(){ open(b); }); });
+  document.querySelectorAll('[data-waitlist]').forEach(function(b){ b.addEventListener('click',function(){ if(typeof gtag==='function')gtag('event','cta_click',{cta:b.getAttribute('data-waitlist')}); open(b); }); });
   modal.querySelectorAll('[data-wl-close]').forEach(function(c){ c.addEventListener('click',close); });
 
   form.addEventListener('submit',function(e){
@@ -601,6 +601,7 @@ if(mobileCta){
           if(closeBtn)closeBtn.focus();                                     // submit is now disabled → move focus to a live control in the dialog
           if(successLine){ var s=successLine.textContent; successLine.textContent=''; setTimeout(function(){ successLine.textContent=s; },60); }
           if(typeof gtag==='function')gtag('event','waitlist_signup',{interest:interest});
+          if(typeof gtag==='function')gtag('event','generate_lead',{lead_source:'waitlist'});
         } else { fail(); }
       })
       .catch(function(){ clearTimeout(timer); fail(); });
