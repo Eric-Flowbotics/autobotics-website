@@ -168,15 +168,20 @@ async function writeAirtable(body, tags) {
 }
 
 // ---- Best-effort UPSERT into the Waitlist table (its own table, NOT the completions log).
-//      Serves both the quiz-results "join the community waitlist" bridge (Interest → Community)
-//      and the homepage Road-Ahead "Get notified" cards (Interest → Community / Playbook / DFY).
+//      Serves three entry points, each passing its OWN `source` EXPLICITLY (there is no shared
+//      default for a caller to silently fall through to — a wrong Source mis-attributes the row and
+//      corrupts the Oct-1 community-gate metric):
+//        • quiz-results "join the community waitlist" bridge → Source 'quiz-results'        (Interest → Community)
+//        • homepage Road-Ahead "Get notified" cards          → Source 'homepage-road-ahead' (Interest → Community/Playbook/DFY)
+//        • lead-magnet bridge "join the community waitlist"   → Source 'lead-magnet'         (Interest → Community)
 //      Upsert key = Email + Interest, so one person can sit on more than one list without a later
 //      interest overwriting an earlier one, while a repeat click on the SAME interest updates
 //      rather than duplicates. Created is stamped on first insert and preserved on repeat clicks.
 //      One retry; never throws — the Airtable write can never block the Beehiiv subscribe. ----
-async function writeWaitlist(body) {
+async function writeWaitlist(body, source) {
   var key = process.env.AIRTABLE_API_KEY;
   if (!key) { console.warn('[subscribe] AIRTABLE_API_KEY not set — skipping waitlist write.'); return { written: false, reason: 'no_key' }; }
+  if (!source) { console.error('[subscribe] writeWaitlist called without an explicit source — refusing to guess a Source.'); return { written: false, reason: 'no_source' }; }
   var email = str(body.email).trim().toLowerCase();
   if (!email) return { written: false, reason: 'no_email' };
 
@@ -196,7 +201,7 @@ async function writeWaitlist(body) {
     var existingId = null;
     if (lookup.ok) { var lj = await lookup.json().catch(function () { return null; }); existingId = lj && lj.records && lj.records[0] && lj.records[0].id; }
 
-    var fields = { Email: email, Interest: interest, Source: str(body.source) || 'quiz-results' };
+    var fields = { Email: email, Interest: interest, Source: source };
     if (tradeLabel) fields.Trade = tradeLabel;
     if (str(body.first_name)) fields['First Name'] = str(body.first_name).slice(0, 100);
     if (str(body.note)) fields.Note = str(body.note).slice(0, 500);
@@ -352,13 +357,22 @@ module.exports = async function handler(req, res) {
   var isRoadAhead = body.source === 'homepage-road-ahead'; // homepage Road-Ahead "Get notified" cards
   var isNewsletter = body.source === 'homepage' || body.source === 'about';
   var isLeadMagnet = body.source === 'lead-magnet';        // /get/[asset] PDF gate (5-Leaks first)
+  var isLeadMagnetWaitlist = body.source === 'lead-magnet-waitlist'; // lead-magnet bridge "join the community waitlist"
+
+  // Each Waitlist entry point owns its Source — computed here and passed EXPLICITLY to writeWaitlist
+  // (no shared default a caller can silently inherit; the lead-magnet bridge used to inherit
+  // 'quiz-results', which mis-attributed the row). null = not a Waitlist event.
+  var waitlistSource = isWaitlist ? 'quiz-results'
+    : isRoadAhead ? 'homepage-road-ahead'
+    : isLeadMagnetWaitlist ? 'lead-magnet'
+    : null;
 
   // Build the tag set — trust the client's tags but also rebuild from the structured fields so a
   // tampered/empty array still segments correctly. Source-aware: a Road-Ahead / lead-magnet signup can
   // carry a trade, so guard the 'quiz' tag to genuine quiz traffic and add the interest waitlist tag.
   var derived = [];
   var isQuizFamily = body.source === 'quiz' || body.source === 'quiz-results';
-  if (isQuizFamily || (!isNewsletter && !isRoadAhead && !isLeadMagnet && (body.trade || body.leak))) derived.push('quiz');
+  if (isQuizFamily || (!isNewsletter && !isRoadAhead && !isLeadMagnet && !isLeadMagnetWaitlist && (body.trade || body.leak))) derived.push('quiz');
   if (isNewsletter || isRoadAhead || isLeadMagnet) derived.push('newsletter');                  // all join the weekly Edge
   if (isRoadAhead && INTEREST_TAG[body.interest]) derived.push(INTEREST_TAG[body.interest]);    // community-/playbook-/dfy-waitlist
   if (isLeadMagnet) {                                                                            // lead-magnet segmentation (spec §4)
@@ -379,7 +393,7 @@ module.exports = async function handler(req, res) {
   if (!apiKey) {
     console.error('[subscribe] BEEHIIV_API_KEY not set — cannot add to the list:', email, tags.join(','));
     var aOnly = isSubmission ? await writeAirtable(body, tags) : { written: false };
-    var wOnly = (isWaitlist || isRoadAhead) ? await writeWaitlist(body) : { written: false };
+    var wOnly = waitlistSource ? await writeWaitlist(body, waitlistSource) : { written: false };
     var cOnly = isNewsletter ? await writeContact(body) : { written: false };  // still capture the lead
     var lOnly = isLeadMagnet ? await writeLeadMagnet(body) : { written: false }; // still capture + deliver the file
     return res.status(200).json({ success: (isRoadAhead || isLeadMagnet) ? true : false, beehiivOk: false, configured: false, airtable: aOnly.written, waitlist: wOnly.written, contact: cOnly.written, leadMagnet: lOnly.written });
@@ -450,8 +464,8 @@ module.exports = async function handler(req, res) {
   if (isSubmission) {
     try { airtable = await writeAirtable(body, tags); } catch (e) { console.error('[subscribe] airtable wrapper error', e && e.message); }
   }
-  if (isWaitlist || isRoadAhead) {
-    try { waitlistRes = await writeWaitlist(body); } catch (e) { console.error('[subscribe] waitlist wrapper error', e && e.message); }
+  if (waitlistSource) {
+    try { waitlistRes = await writeWaitlist(body, waitlistSource); } catch (e) { console.error('[subscribe] waitlist wrapper error', e && e.message); }
   }
   if (isNewsletter) {
     try { contactRes = await writeContact(body); } catch (e) { console.error('[subscribe] contact wrapper error', e && e.message); }

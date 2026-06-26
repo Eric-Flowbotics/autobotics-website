@@ -347,8 +347,9 @@
     try{ localStorage.setItem('lm_email',email); }catch(e){}
   });
 
-  // ----- Community waitlist join — reuses the existing Waitlist write path (Interest=Community).
-  //       Same mechanism as the Leak Score results bridge: source 'quiz-results' + community-waitlist tag. -----
+  // ----- Community waitlist join — reuses the existing Waitlist write path (Interest=Community), but
+  //       posts its OWN source so the Waitlist row is attributed to 'lead-magnet', not 'quiz-results'.
+  //       source 'lead-magnet-waitlist' → handler routes to writeWaitlist with an explicit Source='lead-magnet'. -----
   function wireWaitlist(){
     var slot=document.getElementById('lmWlSlot');
     if(!slot || slot.dataset.wired) return;
@@ -374,7 +375,7 @@
   function joinWaitlist(email,slot){
     if(typeof gtag==='function') gtag('event','lead_magnet_waitlist_join',{asset:ASSET});
     var b=document.getElementById('lmWlBtn'); if(b){ b.disabled=true; b.textContent='Adding…'; }
-    var body={ email:email, website:'', source:'quiz-results', tags:['community-waitlist'] };
+    var body={ email:email, website:'', source:'lead-magnet-waitlist', tags:['community-waitlist'] };
     if(trade) body.trade=trade;
     fetch('/api/subscribe',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) })
       .then(function(res){ return res.json().then(function(j){ return res.ok && !!j && (j.waitlist===true || j.tagged===true); },function(){ return res.ok; }); })
