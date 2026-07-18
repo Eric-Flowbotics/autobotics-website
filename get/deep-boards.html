@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deep Boards Starter Kit — the free Claude skill for on-brand diagrams | Autobotics</title>
+<meta name="description" content="The free Claude skill that renders clean, on-brand whiteboard graphics from code — no design tool, no image AI, the same every time. Skill + brand-config file + example boards + a 10-minute quickstart.">
+<link rel="canonical" href="https://theautobotics.com/get/deep-boards">
+<!-- Open Graph -->
+<meta property="og:title" content="Deep Boards Starter Kit — a free Claude skill for on-brand diagrams">
+<meta property="og:description" content="Clean, on-brand whiteboard graphics rendered from code by a Claude skill — no design tool, no image AI, the same every time. Free kit: skill, brand config, examples, 10-minute quickstart.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://theautobotics.com/get/deep-boards">
+<meta property="og:image" content="https://theautobotics.com/images/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EG6CSRBKY6"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-EG6CSRBKY6');</script>
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xctpd5g43j");
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<style>
+/* ===== /get/[asset] lead-magnet gate — page-scoped, on top of /styles.css brand tokens =====
+   Reusable gate template; Deep Boards is the second asset (the skill-drop lane, after the 5-Leaks PDF).
+   Cream bg, Charcoal text, Teal CTA, Amber for money only (no money figures on this page). Mobile-first.
+   Same .lm-* system as /get/5-leaks — only the hero is restyled landscape for a wide board graphic. */
+.lm-wrap{min-height:100vh;background:var(--cream);display:flex;flex-direction:column}
+.lm-main{flex:1 0 auto;display:flex;align-items:center;padding:108px 0 64px}
+.lm-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center}
+
+/* Hero board (landscape — a real Deep Board renders wide) */
+.lm-cover-col{display:flex;justify-content:center}
+.lm-cover{display:block;width:100%;max-width:520px;height:auto;border-radius:var(--radius-md);
+  box-shadow:0 18px 50px rgba(28,32,36,.22),0 4px 14px rgba(28,32,36,.12);border:1px solid var(--border)}
+
+/* Copy column */
+.lm-eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;color:var(--amber);display:block;margin-bottom:16px}
+.lm-h1{font-size:clamp(1.9rem,4.4vw,2.6rem);line-height:1.12;margin-bottom:18px;color:var(--charcoal)}
+.lm-list{list-style:none;margin:0 0 26px;padding:0;display:flex;flex-direction:column;gap:13px}
+.lm-list li{display:flex;align-items:flex-start;gap:11px;color:var(--medium);font-size:1.02rem;line-height:1.55}
+.lm-list svg{flex:0 0 auto;width:20px;height:20px;color:var(--teal);margin-top:2px}
+.lm-fig{font-family:var(--mono);font-weight:600;color:var(--amber);white-space:nowrap}
+
+/* Capture card */
+.lm-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-md);padding:24px 22px 20px;max-width:480px}
+.lm-form{display:flex;flex-direction:column;gap:12px}
+.lm-field-wrap{position:relative}
+.lm-field{width:100%;font-family:var(--font);font-size:1rem;color:var(--charcoal);background:var(--cream);
+  border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:15px 16px;min-height:52px;transition:border-color .18s,background .18s}
+.lm-field:focus{outline:none;border-color:var(--teal);background:var(--white)}
+.lm-form.is-success .lm-field{border-color:var(--teal);background:var(--teal-subtle)}
+.lm-submit{width:100%;min-height:52px}
+.lm-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
+.lm-status{font-size:.86rem;line-height:1.5;color:var(--medium);margin:2px 2px 0;min-height:0}
+.lm-status.is-error{color:#B42318}
+.lm-status.is-ok{color:var(--teal)}
+.lm-consent{font-size:.82rem;color:var(--medium);line-height:1.6;margin:14px 2px 0}
+.lm-consent strong{color:var(--medium);font-weight:600}
+
+/* Delivered state — and the in-page hide rules. NOTE: a class that sets `display` (.lm-grid → grid,
+   .lm-bridge-card → flex) overrides the UA [hidden]{display:none} at equal specificity, so each needs
+   its own [hidden] rule or it will NOT hide when JS toggles the attribute. */
+.lm-delivered[hidden],.lm-grid[hidden],.lm-bridge-card[hidden]{display:none}
+.lm-delivered-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:28px 24px}
+.lm-deliv-eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--teal);display:block;margin-bottom:12px}
+.lm-deliv-h{font-size:clamp(1.5rem,3.4vw,2rem);line-height:1.15;margin-bottom:8px;color:var(--charcoal)}
+.lm-deliv-h:focus{outline:none}
+.lm-deliv-sub{color:var(--medium);font-size:1rem;line-height:1.65;margin-bottom:20px}
+.lm-download{width:100%;min-height:54px;font-size:1rem;margin-bottom:8px}
+.lm-confirm{font-size:.86rem;color:var(--medium);line-height:1.6;margin:14px 0 0}
+
+/* Bridge */
+.lm-bridge{margin-top:28px;border-top:1px solid var(--border);padding-top:24px;display:flex;flex-direction:column;gap:16px}
+.lm-bridge-lead{font-family:var(--mono);font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;color:var(--medium)}
+.lm-bridge-card{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius-md);padding:18px 18px;display:flex;flex-direction:column;gap:8px}
+.lm-bridge-card h3{font-size:1.08rem;line-height:1.25;color:var(--charcoal)}
+.lm-bridge-card p{font-size:.94rem;color:var(--medium);line-height:1.55}
+.lm-bridge-card .lm-bridge-go{align-self:flex-start;margin-top:4px}
+.lm-bridge-links{display:flex;flex-direction:column;gap:10px}
+.lm-bridge-link{display:inline-flex;align-items:center;min-height:44px;padding:6px 0;font-weight:600;font-size:.96rem;color:var(--teal);text-decoration:none}
+.lm-bridge-link:hover{color:var(--teal-hover)}
+.lm-bridge-aside{font-size:.9rem;color:var(--medium);line-height:1.55;margin:2px 0 0}
+.lm-bridge-aside a{color:var(--teal);font-weight:600;text-decoration:none}
+.lm-bridge-aside a:hover{color:var(--teal-hover)}
+
+/* Footer note under the card */
+.lm-foot-note{font-size:.82rem;color:var(--medium);margin-top:18px;text-align:center}
+.lm-foot-note a{color:var(--medium);font-weight:600;text-decoration:none}
+
+@media (max-width:780px){
+  .lm-main{padding:92px 0 48px}
+  .lm-grid{grid-template-columns:1fr;gap:26px}
+  .lm-cover-col{order:-1}
+  .lm-cover{max-width:100%}
+  .lm-h1{font-size:clamp(1.7rem,7vw,2.1rem)}
+  .lm-list li{font-size:.98rem}
+}
+</style>
+</head>
+<body>
+<div class="lm-wrap">
+
+<!-- Minimal nav: logo only — single-purpose page, no nav competition (spec §2) -->
+<nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo" aria-label="Autobotics home">
+      <svg viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Autobotics logo">
+        <rect x="2" y="2" width="44" height="44" rx="10" stroke="#0D9488" stroke-width="2.5" fill="none"/>
+        <path d="M15 34L24 12L33 34" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2" stroke-linecap="round"/>
+        <text x="60" y="34" font-family="'Plus Jakarta Sans',sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5">
+          <tspan fill="#FFFFFF">auto</tspan><tspan fill="#0D9488">botics</tspan>
+        </text>
+      </svg>
+    </a>
+  </div>
+</nav>
+
+<main class="lm-main">
+  <div class="container">
+
+    <!-- ============================ GATE STATE ============================ -->
+    <div class="lm-grid" id="lmGate">
+      <div class="lm-cover-col">
+        <!-- Hero = a real Deep Board (one of the kit's example boards). Placed at handoff with the kit. -->
+        <img class="lm-cover" src="/images/deep-boards-hero.png" width="1600" height="1000"
+             alt="Example Deep Board: a clean, on-brand diagram rendered by the Deep Boards Claude skill">
+      </div>
+      <div class="lm-copy-col">
+        <span class="lm-eyebrow">Free kit · A Claude skill · Yours to keep</span>
+        <h1 class="lm-h1">Make clean, on-brand diagrams straight from Claude — the same every time</h1>
+        <ul class="lm-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>The full skill — install it in Claude, describe the board you want, and it renders a clean PNG. No design tool, no image generator, no fiddling with layout.</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>One brand-config file — drop in your colors, fonts, and name, and every board comes out looking like yours.</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Four example boards and a 10-minute quickstart — copy one prompt and render your first board, with your name on it, today.</span>
+          </li>
+        </ul>
+
+        <div class="lm-card">
+          <form class="lm-form" id="lmForm" novalidate>
+            <label for="lmEmail" class="sr-only">Email address</label>
+            <div class="lm-field-wrap">
+              <input class="lm-field" type="email" id="lmEmail" name="email" inputmode="email" autocomplete="email" placeholder="you@yourbusiness.com" maxlength="120" required>
+            </div>
+            <input type="text" class="lm-hp" id="lmHp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <button type="submit" class="btn btn-primary lm-submit" id="lmSubmit">Send me the kit →</button>
+            <p class="lm-status" id="lmStatus" role="status" aria-live="polite"></p>
+          </form>
+          <p class="lm-consent">Enter your email and I'll send you the kit. You'll also get <strong>The Home Service Edge</strong> — one plain-English automation fix a week. Unsubscribe anytime.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================= DELIVERED STATE ========================= -->
+    <div class="lm-delivered" id="lmDelivered" hidden>
+      <div class="lm-delivered-card">
+        <span class="lm-deliv-eyebrow">You're in 🎉</span>
+        <h2 class="lm-deliv-h" id="lmDelivH" tabindex="-1">Here's your kit.</h2>
+        <p class="lm-deliv-sub">The Deep Boards skill, the brand-config file, four example boards, and the 10-minute quickstart — it's all in the zip. Unzip it, open QUICKSTART, and render your first board.</p>
+        <a class="btn btn-primary lm-download" id="lmDownload" href="/deep-boards-starter-kit.zip" rel="noopener" download="deep-boards-starter-kit.zip">Download the Deep Boards Starter Kit (.zip) →</a>
+        <p class="lm-confirm" id="lmConfirm">One more thing: <strong>check your inbox to confirm</strong> your subscription — that's where the weekly Home Service Edge comes from.</p>
+
+        <!-- Video-first bridge (spec §4): the video, then /learn, then the honestly-framed Leak Score. -->
+        <div class="lm-bridge">
+          <span class="lm-bridge-lead">While you've got it open</span>
+
+          <!-- (1) the pillar video — the loop-closer. Hidden until the video is live (set VIDEO_URL below). -->
+          <div class="lm-bridge-card" id="lmVideoCard" hidden>
+            <h3>Watch the 10-minute build</h3>
+            <p>See exactly how these boards get made — the skill, the prompt, and the one-file brand swap — start to finish.</p>
+            <a class="btn btn-primary btn-sm lm-bridge-go" id="lmVideoCta" href="#" target="_blank" rel="noopener">Watch the build →</a>
+          </div>
+
+          <!-- (3) /learn hub — secondary text link -->
+          <div class="lm-bridge-links">
+            <a class="lm-bridge-link" id="lmLearnLink" href="/learn">Browse the plain-language automation fixes →</a>
+          </div>
+
+          <!-- (4) Revenue Leak Score — tertiary, one line, honestly home-services-framed -->
+          <p class="lm-bridge-aside">Run a home-service business? See which leak is costing you the most — the <a href="/leak-score" id="lmQuizCta">Revenue Leak Score</a>, about 3 minutes.</p>
+        </div>
+      </div>
+      <p class="lm-foot-note">Trouble with the download? <a href="/deep-boards-starter-kit.zip" rel="noopener" download="deep-boards-starter-kit.zip">Download the .zip directly →</a></p>
+    </div>
+
+  </div>
+</main>
+
+<!-- SLOT: footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <a href="/" class="footer-logo" aria-label="Autobotics home">
+        <svg viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Autobotics logo">
+          <rect x="2" y="2" width="44" height="44" rx="10" stroke="#0D9488" stroke-width="2.5" fill="none"/>
+          <path d="M15 34L24 12L33 34" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2" stroke-linecap="round"/>
+          <text x="60" y="34" font-family="'Plus Jakarta Sans',sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5">
+            <tspan fill="#FFFFFF">auto</tspan><tspan fill="#0D9488">botics</tspan>
+          </text>
+        </svg>
+      </a>
+      <div class="footer-links">
+        <a href="/about">About</a>
+        <a href="/learn">Learn</a>
+        <a href="/field-reports">Field Reports</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+      </div>
+      <p class="footer-meta">© 2026 Autobotics · 1712 6th Ave, Ste 100 PMB 1124, Tacoma, WA 98405</p>
+    </div>
+  </div>
+</footer>
+</div>
+
+<script>
+// Fixed nav: transparent over the cream hero, dark blur once scrolled
+(function(){var nav=document.getElementById('nav');if(!nav)return;
+  window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>40)},{passive:true});})();
+
+// ===== Skill-drop gate → the ONE shared /api/subscribe path (Beehiiv primary + best-effort Airtable).
+//       The file delivers on-screen regardless of the subscribe result (spec §4): we always reveal the
+//       download. Broad audience — NO trade param on this gate. Same pattern as the 5-Leaks PDF gate. =====
+(function(){
+  var EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var ASSET='deep-boards';
+
+  // The pillar video publishes Tue Jul 21. Until then the gate is live-but-unpromoted and the video
+  // card stays hidden (no broken link). AT PROMOTION: paste the full YouTube URL here and the card
+  // lights up as the primary bridge element — the only change needed to close the video↔gate loop.
+  var VIDEO_URL='';
+
+  function qp(name){ try{ return new URLSearchParams(location.search).get(name)||''; }catch(e){ return ''; } }
+  var utm={
+    utm_source:qp('utm_source')||'skill-drop',
+    utm_medium:qp('utm_medium')||'website',
+    utm_campaign:qp('utm_campaign')||'deep-boards',
+    utm_content:qp('utm_content')||'',
+    utm_term:qp('utm_term')||''
+  };
+  // Internal bridge links stay plain (no utm_*): same-domain hrefs must not carry UTMs or they reset
+  // GA4 session attribution mid-visit. Inbound UTM capture for the subscribe payload is untouched below.
+
+  var form=document.getElementById('lmForm');
+  var field=document.getElementById('lmEmail');
+  var hp=document.getElementById('lmHp');
+  var btn=document.getElementById('lmSubmit');
+  var status=document.getElementById('lmStatus');
+  var gate=document.getElementById('lmGate');
+  var delivered=document.getElementById('lmDelivered');
+  var done=false;
+
+  // Leak Score cross-link (tertiary) — wire analytics only; the href stays plain (/leak-score).
+  var quizCta=document.getElementById('lmQuizCta');
+  if(quizCta) quizCta.addEventListener('click',function(){ if(typeof gtag==='function') gtag('event','cta_click',{cta:'quiz'}); });
+
+  function say(msg,kind){ if(!status)return; status.textContent=msg||''; status.className='lm-status'+(kind?' is-'+kind:''); }
+
+  function revealVideo(){
+    if(!VIDEO_URL) return;                       // no video yet → card stays hidden (unpromoted window)
+    var card=document.getElementById('lmVideoCard');
+    var cta=document.getElementById('lmVideoCta');
+    if(!card||!cta) return;
+    cta.href=VIDEO_URL;
+    card.hidden=false;
+    // Video is the primary bridge element — hoist it above the /learn + Leak Score links.
+    var bridge=card.parentNode, lead=bridge&&bridge.querySelector('.lm-bridge-lead');
+    if(lead&&lead.nextSibling!==card) bridge.insertBefore(card,lead.nextSibling);
+  }
+
+  function reveal(noteOk){
+    if(gate) gate.hidden=true;
+    if(delivered) delivered.hidden=false;
+    var h=document.getElementById('lmDelivH');
+    if(h){ try{ h.focus(); }catch(e){} }       // move focus to the delivered heading for SR + keyboard
+    revealVideo();
+    if(!noteOk){
+      // Subscribe didn't confirm — the file still delivers; soften the confirm nudge honestly.
+      var c=document.getElementById('lmConfirm');
+      if(c) c.innerHTML='Your kit is right above. I couldn’t confirm your email just now — if you don’t get a confirmation note, just <a href="/#final-capture" style="color:var(--medium);font-weight:600">try the newsletter signup here</a>.';
+    }
+  }
+
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(done) return;
+    if(hp && hp.value){ done=true; reveal(true); return; }   // honeypot: bots fill this; humans never do
+    var email=(field&&field.value||'').trim();
+    if(!EMAIL_RE.test(email)){ say('Enter a valid email and I’ll send the kit.','error'); if(field)field.focus(); return; }
+    if(btn){ btn.disabled=true; btn.dataset.label=btn.textContent; btn.textContent='Sending…'; }
+    say('','');
+    done=true;
+    form.classList.add('is-success');
+
+    var payload={
+      email:email, website:'', source:'skill-drop', asset:ASSET,
+      tags:['source:skill-drop','asset:'+ASSET],
+      utm_source:utm.utm_source, utm_medium:utm.utm_medium, utm_campaign:utm.utm_campaign,
+      utm_content:utm.utm_content, utm_term:utm.utm_term,
+      referring_site:(document.referrer||'').slice(0,255)
+    };
+    var ctrl=('AbortController' in window)?new AbortController():null;
+    var timer=setTimeout(function(){ if(ctrl)ctrl.abort(); },9000);
+    fetch('/api/subscribe',{ method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload), signal:ctrl?ctrl.signal:undefined })
+      .then(function(res){ clearTimeout(timer); return res.json().then(function(j){ return {ok:res.ok,j:j||{}}; },function(){ return {ok:res.ok,j:{}}; }); })
+      .then(function(r){
+        if(typeof gtag==='function') gtag('event','skill_drop_download',{asset:ASSET});
+        if((r.ok && r.j.success) && typeof gtag==='function') gtag('event','generate_lead',{lead_source:'skill_drop_gate'});
+        reveal(!!(r.ok && r.j.success));      // file delivers either way; tailor the confirm note
+      })
+      .catch(function(){ clearTimeout(timer); reveal(false); });   // network error → still deliver the file
+  });
+})();
+</script>
+</body>
+</html>

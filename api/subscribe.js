@@ -2,7 +2,7 @@
    /api/subscribe — the ONE shared write path for the site's email capture:
      • the Revenue Leak Score quiz   (source 'quiz' / 'quiz-results')
      • the native newsletter form    (source 'homepage' / 'about')
-     • the PDF lead-magnet gate      (source 'lead-magnet' — /get/[asset], the 5-Leaks PDF first)
+     • the /get/[asset] gate family  (source 'lead-magnet' — 5-Leaks PDF; source 'skill-drop' — Deep Boards kit)
 
    Native fetch() from those pages  →  this serverless function  →
      1) Beehiiv  (PRIMARY — the list/gate; double opt-in + tags; success gates here)
@@ -356,8 +356,11 @@ module.exports = async function handler(req, res) {
   var isWaitlist = body.source === 'quiz-results';
   var isRoadAhead = body.source === 'homepage-road-ahead'; // homepage Road-Ahead "Get notified" cards
   var isNewsletter = body.source === 'homepage' || body.source === 'about';
-  var isLeadMagnet = body.source === 'lead-magnet';        // /get/[asset] PDF gate (5-Leaks first)
-  var isLeadMagnetWaitlist = body.source === 'lead-magnet-waitlist'; // lead-magnet bridge "join the community waitlist"
+  // The /get/[asset] gate family shares one flow: Beehiiv subscribe (double-opt-in + newsletter/source/asset
+  // tags) primary, best-effort Lead Magnet Downloads upsert, file delivers on-screen regardless. 'lead-magnet'
+  // = the 5-Leaks PDF; 'skill-drop' = the Deep Boards kit (broad audience, no trade, video-first bridge).
+  var isLeadMagnet = body.source === 'lead-magnet' || body.source === 'skill-drop';
+  var isLeadMagnetWaitlist = body.source === 'lead-magnet-waitlist'; // lead-magnet bridge "join the community waitlist" (PDF gate only)
 
   // Each Waitlist entry point owns its Source — computed here and passed EXPLICITLY to writeWaitlist
   // (no shared default a caller can silently inherit; the lead-magnet bridge used to inherit
@@ -375,9 +378,9 @@ module.exports = async function handler(req, res) {
   if (isQuizFamily || (!isNewsletter && !isRoadAhead && !isLeadMagnet && !isLeadMagnetWaitlist && (body.trade || body.leak))) derived.push('quiz');
   if (isNewsletter || isRoadAhead || isLeadMagnet) derived.push('newsletter');                  // all join the weekly Edge
   if (isRoadAhead && INTEREST_TAG[body.interest]) derived.push(INTEREST_TAG[body.interest]);    // community-/playbook-/dfy-waitlist
-  if (isLeadMagnet) {                                                                            // lead-magnet segmentation (spec §4)
-    derived.push('source:lead-magnet');
-    if (body.asset) derived.push('asset:' + String(body.asset).toLowerCase());
+  if (isLeadMagnet) {                                                                            // /get/[asset] gate segmentation (spec §4) — lead-magnet + skill-drop
+    derived.push('source:' + String(body.source).toLowerCase());                               // source:lead-magnet OR source:skill-drop
+    if (body.asset) derived.push('asset:' + String(body.asset).toLowerCase());                  // asset:5-leaks / asset:deep-boards
   }
   if (body.trade) derived.push('trade:' + String(body.trade).toLowerCase());
   if (body.leak && body.leak !== 'none') derived.push('leak:' + String(body.leak).toLowerCase());

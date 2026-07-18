@@ -13,7 +13,8 @@
     { "source": "/cancel", "destination": "/", "statusCode": 301 },
     { "source": "/success", "destination": "/", "statusCode": 301 },
     { "source": "/log", "destination": "/", "statusCode": 301 },
-    { "source": "/5-leaks", "destination": "/get/5-leaks", "statusCode": 301 }
+    { "source": "/5-leaks", "destination": "/get/5-leaks", "statusCode": 301 },
+    { "source": "/deep-boards", "destination": "/get/deep-boards", "statusCode": 301 }
   ],
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
