@@ -105,6 +105,11 @@
   .lm-h1{font-size:clamp(1.7rem,7vw,2.1rem)}
   .lm-list li{font-size:.98rem}
 }
+
+/* Header wordmark: "auto" ships charcoal (#1C2024) so it reads on the transparent cream nav —
+   plain white was invisible on cream. When the nav darkens on scroll, flip "auto" back to white so
+   the full "autobotics" stays legible in both states. Footer logo is on a dark bg — left untouched. */
+#nav.scrolled .lm-nav-auto{fill:#FFFFFF}
 </style>
 </head>
 <body>
@@ -119,7 +124,7 @@
         <path d="M15 34L24 12L33 34" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
         <line x1="18" y1="28" x2="30" y2="28" stroke="#0D9488" stroke-width="2" stroke-linecap="round"/>
         <text x="60" y="34" font-family="'Plus Jakarta Sans',sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5">
-          <tspan fill="#FFFFFF">auto</tspan><tspan fill="#0D9488">botics</tspan>
+          <tspan class="lm-nav-auto" fill="#1C2024">auto</tspan><tspan fill="#0D9488">botics</tspan>
         </text>
       </svg>
     </a>
@@ -164,7 +169,7 @@
             <button type="submit" class="btn btn-primary lm-submit" id="lmSubmit">Send me the kit →</button>
             <p class="lm-status" id="lmStatus" role="status" aria-live="polite"></p>
           </form>
-          <p class="lm-consent">Enter your email and I'll send you the kit. You'll also get <strong>The Home Service Edge</strong> — one plain-English automation fix a week. Unsubscribe anytime.</p>
+          <p class="lm-consent">Enter your email and the kit downloads right away. You'll also get <strong>The Home Service Edge</strong> — one plain-English automation fix a week. Unsubscribe anytime.</p>
         </div>
       </div>
     </div>
