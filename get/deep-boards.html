@@ -166,7 +166,7 @@
               <input class="lm-field" type="email" id="lmEmail" name="email" inputmode="email" autocomplete="email" placeholder="you@yourbusiness.com" maxlength="120" required>
             </div>
             <input type="text" class="lm-hp" id="lmHp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-            <button type="submit" class="btn btn-primary lm-submit" id="lmSubmit">Send me the kit →</button>
+            <button type="submit" class="btn btn-primary lm-submit" id="lmSubmit">Get the kit →</button>
             <p class="lm-status" id="lmStatus" role="status" aria-live="polite"></p>
           </form>
           <p class="lm-consent">Enter your email and the kit downloads right away. You'll also get <strong>The Home Service Edge</strong> — one plain-English automation fix a week. Unsubscribe anytime.</p>
@@ -310,7 +310,7 @@
     if(done) return;
     if(hp && hp.value){ done=true; reveal(true); return; }   // honeypot: bots fill this; humans never do
     var email=(field&&field.value||'').trim();
-    if(!EMAIL_RE.test(email)){ say('Enter a valid email and I’ll send the kit.','error'); if(field)field.focus(); return; }
+    if(!EMAIL_RE.test(email)){ say('Enter a valid email to get the kit.','error'); if(field)field.focus(); return; }
     if(btn){ btn.disabled=true; btn.dataset.label=btn.textContent; btn.textContent='Sending…'; }
     say('','');
     done=true;
