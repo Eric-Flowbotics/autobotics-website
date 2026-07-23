@@ -77,11 +77,16 @@
       </div>
       <!-- SLOT: hero-capture -->
       <div class="capture capture--hero" id="hero-capture">
-        <span class="capture-eyebrow">Revenue Leak Score · Free · 3 min</span>
+        <span class="capture-eyebrow">Revenue Leak Score <span class="capture-pill">100% free</span></span>
         <p class="capture-h">What's your #1 money leak?</p>
         <p class="capture-sub">See exactly where your business is leaking money — and the first fix for it.</p>
-        <a href="/leak-score" class="btn btn-primary hero-quiz-btn" onclick="if(typeof gtag==='function')gtag('event','cta_click',{cta:'home_hero'});">Find my #1 leak →</a>
-        <p class="hero-quiz-meta">Works on your phone · free · no card needed.</p>
+        <a href="/leak-score" class="btn btn-primary hero-quiz-btn" onclick="if(typeof gtag==='function')gtag('event','cta_click',{cta:'home_hero'});">Get my free Leak Score →</a>
+        <p class="hero-quiz-trust">
+          <span><i aria-hidden="true">✓</i>Free</span>
+          <span><i aria-hidden="true">✓</i>3-min quiz</span>
+          <span><i aria-hidden="true">✓</i>No credit card</span>
+          <span><i aria-hidden="true">✓</i>Instant result</span>
+        </p>
         <!-- Secondary door: the email option is hidden until the operator opens it -->
         <button type="button" class="nl-reveal" id="nlReveal" aria-expanded="false" aria-controls="heroNl">Prefer email? →</button>
         <div class="nl-collapse" id="heroNl" hidden>
