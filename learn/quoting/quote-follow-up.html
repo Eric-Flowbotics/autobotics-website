@@ -158,7 +158,45 @@
       <p class="faq-q">Won't following up make me look desperate?</p>
       <p>Not if the texts sound like the ones above. A short, friendly check-in that assumes the customer is just busy reads as a professional who's on top of their work — the opposite of desperate. The operators who look desperate are the ones who go silent and then panic-discount later.</p>
 
-      <!-- Keep learning — live destinations only. The source video (Pillar 2.1) was recorded 2026-07-25 but is NOT published: no embed, no VideoObject schema and no "watch the full walkthrough" CTA until the YouTube URL exists. Add all three at publish. -->
+      <!-- ==================================================================
+           PILLAR 2.1 PUBLISH CHECKLIST — do all four when the YouTube URL exists.
+           The body already says "— Eric, in the video" five times (all five are
+           verbatim from quote-follow-up-transcript-v1.srt). Those references are
+           accurate but currently dangle: there is no video anywhere on the page.
+           Publishing the pillar is what resolves them. Until then, add nothing —
+           never point a video link at the channel homepage.
+
+           Substitute <VIDEO_ID> throughout (11-char YouTube id, e.g. JkscvJN3AIA).
+
+           1. EMBED — insert directly after the <p class="article-lead"> block,
+              matching learn/answering-calls/missed-call-text-back.html:99-103:
+                <div class="video-embed">
+                  <iframe src="https://www.youtube-nocookie.com/embed/<VIDEO_ID>"
+                    title="The Quote Follow-Up Ladder" loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+                </div>
+                <p class="video-embed-caption">The full breakdown, on screen — or keep
+                reading; everything in the video is written out below.</p>
+
+           2. VideoObject JSON-LD — add a third <script type="application/ld+json">
+              in <head> after the BreadcrumbList block (line 31). Copy the shape from
+              missed-call-text-back.html:34; set name, description, uploadDate,
+              thumbnailUrl (https://i.ytimg.com/vi/<VIDEO_ID>/maxresdefault.jpg),
+              embedUrl, contentUrl, author Eric Lenhardt, publisher Autobotics.
+
+           3. WATCH LINK — add as the FIRST <li> in the keep-learning list below:
+                <li><a href="https://www.youtube.com/watch?v=<VIDEO_ID>" target="_blank"
+                  rel="noopener noreferrer">Watch the full video on YouTube →</a></li>
+
+           4. PROMPTS PAGE — learn/prompts.html card #2 (id="quote-follow-up") has no
+              "From this video →" link because the video did not exist. Restore it in
+              .prompt-meta, BEFORE the "Read the breakdown →" link, matching cards 1
+              and 3. Same <VIDEO_ID>.
+
+           Then re-run: python3 tools/quote-audit.py   (expect 5 attributed, 0 speaker-less)
+           ================================================================== -->
+      <!-- Keep learning — live destinations only. -->
       <div class="keep-learning">
         <span class="eyebrow">Keep learning</span>
         <ul>

@@ -97,8 +97,13 @@ SKIP_DIRS = {".git", "node_modules", "design"}
 # <meta content="How do you follow up on a quote?"> looks exactly like a quoted
 # sentence until the tags come off. Check 2 runs on text content only.
 TAG = re.compile(r"<[^>]+>")
+
+# HTML comments are not rendered, so nothing inside one is a published quote.
+# They must be blanked for BOTH checks, not just check 2: a publish-checklist
+# comment that discusses the page's quotes would otherwise be counted as one.
 HEAD_OR_SCRIPT = re.compile(
-    r"<head\b.*?</head>|<script\b.*?</script>|<style\b.*?</style>", re.S | re.I
+    r"<!--.*?-->|<head\b.*?</head>|<script\b.*?</script>|<style\b.*?</style>",
+    re.S | re.I,
 )
 
 
@@ -135,9 +140,10 @@ def audit(path):
         if EXEMPT_CLASS.search(line):
             continue
 
-        if ATTRIBUTION.search(line):
+        # Check 1 reads the comment-stripped body too — see HEAD_OR_SCRIPT.
+        if ATTRIBUTION.search(body_line):
             # A signature closing a first-person letter is not a quotation.
-            if re.search(r'class="[^"]*\b(yi-sign|signoff|footer)\b', line, re.I):
+            if re.search(r'class="[^"]*\b(yi-sign|signoff|footer)\b', body_line, re.I):
                 continue
             if '"' in line or "“" in line or "<blockquote" in line:
                 attributed.append((n, line.strip()[:150]))
