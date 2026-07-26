@@ -30,6 +30,9 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://theautobotics.com/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://theautobotics.com/learn"},{"@type":"ListItem","position":3,"name":"Quote fast, follow up","item":"https://theautobotics.com/learn/quoting"},{"@type":"ListItem","position":4,"name":"Quote follow-up"}]}
 </script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"VideoObject","name":"How to Follow Up on a Quote Without Sounding Desperate (3 Texts You Can Steal)","description":"The exact 3 texts to send after every quote — day 1, day 3, day 7 — plus the AI prompt that writes a personalized follow-up for every quiet quote you’ve got, in about five minutes.","thumbnailUrl":"https://i.ytimg.com/vi/WJnDkHUkElk/maxresdefault.jpg","uploadDate":"2026-07-25","embedUrl":"https://www.youtube-nocookie.com/embed/WJnDkHUkElk","contentUrl":"https://www.youtube.com/watch?v=WJnDkHUkElk","author":{"@type":"Person","name":"Eric Lenhardt"},"publisher":{"@type":"Organization","name":"Autobotics","url":"https://theautobotics.com"}}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -86,6 +89,12 @@
     <article class="article-prose">
 
       <p class="article-lead">Send the same three short texts on a fixed schedule — the day after the quote goes out, again a few days later, and once more about a week on — written to sound like a busy professional checking in, not someone chasing money. Then, before you send them to a pile of quiet quotes, paste your list into a free AI assistant and have it rewrite each one to name the actual job, in your own words. That last step is what turns a template into twenty real messages, and it takes about five minutes. The reason any of it works is the part that stops most operators cold: following up on a quote isn't begging. It's service.</p>
+
+      <!-- Source video — Pillar 2.1, published 2026-07-25 -->
+      <div class="video-embed">
+        <iframe src="https://www.youtube-nocookie.com/embed/WJnDkHUkElk" title="The Quote Follow-Up Ladder" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <p class="video-embed-caption">The full breakdown, on screen — or keep reading; everything in the video is written out below.</p>
 
       <p>That's the answer. Here's why it's worth doing, and exactly how — with or without software.</p>
 
@@ -158,48 +167,11 @@
       <p class="faq-q">Won't following up make me look desperate?</p>
       <p>Not if the texts sound like the ones above. A short, friendly check-in that assumes the customer is just busy reads as a professional who's on top of their work — the opposite of desperate. The operators who look desperate are the ones who go silent and then panic-discount later.</p>
 
-      <!-- ==================================================================
-           PILLAR 2.1 PUBLISH CHECKLIST — do all four when the YouTube URL exists.
-           The body already says "— Eric, in the video" five times (all five are
-           verbatim from quote-follow-up-transcript-v1.srt). Those references are
-           accurate but currently dangle: there is no video anywhere on the page.
-           Publishing the pillar is what resolves them. Until then, add nothing —
-           never point a video link at the channel homepage.
-
-           Substitute <VIDEO_ID> throughout (11-char YouTube id, e.g. JkscvJN3AIA).
-
-           1. EMBED — insert directly after the <p class="article-lead"> block,
-              matching learn/answering-calls/missed-call-text-back.html:99-103:
-                <div class="video-embed">
-                  <iframe src="https://www.youtube-nocookie.com/embed/<VIDEO_ID>"
-                    title="The Quote Follow-Up Ladder" loading="lazy"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen></iframe>
-                </div>
-                <p class="video-embed-caption">The full breakdown, on screen — or keep
-                reading; everything in the video is written out below.</p>
-
-           2. VideoObject JSON-LD — add a third <script type="application/ld+json">
-              in <head> after the BreadcrumbList block (line 31). Copy the shape from
-              missed-call-text-back.html:34; set name, description, uploadDate,
-              thumbnailUrl (https://i.ytimg.com/vi/<VIDEO_ID>/maxresdefault.jpg),
-              embedUrl, contentUrl, author Eric Lenhardt, publisher Autobotics.
-
-           3. WATCH LINK — add as the FIRST <li> in the keep-learning list below:
-                <li><a href="https://www.youtube.com/watch?v=<VIDEO_ID>" target="_blank"
-                  rel="noopener noreferrer">Watch the full video on YouTube →</a></li>
-
-           4. PROMPTS PAGE — learn/prompts.html card #2 (id="quote-follow-up") has no
-              "From this video →" link because the video did not exist. Restore it in
-              .prompt-meta, BEFORE the "Read the breakdown →" link, matching cards 1
-              and 3. Same <VIDEO_ID>.
-
-           Then re-run: python3 tools/quote-audit.py   (expect 5 attributed, 0 speaker-less)
-           ================================================================== -->
       <!-- Keep learning — live destinations only. -->
       <div class="keep-learning">
         <span class="eyebrow">Keep learning</span>
         <ul>
+          <li><a href="https://www.youtube.com/watch?v=WJnDkHUkElk" target="_blank" rel="noopener noreferrer">Watch the full video on YouTube &rarr;</a></li>
           <li><a href="/learn/quoting/qualify-on-the-phone">How do I stop driving to quotes that were never going to buy?</a></li>
           <li><a href="/learn/answering-calls/missed-call-text-back">How do you stop missed calls from costing you jobs?</a></li>
           <li>Browse the full <a href="/learn/quoting">Quote fast, follow up</a> hub</li>
